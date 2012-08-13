@@ -1,0 +1,5 @@
+<?php foreach($this->vars() as $key => $temp) : ?>
+<div id="block-<?php echo $key ?>" class="block block-<?php echo $key ?>"><?php echo $key ?>
+	<?php echo $this->renderChildModel($key) ?>
+</div>
+<?php endforeach ?>
