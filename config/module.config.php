@@ -109,6 +109,36 @@ return array(
             ),
         ),
     ),
+	'navigation' => array(
+		'default' => array(
+			'module' => array(
+				'label' => 'Modules',
+				'route' => 'module',
+				'pages' => array(
+					'installed' => array(
+						'label' => 'Installed',
+						'route' => 'module',
+					),
+					'uninstalled' => array(
+						'label' => 'Uninstalled',
+						'route' => 'module/default',
+						'params' => array(
+							'action' => 'uninstalled'
+						)
+					),
+				)
+			),
+			'page' => array(
+				'label' => 'Pages',
+				'route' => 'page',
+			),
+		)
+	),
+	'service_manager' => array(
+		'factories' => array(
+			'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory'
+		),
+	),
     'controllers' => array(
         'invokables' => array(
             'Wiss\Controller\Index'			=> 'Wiss\Controller\IndexController',

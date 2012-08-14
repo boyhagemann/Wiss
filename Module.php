@@ -21,11 +21,11 @@ class Module
 		$evm->attach(MvcEvent::EVENT_ROUTE, function($e) {
 				
 			// Rewrite all incoming uri's to a single entry point
-//			$route = $e->getRouteMatch();
-//			$current = $route->getMatchedRouteName();	
-//			$route->setParam('controller', 'Wiss\Controller\PageContent');
-//			$route->setParam('action', 'route');
-//			$route->setParam('route', $current);	
+			$route = $e->getRouteMatch();
+			$current = $route->getMatchedRouteName();	
+			$route->setParam('controller', 'Wiss\Controller\PageContent');
+			$route->setParam('action', 'route');
+			$route->setParam('route', $current);	
 		});
     }
 
