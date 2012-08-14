@@ -18,9 +18,7 @@ class ModuleController extends AbstractActionController
 	
     public function indexAction()
     {
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Module');
-		$modules = $repo->findAll();
-		
+		$modules = $this->getEntityManager()->getRepository('Wiss\Entity\Module')->findAll();		
 		return compact('modules');
     }
 	
@@ -28,6 +26,7 @@ class ModuleController extends AbstractActionController
 	{
 		$config = $this->getServiceLocator()->get('applicationconfig');
 		$paths = $config['module_listener_options']['module_paths'];
+		$installed = $this->getInstalledModules();
 		$modules = array();
 		
 		foreach($paths as $path) {
@@ -44,6 +43,12 @@ class ModuleController extends AbstractActionController
 					continue;
 				}
 				
+				// Check if module is installed
+				if(in_array($folder->getFilename(), $installed)) {
+					continue;
+				}
+				
+				// Module does not exist yet
 				$modules[] = $folder->getFilename();
 			}
 		}
@@ -63,10 +68,60 @@ class ModuleController extends AbstractActionController
 			$em->flush();
 		}				
 		
+		$moduleManager = $this->getServiceLocator()->get('modulemanager');
+		$zfModule = $moduleManager->getModule($module->getName());
+		
+		// Get the module config
+		$config = array();
+		if(method_exists($zfModule, 'getConfig')) {
+			$config = $zfModule->getConfig();
+			$this->installRoutes($config);
+		}
+						
 		// Redirect
 		$this->redirect()->toRoute('module');
 		
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param array $config
+	 */
+	public function installRoutes(Array $config)
+	{
+		if(!isset($config['router']['routes'])) {
+			return;
+		}
+		
+		$routes = $config['router']['routes'];
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
+		
+		// Build the pages from the routes
+		foreach($routes as $name => $routeData) {
+			$repo->createPageFromRoute($name, $routeData);
+		}
+				
+		// Save entities
+		$this->getEntityManager()->flush();
+		
+		// Build the config
+		$repo->exportRoutes();
+	}
+	
+	/**
+	 *
+	 * @return array 
+	 */
+	public function getInstalledModules()
+	{
+		$modules = $this->getEntityManager()->getRepository('Wiss\Entity\Module')->findAll();
+		$installed = array();
+		foreach($modules as $module) {
+			$installed[] = $module->getName();
+		}
+		
+		return $installed;
 	}
 	
 	/**

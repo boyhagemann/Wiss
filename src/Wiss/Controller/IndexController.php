@@ -66,6 +66,12 @@ class IndexController extends AbstractActionController
 		$em->persist($layout);
 		
 		$em->flush();
+		
+		$this->redirect()->toRoute('module/default', array(
+			'action' => 'uninstalled'
+		));
+		
+		return false;
     }
 	
 	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
