@@ -74,12 +74,23 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route'    => '/[:action]',
                             'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
+                            ),
+                        ),
+                    ),
+                    'install' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/install/[:name]',
+                            'constraints' => array(
+                                'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+								'action' => 'install'
                             ),
                         ),
                     ),

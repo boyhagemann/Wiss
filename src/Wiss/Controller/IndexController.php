@@ -29,6 +29,7 @@ class IndexController extends AbstractActionController
           $em->getClassMetadata('Wiss\Entity\Zone'),
           $em->getClassMetadata('Wiss\Entity\Content'),
           $em->getClassMetadata('Wiss\Entity\Block'),
+          $em->getClassMetadata('Wiss\Entity\Module'),
         );
         
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);

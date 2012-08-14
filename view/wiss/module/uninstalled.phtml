@@ -1,0 +1,12 @@
+<h1>Uninstalled</h1>
+
+<ul class="unstyled">
+	<?php foreach($modules as $module) : ?>
+	<li>
+		<h3><?= $module ?></h3>
+		<dl>
+			<a href="<?= $this->url('module/install', array('name' => $module)) ?>" class="btn btn-primary btn-small">Install</a>
+		</dl>
+	</li>
+	<?php endforeach ?>
+</ul>

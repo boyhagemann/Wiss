@@ -1,1 +1,12 @@
-Module index
+<h1>Installed</h1>
+
+<ul class="unstyled">
+	<?php foreach($modules as $module) : ?>
+	<li>
+		<h3><?= $module->getName() ?></h3>
+		<dl>
+			<a href="" class="btn btn-primary btn-small">Deactivate</a>
+		</dl>
+	</li>
+	<?php endforeach ?>
+</ul>

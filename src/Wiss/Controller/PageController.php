@@ -224,6 +224,10 @@ class PageController extends AbstractActionController
 		return $this->findDefault($key, $page->getParent());
 	}
 	
+	/**
+	 *
+	 * @param \Doctrine\ORM\EntityManager $entityManager 
+	 */
 	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
