@@ -12,6 +12,7 @@ namespace Wiss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Annotation\AnnotationBuilder;
+use Zend\Code\Annotation\Parser;
 
 class ModelController extends AbstractActionController
 {
@@ -36,8 +37,19 @@ class ModelController extends AbstractActionController
 		$entityClass = $model->getEntityClass();
 		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
 		
+		
+		$listener = new \Wiss\Form\Annotation\ElementAnnotationsListener;
 		$builder = new AnnotationBuilder();
+//		$builder->getEventManager()->attachAggregate($listener);
+		
+        $parser = new Parser\DoctrineAnnotationParser();
+		$parser->registerAnnotation('Wiss\Form\Mapping\Text');
+		$builder->getAnnotationManager()->attach($parser);
+		
+		
 		$form = $builder->createForm($entityClass);
+//		$form = $builder->createForm('Wiss\Entity\User');
+		\Zend\Debug\Debug::dump($form); exit;
 							
 		return compact('model', 'entity', 'form');
 	}

@@ -3,6 +3,8 @@
 namespace Wiss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Wiss\Form\Mapping as Form;
+use Zend\Form\Annotation;
 
 /**
  * @ORM\Entity 
@@ -11,6 +13,7 @@ class Layout
 {
 	/**
 	 * 
+     * @Annotation\Exclude()
 	 * @ORM\ID
 	 * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
@@ -18,7 +21,9 @@ class Layout
 	protected $id;
 
 	/**
-	 * 
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Testlabel"})
+	 * @Form\Text()
      * @ORM\Column
 	 */
 	protected $title;
