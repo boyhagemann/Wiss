@@ -25,6 +25,31 @@ class ModelController extends AbstractActionController
 		return compact('models');
     }
 		
+	public function installAction()
+	{
+		$class = $this->params('class');
+		$class = str_replace('-', '\\', $class);
+		$title = end(explode('\\', $class));
+		
+		$em = $this->getEntityManager();
+		$model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
+			'entityClass' => $class
+		));
+		
+		if(!$model) {
+			$model = new \Wiss\Entity\Model;
+			$model->setTitle($title);
+			$model->setEntityClass($class);
+			$em->persist($model);
+			$em->flush();
+		}
+		
+		// Redirect
+		$this->redirect()->toRoute('model/default', array('action' => 'uninstalled') + (array)$this->params());
+		
+		return false;
+	}
+	
 	public function uninstalledAction()
 	{
 		$scanned = $this->getScannedEntities();
@@ -32,7 +57,7 @@ class ModelController extends AbstractActionController
 		
 		// Unset each model that already is installed
 		foreach($models as $model) {
-			unset($scanned[get_class($model)]);
+			unset($scanned[$model->getEntityClass()]);
 		}
 		
 		return compact('scanned');
