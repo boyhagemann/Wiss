@@ -71,6 +71,15 @@ return array(
 				),
 				'may_terminate' => true,
 				'child_routes' => array(	
+					'default' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/[:action]',
+							'constraints' => array(
+								'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+							),
+						),
+					),	
 					'list' => array(
 						'type'    => 'Segment',
 						'options' => array(
@@ -83,6 +92,18 @@ return array(
 							),
 						),
 					),	
+					'install' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/install/[:class]',
+							'constraints' => array(
+								'class'     => '[A-Z][a-zA-Z0-9\\_-]*',
+							),
+							'defaults' => array(
+								'action' => 'install',
+							),
+						),
+					),
 					'edit' => array(
 						'type'    => 'Segment',
 						'options' => array(
@@ -165,6 +186,23 @@ return array(
 							'uninstalled' => array(
 								'label' => 'Uninstalled',
 								'route' => 'module/default',
+								'params' => array(
+									'action' => 'uninstalled'
+								)
+							),
+						)
+					),
+					'models' => array(
+						'label' => 'Models',
+						'route' => 'model',
+						'pages' => array(
+							'installed' => array(
+								'label' => 'Installed',
+								'route' => 'model',
+							),
+							'uninstalled' => array(
+								'label' => 'Uninstalled',
+								'route' => 'model/default',
 								'params' => array(
 									'action' => 'uninstalled'
 								)

@@ -1,0 +1,12 @@
+<h1>Installed models</h1>
+
+<ul class="unstyled">
+	<?php foreach($models as $model) : ?>
+	<li>
+		<h3><?= $model->getTitle() ?></h3>
+		<dl>
+			<a href="" class="btn btn-primary btn-small">Deactivate</a>
+		</dl>
+	</li>
+	<?php endforeach ?>
+</ul>

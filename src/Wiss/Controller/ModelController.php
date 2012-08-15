@@ -25,6 +25,84 @@ class ModelController extends AbstractActionController
 		return compact('models');
     }
 		
+	public function uninstalledAction()
+	{
+		$scanned = $this->getScannedEntities();
+		$models = $this->getInstalledModels();
+		
+		// Unset each model that already is installed
+		foreach($models as $model) {
+			unset($scanned[get_class($model)]);
+		}
+		
+		return compact('scanned');
+	}
+	
+	/**
+	 *
+	 * @return Doctrine\ORM\Collection
+	 */
+	public function getInstalledModels()
+	{		
+		$models = $this->getEntityManager()->getRepository('Wiss\Entity\Model')->findAll();
+		return $models;
+	}
+	
+	public function getScannedEntities()
+	{
+		$config = $this->getServiceLocator()->get('applicationconfig');
+		$paths = $config['module_listener_options']['module_paths'];
+		$drivers = $this->getEntityManager()->getConfiguration()->getMetadataDriverImpl()->getDrivers();
+		$entities = array();
+							
+		foreach($paths as $basepath) {
+					
+			foreach($drivers as $namespace => $driver) {
+
+				foreach($driver->getPaths() as $path) {
+
+					$filePattern = '%s/%s/src/%s%s';
+					$file = sprintf($filePattern, $basepath, $namespace, $namespace, $path);
+					
+					if(!file_exists($file)) {
+						continue;
+					}
+					
+					$directory = new \DirectoryIterator($file);
+					foreach($directory as $file) {
+						
+						if($file->isDot() || $file->isDir()) {
+							continue;
+						}
+									
+						try {							
+							
+							$scanner = new \Zend\Code\Scanner\FileScanner($file->getPathname());
+							foreach($scanner->getClassNames() as $class) {
+								
+								try {
+									$entity = $this->getEntityManager()->getRepository($class);
+									$entities[$class] = $entity;
+								}
+								catch(\Exception $e) {
+									
+								}
+							}
+							
+						}
+						catch(\Exception $e) {
+						}
+
+					}
+				}
+				
+			}
+			
+		}
+		
+		return $entities;
+	}
+	
 	public function listAction()
 	{
 	}
