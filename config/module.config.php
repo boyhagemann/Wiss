@@ -59,6 +59,45 @@ return array(
 					),
 				)
 			),
+			'model' => array(
+				'type'    => 'Literal',
+				'options' => array(
+					'route'    => '/models',
+					'defaults' => array(
+                        '__NAMESPACE__' => 'Wiss\Controller',
+                        'controller' => 'model',
+                        'action' => 'index',
+					),
+				),
+				'may_terminate' => true,
+				'child_routes' => array(	
+					'list' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/list/[:name]',
+							'constraints' => array(
+								'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+							),
+							'defaults' => array(
+								'action' => 'list',
+							),
+						),
+					),	
+					'edit' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/edit/[:name]/[:id]',
+							'constraints' => array(
+								'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'id' => '[0-9-]*',
+							),
+							'defaults' => array(
+								'action' => 'edit',
+							),
+						),
+					),
+				)
+			),
             'module' => array(
                 'type'    => 'Literal',
                 'options' => array(
@@ -110,33 +149,40 @@ return array(
         ),
     ),
 	'navigation' => array(
-		'default' => array(
-			'module' => array(
-				'label' => 'Modules',
+		'cms' => array(
+			'content' => array(
+				'label' => 'Content',
 				'route' => 'module',
 				'pages' => array(
-					'installed' => array(
-						'label' => 'Installed',
+					'module' => array(
+						'label' => 'Modules',
 						'route' => 'module',
-					),
-					'uninstalled' => array(
-						'label' => 'Uninstalled',
-						'route' => 'module/default',
-						'params' => array(
-							'action' => 'uninstalled'
+						'pages' => array(
+							'installed' => array(
+								'label' => 'Installed',
+								'route' => 'module',
+							),
+							'uninstalled' => array(
+								'label' => 'Uninstalled',
+								'route' => 'module/default',
+								'params' => array(
+									'action' => 'uninstalled'
+								)
+							),
 						)
 					),
-				)
-			),
-			'page' => array(
-				'label' => 'Pages',
-				'route' => 'page',
+					'page' => array(
+						'label' => 'Pages',
+						'route' => 'page',
+					),
+				) 
 			),
 		)
 	),
 	'service_manager' => array(
 		'factories' => array(
-			'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory'
+			'default' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+			'cms' => 'Wiss\Navigation\Service\CmsNavigationFactory'
 		),
 	),
     'controllers' => array(
@@ -145,6 +191,7 @@ return array(
             'Wiss\Controller\Module'		=> 'Wiss\Controller\ModuleController',
             'Wiss\Controller\Page'			=> 'Wiss\Controller\PageController',
             'Wiss\Controller\PageContent'	=> 'Wiss\Controller\PageContentController',
+            'Wiss\Controller\Model'			=> 'Wiss\Controller\ModelController',
         ),
     ),
     'view_manager' => array(

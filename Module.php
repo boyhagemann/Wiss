@@ -20,12 +20,19 @@ class Module
 		$evm = $e->getApplication()->getEventManager();		
 		$evm->attach(MvcEvent::EVENT_ROUTE, function($e) {
 				
-			// Rewrite all incoming uri's to a single entry point
-			$route = $e->getRouteMatch();
-			$current = $route->getMatchedRouteName();	
-			$route->setParam('controller', 'Wiss\Controller\PageContent');
-			$route->setParam('action', 'route');
-			$route->setParam('route', $current);	
+			$config = $e->getApplication()->getConfig();
+			
+			if($config['application']['use_zones']) {
+				
+				// Rewrite all incoming uri's to a single entry point
+				$route = $e->getRouteMatch();
+				$current = $route->getMatchedRouteName();	
+				$route->setParam('controller', 'Wiss\Controller\PageContent');
+				$route->setParam('action', 'route');
+				$route->setParam('route', $current);				
+				
+			}
+
 		});
     }
 

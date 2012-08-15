@@ -25,6 +25,7 @@ class PageContentController extends AbstractActionController
 		
 		$view = new ViewModel();
 		$view->setTemplate('wiss/page-content/route');
+		$view->setOption('layout', $page->getLayout()->getPath());
 					
 		// Split the content into zones
 		$zones = array();

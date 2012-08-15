@@ -58,8 +58,22 @@ class ModuleController extends AbstractActionController
 	
 	public function installAction()
 	{
+		$this->install($this->params('name'));
+						
+		// Show flash message
+		$message = sprintf('Module %s is installed', $this->params('name'));
+		$this->flashMessenger()->addMessage($message);
+		
+		// Redirect
+		$this->redirect()->toRoute('module/default', array('action' => 'uninstalled') + (array)$this->params());
+		
+		return false;
+	}
+	
+	public function install($name)
+	{
 		$em = $this->getEntityManager();
-		$module = $em->getRepository('Wiss\Entity\Module')->findOneBy(array('name' => $this->params('name')));
+		$module = $em->getRepository('Wiss\Entity\Module')->findOneBy(array('name' => $name));
 		
 		if(!$module) {
 			$module = new \Wiss\Entity\Module;
@@ -77,11 +91,6 @@ class ModuleController extends AbstractActionController
 			$config = $zfModule->getConfig();
 			$this->installRoutes($config);
 		}
-						
-		// Redirect
-		$this->redirect()->toRoute('module');
-		
-		return false;
 	}
 	
 	/**

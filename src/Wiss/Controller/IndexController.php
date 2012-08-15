@@ -30,6 +30,7 @@ class IndexController extends AbstractActionController
           $em->getClassMetadata('Wiss\Entity\Content'),
           $em->getClassMetadata('Wiss\Entity\Block'),
           $em->getClassMetadata('Wiss\Entity\Module'),
+          $em->getClassMetadata('Wiss\Entity\Model'),
         );
         
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
@@ -46,7 +47,14 @@ class IndexController extends AbstractActionController
 		// Insert layout
 		$layout = new \Wiss\Entity\Layout;
 		$layout->setTitle('default');		
+		$layout->setPath('layout/layout');
 		$em->persist($layout);
+		
+		// Insert layout
+		$layout2 = new \Wiss\Entity\Layout;
+		$layout2->setTitle('cms');	
+		$layout2->setPath('wiss/layout/layout');
+		$em->persist($layout2);
 		
 		// Insert zone
 		$zone = new \Wiss\Entity\Zone;
@@ -65,8 +73,15 @@ class IndexController extends AbstractActionController
 		$layout->setMainZone($zone);
 		$em->persist($layout);
 		
-		$em->flush();
 		
+		// Insert model
+		$model = new \Wiss\Entity\Model;
+		$model->setTitle('Layout');
+		$model->setEntityClass('Wiss\Entity\Layout');
+		$em->persist($model);
+		
+		$em->flush();
+				
 		$this->redirect()->toRoute('module/default', array(
 			'action' => 'uninstalled'
 		));

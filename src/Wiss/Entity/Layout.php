@@ -24,6 +24,12 @@ class Layout
 	protected $title;
 
 	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $path;	
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Zone", mappedBy="layout")
 	 */
 	protected $zones;
@@ -48,7 +54,15 @@ class Layout
 	public function setTitle($title) {
 		$this->title = $title;
 	}
+	
+	public function getPath() {
+		return $this->path;
+	}
 
+	public function setPath($path) {
+		$this->path = $path;
+	}
+	
 	public function getZones() {
 		return $this->zones;
 	}
