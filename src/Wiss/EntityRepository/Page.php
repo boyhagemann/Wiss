@@ -37,12 +37,11 @@ class Page extends \Doctrine\ORM\EntityRepository
 			
 			$name = $page->getName();
 			$route = $page->getRoute();
-			$routeParts = explode('/', $route->getRoute());
 			$config[$name] = array(
 				'type' => 'Segment',
 				'may_terminate' => true,
 				'options' => array(					
-					'route'    => '/' . end($routeParts),
+					'route'    => $route->getRoute(),
 					'defaults' => (array)$route->getDefaults(),
 					'constraints' => $route->getConstraints(),
 				)

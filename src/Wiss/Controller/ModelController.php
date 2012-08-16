@@ -43,6 +43,7 @@ class ModelController extends AbstractActionController
 			$model = new \Wiss\Entity\Model;
 			$model->setTitle($title);
 			$model->setEntityClass($class);
+			$model->setTitleField('title');
 			$em->persist($model);
 			
 			// Insert the model in the navigation
@@ -63,7 +64,9 @@ class ModelController extends AbstractActionController
 		}
 		
 		// Redirect
-		$this->redirect()->toRoute('model/default', array('action' => 'uninstalled') + (array)$this->params());
+		$this->redirect()->toRoute('model/list', array(
+			'name' => $model->getSlug()
+		));
 		
 		return false;
 	}
@@ -161,6 +164,15 @@ class ModelController extends AbstractActionController
 	
 	public function listAction()
 	{
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Model');
+		$model = $repo->findOneBy(array('slug' => $this->params('name')));
+		
+		$entityClass = $model->getEntityClass();
+		$entities = $this->getEntityManager()->getRepository($entityClass)->findAll();
+		
+		$labelGetter = 'get' . ucfirst($model->getTitleField());
+		
+		return compact('model', 'entities', 'labelGetter');
 	}
 		
 	public function editAction()

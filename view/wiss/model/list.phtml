@@ -1,0 +1,12 @@
+<h1>List <?= $model->getTitle() ?></h1>
+
+<ul class="unstyled">
+	<?php foreach($entities as $entity) : ?>
+	<li>
+		<h3><?= $entity->$labelGetter() ?></h3>
+		<dl>
+			<a href="<?php echo $this->url('model/edit', array('name' => $model->getSlug(), 'id' => $entity->getId())) ?>" class="btn btn-primary btn-small">Edit</a>
+		</dl>
+	</li>
+	<?php endforeach ?>
+</ul>

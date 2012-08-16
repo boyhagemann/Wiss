@@ -79,6 +79,7 @@ class IndexController extends AbstractActionController
 		$model = new \Wiss\Entity\Model;
 		$model->setTitle('Layout');
 		$model->setEntityClass('Wiss\Entity\Layout');
+		$model->setTitleField('title');
 		$em->persist($model);
 		
 		

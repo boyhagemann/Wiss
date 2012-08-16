@@ -28,7 +28,7 @@ class Navigation
 	/**
 	 * 
      * @ORM\Column
-     * @Gedmo\Slug(fields={"label"})
+     * @Gedmo\Slug(fields={"label"}, unique=false)
 	 */
 	protected $name;
 	

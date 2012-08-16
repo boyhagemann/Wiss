@@ -36,6 +36,12 @@ class Model
      * @ORM\Column
 	 */
 	protected $entityClass;
+	
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $titleField;
 
 	public function getId() {
 		return $this->id;
@@ -65,5 +71,12 @@ class Model
 		$this->entityClass = $entityClass;
 	}
 
+	public function getTitleField() {
+		return $this->titleField;
+	}
+
+	public function setTitleField($titleField) {
+		$this->titleField = $titleField;
+	}
 
 }
