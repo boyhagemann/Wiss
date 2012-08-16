@@ -59,6 +59,17 @@ return array(
 					),
 				)
 			),
+			'navigation' => array(
+				'type'    => 'Literal',
+				'options' => array(
+					'route'    => '/navigation',
+					'defaults' => array(
+                        '__NAMESPACE__' => 'Wiss\Controller',
+                        'controller' => 'navigation',
+                        'action' => 'index',
+					),
+				)
+			),
 			'model' => array(
 				'type'    => 'Literal',
 				'options' => array(
@@ -154,6 +165,15 @@ return array(
                             ),
                         ),
                     ),
+                    'export' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/export',
+                            'defaults' => array(
+								'action' => 'export'
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'install' => array(
@@ -230,6 +250,7 @@ return array(
             'Wiss\Controller\Page'			=> 'Wiss\Controller\PageController',
             'Wiss\Controller\PageContent'	=> 'Wiss\Controller\PageContentController',
             'Wiss\Controller\Model'			=> 'Wiss\Controller\ModelController',
+            'Wiss\Controller\Navigation'	=> 'Wiss\Controller\NavigationController',
         ),
     ),
     'view_manager' => array(

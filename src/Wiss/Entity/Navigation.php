@@ -1,0 +1,140 @@
+<?php
+
+namespace Wiss\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Navigation")
+ * @Gedmo\Tree(type="nested")
+ */
+class Navigation
+{
+	/**
+	 * 
+	 * @ORM\ID
+	 * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+	 */
+	protected $id;
+
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $label;
+
+	/**
+	 * 
+     * @ORM\Column
+     * @Gedmo\Slug(fields={"label"})
+	 */
+	protected $name;
+	
+	/**
+	 *
+     * @ORM\ManyToOne(targetEntity="Route")
+	 */
+	protected $route;
+	
+	/**
+	 * 
+     * @ORM\Column(type="array")
+	 */
+	protected $params;
+	
+	/**
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer")
+     */
+    private $lft;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    private $lvl;
+
+    /**
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    private $rgt;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @ORM\Column(name="root", type="integer", nullable=true)
+     */
+    private $root;
+	
+    /**
+     * @Gedmo\TreeParent
+     * @ORM\ManyToOne(targetEntity="Navigation", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Navigation", mappedBy="parent")
+     * @ORM\OrderBy({"lft" = "ASC"})
+     */
+    private $children;
+
+	public function getId() {
+		return $this->id;
+	}
+
+	public function setId($id) {
+		$this->id = $id;
+	}
+
+	public function getLabel() {
+		return $this->label;
+	}
+
+	public function setLabel($label) {
+		$this->label = $label;
+	}
+
+	public function getName() {
+		return $this->name;
+	}
+
+	public function setName($name) {
+		$this->name = $name;
+	}
+
+	public function getRoute() {
+		return $this->route;
+	}
+
+	public function setRoute($route) {
+		$this->route = $route;
+	}
+
+	public function getParams() {
+		return $this->params;
+	}
+
+	public function setParams($params) {
+		$this->params = $params;
+	}
+
+	public function getParent() {
+		return $this->parent;
+	}
+
+	public function setParent($parent) {
+		$this->parent = $parent;
+	}
+
+	public function getChildren() {
+		return $this->children;
+	}
+
+	public function setChildren($children) {
+		$this->children = $children;
+	}
+
+}

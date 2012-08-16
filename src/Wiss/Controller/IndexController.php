@@ -31,6 +31,7 @@ class IndexController extends AbstractActionController
           $em->getClassMetadata('Wiss\Entity\Block'),
           $em->getClassMetadata('Wiss\Entity\Module'),
           $em->getClassMetadata('Wiss\Entity\Model'),
+          $em->getClassMetadata('Wiss\Entity\Navigation'),
         );
         
         $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
@@ -79,6 +80,17 @@ class IndexController extends AbstractActionController
 		$model->setTitle('Layout');
 		$model->setEntityClass('Wiss\Entity\Layout');
 		$em->persist($model);
+		
+		
+		// Insert navigation
+		$navigation = new \Wiss\Entity\Navigation;
+		$navigation->setLabel('Default');
+		$em->persist($navigation);
+		
+		// Insert navigation
+		$navigation2 = new \Wiss\Entity\Navigation;
+		$navigation2->setLabel('Cms');
+		$em->persist($navigation2);
 		
 		$em->flush();
 				

@@ -65,8 +65,23 @@ class ModuleController extends AbstractActionController
 		$this->flashMessenger()->addMessage($message);
 		
 		// Redirect
-		$this->redirect()->toRoute('module/default', array('action' => 'uninstalled') + (array)$this->params());
+		$this->redirect()->toRoute('module/export');
 		
+		return false;
+	}
+	
+	public function exportAction()
+	{		
+		// Build the config
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
+		$repo->exportToConfig();		
+		
+		// Build the config
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
+		$repo->exportRoutes();
+				
+		$this->redirect()->toRoute('module');
+
 		return false;
 	}
 	
@@ -90,7 +105,30 @@ class ModuleController extends AbstractActionController
 		if(method_exists($zfModule, 'getConfig')) {
 			$config = $zfModule->getConfig();
 			$this->installRoutes($config);
+			$this->installNavigation($config);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param array $config
+	 */
+	public function installNavigation(Array $config)
+	{
+		if(!isset($config['navigation'])) {
+			return;
+		}
+		
+		$navigation = $config['navigation'];
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
+//		
+		// Build the pages from the routes
+		foreach($navigation as $name => $navigationData) {
+			$repo->createNavigationFromArray($name, $navigationData, null, true);
+		}
+				
+		// Save entities
+		$this->getEntityManager()->flush();
 	}
 	
 	/**
@@ -113,9 +151,6 @@ class ModuleController extends AbstractActionController
 				
 		// Save entities
 		$this->getEntityManager()->flush();
-		
-		// Build the config
-		$repo->exportRoutes();
 	}
 	
 	/**

@@ -29,7 +29,8 @@ class ModelController extends AbstractActionController
 	{
 		$class = $this->params('class');
 		$class = str_replace('-', '\\', $class);
-		$title = end(explode('\\', $class));
+		$title = explode('\\', $class);
+		$title = end($title);
 		
 		$em = $this->getEntityManager();
 		$model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
@@ -37,17 +38,47 @@ class ModelController extends AbstractActionController
 		));
 		
 		if(!$model) {
+			
+			// Create a new model
 			$model = new \Wiss\Entity\Model;
 			$model->setTitle($title);
 			$model->setEntityClass($class);
 			$em->persist($model);
+			
+			// Insert the model in the navigation
+			$routeList = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
+				'name' => 'model/list'
+			));
+			$navigation = new \Wiss\Entity\Navigation;
+			$navigation->setParent($this->getParentNavigation());
+			$navigation->setRoute($routeList);
+			$navigation->setLabel($title);
+			$navigation->setParams(array(
+				'class' => $class
+			));			
+			$em->persist($navigation);
+			
 			$em->flush();
+			
 		}
 		
 		// Redirect
 		$this->redirect()->toRoute('model/default', array('action' => 'uninstalled') + (array)$this->params());
 		
 		return false;
+	}
+	
+	/**
+	 *
+	 * @return Wiss\Entity\Navigation 
+	 */
+	public function getParentNavigation()
+	{
+		$navigation = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation')->findOneBy(array(
+			'name' => 'cms'
+		));		
+		
+		return $navigation;
 	}
 	
 	public function uninstalledAction()

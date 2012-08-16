@@ -22,7 +22,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 		
 		// Write the config to disk in the config autoload folder
 		$writer = new \Zend\Config\Writer\PhpArray();
-		$writer->toFile('config/autoload/global.page.routes.config.php', $config);
+		$writer->toFile('config/autoload/routes.global.php', $config);
 	}
 	
 	/**
@@ -42,7 +42,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 				'type' => 'Segment',
 				'may_terminate' => true,
 				'options' => array(					
-					'route'    => end($routeParts),
+					'route'    => '/' . end($routeParts),
 					'defaults' => (array)$route->getDefaults(),
 					'constraints' => $route->getConstraints(),
 				)
@@ -159,7 +159,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 	 */
 	public function findDefault($key, $page)
 	{
-		$defaults = $page->getRoute()->getDefaults();
+		$defaults = (array) $page->getRoute()->getDefaults();
 		if(key_exists($key, $defaults)) {
 			return $defaults[$key];
 		}
