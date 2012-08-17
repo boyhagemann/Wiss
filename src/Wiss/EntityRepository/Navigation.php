@@ -53,6 +53,8 @@ class Navigation extends NestedTreeRepository
 			$navigation = new \Wiss\Entity\Navigation;
 			$navigation->setLabel($data['label']);
 			$navigation->setParent($parent);
+			$navigation->setName($name);
+			$navigation->setParams($data['params']);
 						
 			if(isset($data['route'])) {
 				$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
@@ -94,6 +96,7 @@ class Navigation extends NestedTreeRepository
 				'label' => $node->getLabel(),
 				'route' => $node->getRoute()->getName(),
 			);
+			
 			if($node->getParams()) {			
 				$config[$name]['params'] = $node->getParams();
 			}

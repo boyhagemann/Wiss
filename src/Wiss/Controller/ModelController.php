@@ -37,38 +37,79 @@ class ModelController extends AbstractActionController
 			'entityClass' => $class
 		));
 		
-		if(!$model) {
+		// Return if a model already exists
+		if($model) {
 			
-			// Create a new model
-			$model = new \Wiss\Entity\Model;
-			$model->setTitle($title);
-			$model->setEntityClass($class);
-			$model->setTitleField('title');
-			$em->persist($model);
-			
-			// Insert the model in the navigation
-			$routeList = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
-				'name' => 'model/list'
+			// Redirect
+			$this->redirect()->toRoute('model/list', array(
+				'name' => $model->getSlug()
 			));
-			$navigation = new \Wiss\Entity\Navigation;
-			$navigation->setParent($this->getParentNavigation());
-			$navigation->setRoute($routeList);
-			$navigation->setLabel($title);
-			$navigation->setParams(array(
-				'class' => $class
-			));			
-			$em->persist($navigation);
 			
-			$em->flush();
+			return false;
 			
 		}
 		
-		// Redirect
-		$this->redirect()->toRoute('model/list', array(
-			'name' => $model->getSlug()
+		// Create the form
+		$form = new \Wiss\Form\Model();
+		$form->prepareElements();
+		$form->setData(array(
+			'title' => $title,
+			'class' => $class,
 		));
+				
+		if($this->getRequest()->isPost()) {
+			
+			$form->setData($this->getRequest()->getPost());
+			
+			if($form->isValid()) {
+				
+				// Create the new model
+				$model = $this->createModel($form->getData());
+
+				// Redirect
+				$this->redirect()->toRoute('model/list', array(
+					'name' => $model->getSlug()
+				));
+			}
+		}
 		
-		return false;
+		
+		
+		return compact('title', 'form');
+	}
+	
+	/**
+	 *
+	 * @param array $data
+	 * @return \Wiss\Entity\Model
+	 */
+	public function createModel(Array $data)
+	{			
+		$em = $this->getEntityManager();
+		
+		// Create a new model
+		$model = new \Wiss\Entity\Model;
+		$model->setTitle($data['title']);
+		$model->setEntityClass($data['class']);
+		$model->setTitleField($data['titleField']);
+		$em->persist($model);
+
+		// Insert the model in the navigation
+		$routeList = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
+			'name' => 'model/list'
+		));
+		$navigation = new \Wiss\Entity\Navigation;
+		$navigation->setParent($this->getParentNavigation());
+		$navigation->setRoute($routeList);
+		$navigation->setLabel($data['title']);
+		$navigation->setParams(array(
+			'class' => $data['class']
+		));			
+		$em->persist($navigation);
+
+		$em->flush();
+		
+		return $model;
 	}
 	
 	/**
