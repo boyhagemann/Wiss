@@ -2,12 +2,12 @@
 
 namespace Wiss\Entity;
 
-use Wiss\Annotation;
+use Wiss\Annotation\Overview;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity 
- * @Annotation\Model(titleField="title")
+ * @Overview(titleField="title")
  */
 class Block
 {

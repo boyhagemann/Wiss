@@ -132,7 +132,7 @@ class ModelController extends AbstractActionController
 	public function getDataFromAnnotations($class)
 	{		
         $parser = new Parser\DoctrineAnnotationParser();
-		$parser->registerAnnotation('Wiss\Annotation\Model');
+		$parser->registerAnnotation('Wiss\Annotation\Overview');
 		
         $annotationManager = new AnnotationManager();
 		$annotationManager->attach($parser);
@@ -142,7 +142,7 @@ class ModelController extends AbstractActionController
 		
 		foreach($annotations as $annotation) {
 			
-			if($annotation instanceof \Wiss\Annotation\Model) {
+			if($annotation instanceof \Wiss\Annotation\Overview) {
 				return array(
 					'title_field' => $annotation->getTitleField()
 				);

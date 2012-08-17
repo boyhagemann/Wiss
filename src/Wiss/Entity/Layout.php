@@ -4,10 +4,12 @@ namespace Wiss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Wiss\Form\Mapping as Form;
+use Wiss\Annotation\Overview;
 use Zend\Form\Annotation;
 
 /**
- * @ORM\Entity 
+ * @ORM\Entity
+ * @Overview(titleField="title")
  */
 class Layout
 {
