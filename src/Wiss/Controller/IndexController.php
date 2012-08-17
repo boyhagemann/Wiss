@@ -73,15 +73,7 @@ class IndexController extends AbstractActionController
 		
 		$layout->setMainZone($zone);
 		$em->persist($layout);
-		
-		
-		// Insert model
-		$model = new \Wiss\Entity\Model;
-		$model->setTitle('Layout');
-		$model->setEntityClass('Wiss\Entity\Layout');
-		$model->setTitleField('title');
-		$em->persist($model);
-		
+				
 		
 		// Insert navigation
 		$navigation = new \Wiss\Entity\Navigation;

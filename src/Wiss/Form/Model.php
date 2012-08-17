@@ -17,8 +17,12 @@ use Zend\InputFilter\InputFilter;
 
 class Model extends Form
 {	
-    public function prepareElements() 
-	{
+    public function __construct()
+    {
+		parent::__construct('model');
+		
+		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
+		
 		// Title
 		$title = new Element('title');
 		$title->setAttributes(array(
@@ -27,16 +31,17 @@ class Model extends Form
 		));
 		
 		// Title field
-		$titleField = new Element('titleField');
+		$titleField = new Element('title_field');
 		$titleField->setAttributes(array(
 			'type' => 'text',
 			'label' => 'Which field is used as title?'
 		));
 		
 		// Class
-		$class = new Element('class');
+		$class = new Element('entity_class');
 		$class->setAttributes(array(
-			'type' => 'hidden',
+			'type' => 'text',
+			'label' => 'Class',
 		));
 
 		// Submit
@@ -53,8 +58,8 @@ class Model extends Form
 
 		$inputFilter = new InputFilter();
 		$inputFilter->add(new Input('title'));
-		$inputFilter->add(new Input('titleField'));
-		$inputFilter->add(new Input('class'));
+		$inputFilter->add(new Input('title_field'));
+		$inputFilter->add(new Input('entity_class'));
 		$this->setInputFilter($inputFilter);
 	}
 	

@@ -13,6 +13,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Code\Annotation\Parser;
+use Zend\Code\Annotation\AnnotationManager;
+use Zend\Code\Reflection\ClassReflection;
 
 class ModelController extends AbstractActionController
 {
@@ -24,6 +26,42 @@ class ModelController extends AbstractActionController
 		
 		return compact('models');
     }
+	
+	public function editAction()
+	{	
+		
+		
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');
+		$model = $repo->find($this->params('id'));
+		
+		$form = new \Wiss\Form\Model;
+		
+		$form->bind($model);
+		
+		if($this->getRequest()->isPost()) {
+			
+			$form->setData($this->getRequest()->getPost());
+			
+			if($form->isValid()) {
+				
+				// Save the changes
+				$em->persist($model);
+				$em->flush();
+				
+				// Show a flash message
+				$this->flashMessenger()->addMessage('The model is now updated');
+				
+				// Redirect
+				$this->redirect()->toRoute('model/edit', array(
+					'id' => $model->getId(),
+				));
+			}
+			
+		}
+		
+		return compact('model', 'form');
+	}
 		
 	public function installAction()
 	{
@@ -40,23 +78,28 @@ class ModelController extends AbstractActionController
 		// Return if a model already exists
 		if($model) {
 			
+			// Show a flash message
+			$this->flashMessenger()->addMessage('The model is already installed');
+				
 			// Redirect
-			$this->redirect()->toRoute('model/list', array(
+			$this->redirect()->toRoute('crud', array(
 				'name' => $model->getSlug()
 			));
 			
-			return false;
-			
+			return false;			
 		}
+		
+		// Get data from entity annotations
+		$data = $this->getDataFromAnnotations($class);
+		$data += array(
+			'title' => $title,
+			'entity_class' => $class,
+		);
 		
 		// Create the form
 		$form = new \Wiss\Form\Model();
-		$form->prepareElements();
-		$form->setData(array(
-			'title' => $title,
-			'class' => $class,
-		));
-				
+		$form->setData($data);
+		
 		if($this->getRequest()->isPost()) {
 			
 			$form->setData($this->getRequest()->getPost());
@@ -66,6 +109,9 @@ class ModelController extends AbstractActionController
 				// Create the new model
 				$model = $this->createModel($form->getData());
 
+				// Show a flash message
+				$this->flashMessenger()->addMessage('The model is now installed');
+				
 				// Redirect
 				$this->redirect()->toRoute('model/export', array(
 					'name' => $model->getSlug()
@@ -80,6 +126,34 @@ class ModelController extends AbstractActionController
 	
 	/**
 	 *
+	 * @param string $class
+	 * @return array 
+	 */
+	public function getDataFromAnnotations($class)
+	{		
+        $parser = new Parser\DoctrineAnnotationParser();
+		$parser->registerAnnotation('Wiss\Annotation\Model');
+		
+        $annotationManager = new AnnotationManager();
+		$annotationManager->attach($parser);
+		
+        $reflection  = new ClassReflection($class);
+        $annotations = $reflection->getAnnotations($annotationManager);
+		
+		foreach($annotations as $annotation) {
+			
+			if($annotation instanceof \Wiss\Annotation\Model) {
+				return array(
+					'title_field' => $annotation->getTitleField()
+				);
+			}
+		}	
+		
+		return array();
+	}
+	
+	/**
+	 *
 	 * @param array $data
 	 * @return \Wiss\Entity\Model
 	 */
@@ -90,14 +164,14 @@ class ModelController extends AbstractActionController
 		// Create a new model
 		$model = new \Wiss\Entity\Model;
 		$model->setTitle($data['title']);
-		$model->setEntityClass($data['class']);
-		$model->setTitleField($data['titleField']);
+		$model->setEntityClass($data['entity_class']);
+		$model->setTitleField($data['title_field']);
 		$em->persist($model);
 		$em->flush();
 
 		// Insert the model in the navigation
 		$routeList = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
-			'name' => 'model/list'
+			'name' => 'crud'
 		));
 		$navigation = new \Wiss\Entity\Navigation;
 		$navigation->setParent($this->getContentNavigation());
@@ -148,7 +222,7 @@ class ModelController extends AbstractActionController
 		$repo->exportRoutes();
 
 		// Redirect
-		$this->redirect()->toRoute('model/list', array(
+		$this->redirect()->toRoute('crud', array(
 			'name' => $this->params('name')
 		));
 
@@ -253,45 +327,7 @@ class ModelController extends AbstractActionController
 		
 		return $entities;
 	}
-	
-	public function listAction()
-	{
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->params('name')));
-		
-		$entityClass = $model->getEntityClass();
-		$entities = $this->getEntityManager()->getRepository($entityClass)->findAll();
-		
-		$labelGetter = 'get' . ucfirst($model->getTitleField());
-		
-		return compact('model', 'entities', 'labelGetter');
-	}
-		
-	public function editAction()
-	{
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->params('name')));
-		
-		$entityClass = $model->getEntityClass();
-		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
-		
-		
-		$listener = new \Wiss\Form\Annotation\ElementAnnotationsListener;
-		$builder = new AnnotationBuilder();
-//		$builder->getEventManager()->attachAggregate($listener);
-		
-        $parser = new Parser\DoctrineAnnotationParser();
-		$parser->registerAnnotation('Wiss\Form\Mapping\Text');
-		$builder->getAnnotationManager()->attach($parser);
-		
-		
-		$form = $builder->createForm($entityClass);
-//		$form = $builder->createForm('Wiss\Entity\User');
-		\Zend\Debug\Debug::dump($form); exit;
-							
-		return compact('model', 'entity', 'form');
-	}
-			
+				
 	/**
 	 *
 	 * @param \Doctrine\ORM\EntityManager $entityManager 

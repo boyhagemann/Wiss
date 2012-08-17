@@ -91,18 +91,6 @@ return array(
 							),
 						),
 					),	
-					'list' => array(
-						'type'    => 'Segment',
-						'options' => array(
-							'route'    => '/list/[:name]',
-							'constraints' => array(
-								'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-							),
-							'defaults' => array(
-								'action' => 'list',
-							),
-						),
-					),	
 					'install' => array(
 						'type'    => 'Segment',
 						'options' => array(
@@ -130,9 +118,8 @@ return array(
 					'edit' => array(
 						'type'    => 'Segment',
 						'options' => array(
-							'route'    => '/edit/[:name]/[:id]',
+							'route'    => '/edit/[:id]',
 							'constraints' => array(
-								'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'id' => '[0-9-]*',
 							),
 							'defaults' => array(
@@ -140,6 +127,35 @@ return array(
 							),
 						),
 					),
+				)
+			),
+			'crud' => array(
+				'type'    => 'Literal',
+				'options' => array(
+					'route'    => '/crud/[:name]',
+					'constraints' => array(
+						'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+					),
+					'defaults' => array(
+                        '__NAMESPACE__' => 'Wiss\Controller',
+                        'controller' => 'crud',
+                        'action' => 'index',
+					),
+				),
+				'may_terminate' => true,
+				'child_routes' => array(	
+					'edit' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/edit/[:id]',
+							'constraints' => array(
+								'id'     => '[0-9]*',
+							),
+							'defaults' => array(
+								'action' => 'edit',
+							),
+						),
+					),	
 				)
 			),
             'module' => array(
@@ -243,6 +259,10 @@ return array(
 					),
 				) 
 			),
+			'install' => array(
+				'label' => 'Install',
+				'route' => 'install',
+			)
 		)
 	),
 	'service_manager' => array(
@@ -259,9 +279,13 @@ return array(
             'Wiss\Controller\PageContent'	=> 'Wiss\Controller\PageContentController',
             'Wiss\Controller\Model'			=> 'Wiss\Controller\ModelController',
             'Wiss\Controller\Navigation'	=> 'Wiss\Controller\NavigationController',
+            'Wiss\Controller\Crud'			=> 'Wiss\Controller\CrudController',
         ),
     ),
     'view_manager' => array(
+		'helper_map' => array(
+//			'flashMessenger' => 'Wiss\View\Helper\FlashMessenger',
+		),
         'template_map' => array(
             'page-content/zone' => __DIR__ . '/../view/wiss/page-content/zone.phtml',
             'navigation/menu' => __DIR__ . '/../view/wiss/navigation/menu.phtml',
