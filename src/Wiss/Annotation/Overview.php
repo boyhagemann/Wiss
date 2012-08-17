@@ -22,7 +22,7 @@ namespace Wiss\Annotation;
 /**
  * @Annotation
  */
-class Model
+class Overview
 {	
 	public $titleField; 
 	
