@@ -22,7 +22,7 @@ namespace Wiss\Form\Mapping;
 /**
  * @Annotation
  */
-class Text
+class Textarea
 {	
 	public $value;
 	

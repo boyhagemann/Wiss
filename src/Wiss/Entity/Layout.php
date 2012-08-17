@@ -23,15 +23,14 @@ class Layout
 	protected $id;
 
 	/**
-     * @Annotation\Attributes({"type":"text"})
-     * @Annotation\Options({"label":"Testlabel"})
-	 * @Form\Text()
+     * @Form\Text({"label":"Title"})
      * @ORM\Column
 	 */
 	protected $title;
 
 	/**
 	 * 
+     * @Form\Text({"label":"Path"})
      * @ORM\Column
 	 */
 	protected $path;	
@@ -43,6 +42,7 @@ class Layout
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Zone")
+     * @Form\Textarea({"label":"Main zone"})
 	 */
 	protected $mainZone;
 

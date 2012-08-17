@@ -169,18 +169,25 @@ class ModelController extends AbstractActionController
 		$em->persist($model);
 		$em->flush();
 
-		// Insert the model in the navigation
-		$routeList = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
-			'name' => 'crud'
-		));
+		// Insert the list navigation
+		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array('name' => 'crud'));
 		$navigation = new \Wiss\Entity\Navigation;
 		$navigation->setParent($this->getContentNavigation());
-		$navigation->setRoute($routeList);
+		$navigation->setRoute($route);
 		$navigation->setLabel($data['title']);
-		$navigation->setParams(array(
-			'name' => $model->getSlug()
-		));			
+		$navigation->setParams(array('name' => $model->getSlug()));			
 		$em->persist($navigation);
+
+		// Insert the edit navigation
+		$route2 = $em->getRepository('Wiss\Entity\Route')->findOneBy(array('name' => 'crud/edit'));
+		$navigation2 = new \Wiss\Entity\Navigation;
+		$navigation2->setParent($navigation);
+		$navigation2->setRoute($route2);
+		$navigation2->setLabel('Properties');
+		$navigation2->setParams(array('name' => $model->getSlug()));			
+		$em->persist($navigation2);
+		
+		
 		$em->flush();
 		
 		return $model;

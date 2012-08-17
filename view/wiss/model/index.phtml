@@ -6,9 +6,9 @@
 	<?php foreach($models as $model) : ?>
 	<li>
 		<h3><?= $model->getTitle() ?></h3>
-		<dl>
-			<a href="<?= $this->url('crud', array('name' => $model->getSlug())) ?>" class="btn btn-primary btn-small">View records</a>
-			<a href="<?= $this->url('model/edit', array('id' => $model->getId())) ?>" class="btn btn-small">Edit</a>
+		<dl class="btn-group">
+			<a href="<?= $this->url('crud', array('name' => $model->getSlug())) ?>" class="btn btn-small">View records</a>
+			<a href="<?= $this->url('model/edit', array('id' => $model->getId())) ?>" class="btn btn-small">Edit this model</a>
 		</dl>
 	</li>
 	<?php endforeach ?>

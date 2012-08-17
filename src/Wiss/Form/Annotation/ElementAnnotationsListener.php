@@ -51,6 +51,7 @@ class ElementAnnotationsListener extends AbstractAnnotationsListener
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach('configureElement', array($this, 'handleTextAnnotation'));
+        $this->listeners[] = $events->attach('configureElement', array($this, 'handleTextareaAnnotation'));
     }
 
     /**
@@ -62,13 +63,31 @@ class ElementAnnotationsListener extends AbstractAnnotationsListener
     public function handleTextAnnotation($e)
     {
         $annotation = $e->getParam('annotation');
-//		\Zend\Debug\Debug::dump($annotation, 'HANDLEEE');
         if (!$annotation instanceof Mapping\Text) {
             return;
         }
 		
         $elementSpec = $e->getParam('elementSpec');
-        $elementSpec['spec']['attributes'] = $annotation->getAttributes();
+        $elementSpec['spec']['attributes']['type'] = 'text';
+        $elementSpec['spec']['attributes']['label'] = $annotation->getLabel();		
+    }
+
+    /**
+     * Determine if the element has been marked to exclude from the definition
+     *
+     * @param  \Zend\EventManager\EventInterface $e
+     * @return bool
+     */
+    public function handleTextareaAnnotation($e)
+    {
+        $annotation = $e->getParam('annotation');
+        if (!$annotation instanceof Mapping\Textarea) {
+            return;
+        }
+		
+        $elementSpec = $e->getParam('elementSpec');
+        $elementSpec['spec']['attributes']['type'] = 'textarea';
+        $elementSpec['spec']['attributes']['label'] = $annotation->getLabel();		
     }
 
 }
