@@ -92,7 +92,7 @@ class IndexController extends AbstractActionController
 		$navigation2 = new \Wiss\Entity\Navigation;
 		$navigation2->setLabel('Cms');
 		$em->persist($navigation2);
-		
+				
 		$em->flush();
 				
 		$this->redirect()->toRoute('module/default', array(

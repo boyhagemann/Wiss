@@ -1,0 +1,20 @@
+
+
+<ul class="nav">
+	<?php foreach ($container as $item) : ?>
+	
+	<?php if($item->pages) : ?>
+	<li class="dropdown <?php if($item->isActive(true)) : echo 'active'; endif ?>">
+		<a href="#<?= $item->getLabel() ?>" class="dropdown-toggle" data-toggle="dropdown"><?= $item->getLabel() ?> <b class="caret"></b></a>
+		<ul class="dropdown-menu">
+			<?php foreach($item->pages as $sub) : ?>
+			<li class="<?php if($sub->isActive(true)) : echo 'active'; endif ?>"><a href="<?= $sub->getHref() ?>"><?= $sub->getLabel() ?></a></li>
+			<?php endforeach ?>
+		</ul>
+	</li>
+	<?php else : ?>
+	<li class="<?php if($item->isActive(true)) : echo 'active'; endif ?>"><a href="<?= $item->getHref() ?>"><?= $item->getLabel() ?></a></li>
+	<?php endif ?>
+	
+	<?php endforeach ?>
+</ul>

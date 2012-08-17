@@ -67,7 +67,7 @@ class ModelController extends AbstractActionController
 				$model = $this->createModel($form->getData());
 
 				// Redirect
-				$this->redirect()->toRoute('model/list', array(
+				$this->redirect()->toRoute('model/export', array(
 					'name' => $model->getSlug()
 				));
 			}
@@ -93,20 +93,20 @@ class ModelController extends AbstractActionController
 		$model->setEntityClass($data['class']);
 		$model->setTitleField($data['titleField']);
 		$em->persist($model);
+		$em->flush();
 
 		// Insert the model in the navigation
 		$routeList = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
 			'name' => 'model/list'
 		));
 		$navigation = new \Wiss\Entity\Navigation;
-		$navigation->setParent($this->getParentNavigation());
+		$navigation->setParent($this->getContentNavigation());
 		$navigation->setRoute($routeList);
 		$navigation->setLabel($data['title']);
 		$navigation->setParams(array(
-			'class' => $data['class']
+			'name' => $model->getSlug()
 		));			
 		$em->persist($navigation);
-
 		$em->flush();
 		
 		return $model;
@@ -114,13 +114,64 @@ class ModelController extends AbstractActionController
 	
 	/**
 	 *
+	 * @return \Wiss\Entity\Navigation 
+	 */
+	public function getContentNavigation()
+	{
+		$navigation = $this->getNavigation('content', 1);
+		
+		if(!$navigation) {
+			
+			$route = $this->getEntityManager()->getRepository('Wiss\Entity\Route')->findOneBy(array(
+				'name' => 'module'
+			));
+			
+			// Insert navigation
+			$navigation = new \Wiss\Entity\Navigation;
+			$navigation->setLabel('Content');
+			$navigation->setParent($this->getNavigation('cms', 0));
+			$navigation->setRoute($route);
+			$this->getEntityManager()->persist($navigation);		
+		}
+		
+		return $navigation;
+	}
+	
+	public function exportAction()
+	{		
+		// Build the config
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
+		$repo->exportToConfig();		
+		
+		// Build the config
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
+		$repo->exportRoutes();
+
+		// Redirect
+		$this->redirect()->toRoute('model/list', array(
+			'name' => $this->params('name')
+		));
+
+		return false;
+	}
+	
+	/**
+	 *
+	 * @param $name OPTIONAL
+	 * @param $level OPTIONAL
 	 * @return Wiss\Entity\Navigation 
 	 */
-	public function getParentNavigation()
+	public function getNavigation($name, $level = null)
 	{
-		$navigation = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation')->findOneBy(array(
-			'name' => 'cms'
-		));		
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
+		$params = array(
+			'name' => $name
+		);
+		if($level) {
+			$params['lvl'] = $level;
+		}
+		
+		$navigation = $repo->findOneBy($params);	
 		
 		return $navigation;
 	}

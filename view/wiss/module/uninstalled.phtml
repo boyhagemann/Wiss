@@ -1,4 +1,6 @@
-<h1>Uninstalled modules</h1>
+<h1>Modules</h1>
+
+<?= $this->navigation('cms')->menu()->setMinDepth(2)->setMaxDepth(2)->setOnlyActiveBranch(true)->setUlClass('nav nav-tabs') ?>
 
 <ul class="unstyled">
 	<?php foreach($modules as $module) : ?>

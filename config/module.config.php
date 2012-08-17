@@ -115,6 +115,18 @@ return array(
 							),
 						),
 					),
+					'export' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/export/[:name]',
+							'constraints' => array(
+								'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+							),
+							'defaults' => array(
+								'action' => 'export',
+							),
+						),
+					),
 					'edit' => array(
 						'type'    => 'Segment',
 						'options' => array(
@@ -229,10 +241,6 @@ return array(
 							),
 						)
 					),
-					'page' => array(
-						'label' => 'Pages',
-						'route' => 'page',
-					),
 				) 
 			),
 		)
@@ -256,6 +264,7 @@ return array(
     'view_manager' => array(
         'template_map' => array(
             'page-content/zone' => __DIR__ . '/../view/wiss/page-content/zone.phtml',
+            'navigation/menu' => __DIR__ . '/../view/wiss/navigation/menu.phtml',
 		),
         'template_path_stack' => array(
             __DIR__ . '/../view',
