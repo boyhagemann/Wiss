@@ -88,6 +88,7 @@ class ElementAnnotationsListener extends AbstractAnnotationsListener
         $elementSpec = $e->getParam('elementSpec');
         $elementSpec['spec']['attributes']['type'] = 'textarea';
         $elementSpec['spec']['attributes']['label'] = $annotation->getLabel();		
+        $elementSpec['spec']['options']['label'] = $annotation->getLabel();		
     }
 
 }

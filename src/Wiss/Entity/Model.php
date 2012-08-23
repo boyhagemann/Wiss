@@ -27,7 +27,7 @@ class Model
 	/**
 	 *
      * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(length=128, unique=true)
+     * @ORM\Column(length=128, unique=false)
 	 */
 	protected $slug;
 	
@@ -36,6 +36,18 @@ class Model
      * @ORM\Column
 	 */
 	protected $entityClass;
+	
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $formClass;
+	
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $controllerClass;
 	
 	/**
 	 * 
@@ -70,7 +82,23 @@ class Model
 	public function setEntityClass($entityClass) {
 		$this->entityClass = $entityClass;
 	}
+	
+	public function getControllerClass() {
+		return $this->controllerClass;
+	}
 
+	public function setControllerClass($controllerClass) {
+		$this->controllerClass = $controllerClass;
+	}
+	
+	public function getFormClass() {
+		return $this->formClass;
+	}
+
+	public function setFormClass($formClass) {
+		$this->formClass = $formClass;
+	}
+	
 	public function getTitleField() {
 		return $this->titleField;
 	}

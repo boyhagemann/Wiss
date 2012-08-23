@@ -115,7 +115,7 @@ class Route
 		return $this->defaults;
 	}
 
-	public function setDefaults($defaults) {
+	public function setDefaults(Array $defaults) {
 		$this->defaults = $defaults;
 	}
 
@@ -123,7 +123,7 @@ class Route
 		return $this->constraints;
 	}
 
-	public function setConstraints($constraints) {
+	public function setConstraints(Array $constraints) {
 		$this->constraints = $constraints;
 	}
 

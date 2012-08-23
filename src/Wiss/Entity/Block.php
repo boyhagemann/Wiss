@@ -3,17 +3,20 @@
 namespace Wiss\Entity;
 
 use Wiss\Annotation\Overview;
+use Wiss\Form\Mapping as Form;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Form\Annotation;
 
 /**
+ *  A test description
+ * 
  * @ORM\Entity 
  * @Overview(titleField="title")
  */
 class Block
 {
 	/**
-	 * 
+	 * @Annotation\Exclude()
 	 * @ORM\ID
 	 * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
@@ -22,6 +25,7 @@ class Block
 
 	/**
 	 * 
+	 * @Form\Text({"label"="Title"})
      * @ORM\Column
 	 */
 	protected $title;

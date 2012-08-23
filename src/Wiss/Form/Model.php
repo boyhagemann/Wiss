@@ -17,8 +17,12 @@ use Zend\InputFilter\InputFilter;
 
 class Model extends Form
 {	
-    public function __construct()
+	protected $entityManager;
+	
+    public function __construct($em)
     {
+		$this->setEntityManager($em);
+		
 		parent::__construct('model');
 		
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
@@ -33,7 +37,7 @@ class Model extends Form
 		// Title field
 		$titleField = new Element('title_field');
 		$titleField->setAttributes(array(
-			'type' => 'text',
+			'type' => 'select',
 			'label' => 'Which field is used as title?'
 		));
 		
@@ -45,10 +49,11 @@ class Model extends Form
 		));
 
 		// Submit
-		$submit = new Element('send');
+		$submit = new Element('submit');
 		$submit->setAttributes(array(
 			'type'  => 'submit',
-			'value' => 'Save',
+			'value' => 'Install',
+			'class' => 'btn btn-primary btn-large',
 		));
 
 		$this->add($title);
@@ -63,4 +68,94 @@ class Model extends Form
 		$this->setInputFilter($inputFilter);
 	}
 	
+	/**
+	 *
+	 * @param type $data 
+	 */
+	public function setData($data)
+	{
+		parent::setData($data);
+		
+		if(isset($data['entity_class'])) {
+			$this->setTitleFieldOptions($data['entity_class']);
+		}
+		
+		$elements = new Fieldset('elements');
+		
+		$inputFilter = $this->getInputFilter();
+		$inputFilter->add(new Input('elements', array(
+			'required' => false,
+		)));
+			
+		
+		foreach($this->getFieldMapping($data['entity_class']) as $field) {
+			
+			$fieldset = new Fieldset($field['fieldName']);
+			$fieldset->setOptions(array(
+				'legend' => $field['fieldName'],
+			));
+			
+			$labelName = sprintf('elements[%s][label]', $field['fieldName']);
+			$fieldset->add(array(
+				'name' => $labelName,
+				'attributes' => array(
+					'type' => 'text',
+					'label' => 'Label',					
+					'placeholder' => sprintf('Label for %s...', $field['fieldName']),
+				)
+			));
+			$elementName = sprintf('elements[%s][type]', $field['fieldName']);
+			$fieldset->add(array(
+				'name' => $elementName,
+				'attributes' => array(
+					'type' => 'select',
+					'label' => 'Label',
+					'options' => array(
+						''			=> 'No element assigned yet...',
+						'Zend\Form\Element\Text'		=> 'Text',
+						'Zend\Form\Element\Textarea'	=> 'Textarea',
+					)
+				)
+			));
+			
+			$elements->add($fieldset);			
+		}
+		
+		$this->add($elements);
+		
+		
+	}
+	
+	/**
+	 *
+	 * @param string $class
+	 * @return array 
+	 */
+	public function getFieldMapping($class)
+	{
+		$meta = $this->getEntityManager()->getClassMetadata($class);
+		return $meta->fieldMappings;
+	}
+	
+	/**
+	 *
+	 * @param string $class 
+	 */
+	public function setTitleFieldOptions($class)
+	{
+		$options = array('' => 'Choose a field name...');
+		foreach($this->getFieldMapping($class) as $field) {
+			$options[$field['fieldName']] = $field['fieldName'];
+		}
+		$this->get('title_field')->setAttribute('options', $options);		
+	}
+	
+	public function getEntityManager() {
+		return $this->entityManager;
+	}
+
+	public function setEntityManager($entityManager) {
+		$this->entityManager = $entityManager;
+	}
+
 }

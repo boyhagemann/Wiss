@@ -19,19 +19,24 @@ use Zend\StdLib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
 class CrudController extends AbstractActionController
 {
+	protected $modelName;
+	
 	protected $entityManager;
 	
     public function indexAction()
 	{
 		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->params('name')));
+		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
 		
 		$entityClass = $model->getEntityClass();
 		$entities = $this->getEntityManager()->getRepository($entityClass)->findAll();
 		
 		$labelGetter = 'get' . ucfirst($model->getTitleField());
+		$params = compact('model', 'entities', 'labelGetter');
+		$viewModel = new ViewModel($params);
+		$viewModel->setTemplate('wiss/crud/index');
 		
-		return compact('model', 'entities', 'labelGetter');
+		return $viewModel;
 	}
 		
 	public function editAction()
@@ -43,8 +48,8 @@ class CrudController extends AbstractActionController
 		$entityClass = $model->getEntityClass();
 		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
 		
-		$form = $this->buildForm($entityClass);
-		$form->setHydrator(new ClassMethodsHydrator());
+		$class = $model->getFormClass();
+		$form = new $class();
 		$form->bind($entity);
 		
 		if($this->getRequest()->isPost()) {
@@ -83,6 +88,7 @@ class CrudController extends AbstractActionController
         $parser = new Parser\DoctrineAnnotationParser();
 		$parser->registerAnnotation('Wiss\Form\Mapping\Text');
 		$parser->registerAnnotation('Wiss\Form\Mapping\Textarea');
+		$parser->registerAnnotation('desc');
 		
 		$annotationManager = $builder->getAnnotationManager();
 		$annotationManager->attach($parser);
@@ -119,4 +125,14 @@ class CrudController extends AbstractActionController
 	{
 		return $this->entityManager;
 	}
+	
+	public function getModelName() {
+		return $this->modelName;
+	}
+
+	public function setModelName($modelName) {
+		$this->modelName = $modelName;
+	}
+
+
 }

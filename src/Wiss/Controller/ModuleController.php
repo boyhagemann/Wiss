@@ -56,37 +56,13 @@ class ModuleController extends AbstractActionController
         return compact('modules');
 	}
 	
+	/**
+	 *
+	 * @return boolean 
+	 */
 	public function installAction()
 	{
-		$this->install($this->params('name'));
-						
-		// Show flash message
-		$message = sprintf('Module %s is installed', $this->params('name'));
-		$this->flashMessenger()->addMessage($message);
-		
-		// Redirect
-		$this->redirect()->toRoute('module/export');
-		
-		return false;
-	}
-	
-	public function exportAction()
-	{		
-		// Build the config
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
-		$repo->exportToConfig();		
-		
-		// Build the config
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
-		$repo->exportRoutes();
-				
-		$this->redirect()->toRoute('module');
-
-		return false;
-	}
-	
-	public function install($name)
-	{
+		$name = $this->params('name');
 		$em = $this->getEntityManager();
 		$module = $em->getRepository('Wiss\Entity\Module')->findOneBy(array('name' => $name));
 		
@@ -104,53 +80,39 @@ class ModuleController extends AbstractActionController
 		$config = array();
 		if(method_exists($zfModule, 'getConfig')) {
 			$config = $zfModule->getConfig();
-			$this->installRoutes($config);
-			$this->installNavigation($config);
+			
+			\Zend\Debug\Debug::dump($config);
+			
+			// Import from config
+			$em->getRepository('Wiss\Entity\Page')->import($config);
+			$em->getRepository('Wiss\Entity\Navigation')->import($config);
 		}
+		
+						
+		// Show flash message
+		$message = sprintf('Module %s is installed', $this->params('name'));
+		$this->flashMessenger()->addMessage($message);
+		
+		// Redirect
+		$this->redirect()->toRoute('module/export');
+		
+		return false;
 	}
 	
 	/**
-	 * 
-	 * @param array $config
+	 *
+	 * @return boolean 
 	 */
-	public function installNavigation(Array $config)
-	{
-		if(!isset($config['navigation'])) {
-			return;
-		}
-		
-		$navigation = $config['navigation'];
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
-//		
-		// Build the pages from the routes
-		foreach($navigation as $name => $navigationData) {
-			$repo->createNavigationFromArray($name, $navigationData, null, true);
-		}
+	public function exportAction()
+	{		
+		// Build the config
+		$em = $this->getEntityManager();
+		$em->getRepository('Wiss\Entity\Page')->export();
+		$em->getRepository('Wiss\Entity\Navigation')->export();		
 				
-		// Save entities
-		$this->getEntityManager()->flush();
-	}
-	
-	/**
-	 * 
-	 * @param array $config
-	 */
-	public function installRoutes(Array $config)
-	{
-		if(!isset($config['router']['routes'])) {
-			return;
-		}
-		
-		$routes = $config['router']['routes'];
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
-		
-		// Build the pages from the routes
-		foreach($routes as $name => $routeData) {
-			$repo->createPageFromRoute($name, $routeData);
-		}
-				
-		// Save entities
-		$this->getEntityManager()->flush();
+		$this->redirect()->toRoute('module');
+
+		return false;
 	}
 	
 	/**

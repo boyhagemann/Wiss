@@ -9,22 +9,48 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * 
  */
 class Page extends \Doctrine\ORM\EntityRepository
-{
-	public function exportRoutes()
+{	
+	/**
+	 * 
+	 * @param array $config
+	 */
+	public function import(Array $config)
+	{
+		if(!isset($config['router']['routes'])) {
+			return;
+		}
+		
+		$routes = $config['router']['routes'];
+		
+		// Build the pages from the routes
+		foreach($routes as $name => $routeData) {
+			$this->createPageFromRoute($name, $routeData);
+		}
+				
+		// Save entities
+		$this->getEntityManager()->flush();
+	}
+	
+	/**
+	 * 
+	 */
+	public function export()
 	{
 		$rootPages = $this->findBy(array(
 			'parent' => null,
 		));
 		
 		// Build the route config as array
-		$config = array();
 		$config['router']['routes'] = $this->buildRouteConfigArray($rootPages);
+		
+		// Also build the controllers currently used
+		$config['controllers']['invokables'] = $this->buildControllerInvokables();
 		
 		// Write the config to disk in the config autoload folder
 		$writer = new \Zend\Config\Writer\PhpArray();
 		$writer->toFile('config/autoload/routes.global.php', $config);
 	}
-	
+		
 	/**
 	 *
 	 * @param array $tree
@@ -54,6 +80,21 @@ class Page extends \Doctrine\ORM\EntityRepository
 		}
 		
 		return $config;
+	}
+	
+	/**
+	 * 
+	 * @return array
+	 */
+	public function buildControllerInvokables()
+	{
+		$controllers = array();
+//		$blocks = $this->getEntityManager()->getRepository('Wiss\Entity\Block')->findAll();
+//		foreach($blocks as $block) {
+//			$alias = substr($block->getController(), 0, strrpos($block->getController(), 'Controller'));
+//			$controllers[$alias] = $block->getController();
+//		}
+		return $controllers;
 	}
 	
 	/**
