@@ -89,11 +89,16 @@ class Page extends \Doctrine\ORM\EntityRepository
 	public function buildControllerInvokables()
 	{
 		$controllers = array();
-//		$blocks = $this->getEntityManager()->getRepository('Wiss\Entity\Block')->findAll();
-//		foreach($blocks as $block) {
-//			$alias = substr($block->getController(), 0, strrpos($block->getController(), 'Controller'));
-//			$controllers[$alias] = $block->getController();
-//		}
+		$blocks = $this->getEntityManager()->getRepository('Wiss\Entity\Block')->findAll();
+		foreach($blocks as $block) {
+			$alias = $block->getController();
+			if(strrpos($alias, 'Controller') === 0) {
+				$alias = substr($alias, 0, strrpos($alias, 'Controller'));
+			}
+			$controllers[$alias] = $alias . 'Controller';
+		}
+		
+//		\Zend\Debug\Debug::dump($controllers); exit;
 		return $controllers;
 	}
 	

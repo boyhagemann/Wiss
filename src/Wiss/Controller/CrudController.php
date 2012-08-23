@@ -32,7 +32,11 @@ class CrudController extends AbstractActionController
 		$entities = $this->getEntityManager()->getRepository($entityClass)->findAll();
 		
 		$labelGetter = 'get' . ucfirst($model->getTitleField());
+		
+		// Create the params for the view
 		$params = compact('model', 'entities', 'labelGetter');
+		
+		// Create view model
 		$viewModel = new ViewModel($params);
 		$viewModel->setTemplate('wiss/crud/index');
 		
@@ -43,7 +47,7 @@ class CrudController extends AbstractActionController
 	{
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->params('name')));
+		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
 		
 		$entityClass = $model->getEntityClass();
 		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
@@ -70,8 +74,15 @@ class CrudController extends AbstractActionController
 				));
 			}
 		}
+		
+		// Create the params for the view
+		$params = compact('model', 'entity', 'form');
 							
-		return compact('model', 'entity', 'form');
+		// Create view model
+		$viewModel = new ViewModel($params);
+		$viewModel->setTemplate('wiss/crud/edit');
+		
+		return $viewModel;
 	}
 	
 	/**

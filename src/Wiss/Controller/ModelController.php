@@ -150,7 +150,7 @@ class ModelController extends AbstractActionController
 		$em->getRepository('Wiss\Entity\Page')->export();
 
 		// Redirect
-		$this->redirect()->toRoute($this->params('name'));
+		$this->redirect()->toRoute('model');
 
 		return false;
 	}
@@ -307,7 +307,7 @@ class ModelController extends AbstractActionController
 								'action' => 'edit',
 							),
 							'constraints' => array(
-								'id' => '/[0-9]+/',
+								'id' => '[0-9]+',
 							),
 						)
 					)
