@@ -25,9 +25,12 @@ class CrudController extends AbstractActionController
 	
     public function indexAction()
 	{
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Model');
+		// Get the main model
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');
 		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
 		
+		// Get the entity that the model is using
 		$entityClass = $model->getEntityClass();
 		$entities = $this->getEntityManager()->getRepository($entityClass)->findAll();
 		
@@ -45,6 +48,7 @@ class CrudController extends AbstractActionController
 		
 	public function editAction()
 	{
+		// Get the main model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');
 		$model = $repo->findOneBy(array('slug' => $this->getModelName()));

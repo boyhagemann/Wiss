@@ -129,35 +129,6 @@ return array(
 					),
 				)
 			),
-//			'crud' => array(
-//				'type'    => 'Literal',
-//				'options' => array(
-//					'route'    => '/crud/[:name]',
-//					'constraints' => array(
-//						'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-//					),
-//					'defaults' => array(
-//                        '__NAMESPACE__' => 'Wiss\Controller',
-//                        'controller' => 'crud',
-//                        'action' => 'index',
-//					),
-//				),
-//				'may_terminate' => true,
-//				'child_routes' => array(	
-//					'edit' => array(
-//						'type'    => 'Segment',
-//						'options' => array(
-//							'route'    => '/edit/[:id]',
-//							'constraints' => array(
-//								'id'     => '[0-9]*',
-//							),
-//							'defaults' => array(
-//								'action' => 'edit',
-//							),
-//						),
-//					),	
-//				)
-//			),
             'module' => array(
                 'type'    => 'Literal',
                 'options' => array(
@@ -253,6 +224,12 @@ return array(
 								'route' => 'model/default',
 								'params' => array(
 									'action' => 'uninstalled'
+								),
+								'pages' => array(
+									'install' => array(
+										'label' => 'Install',
+										'route' => 'model/install'
+									),
 								)
 							),
 						)
