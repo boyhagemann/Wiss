@@ -98,7 +98,6 @@ class Page extends \Doctrine\ORM\EntityRepository
 			$controllers[$alias] = $alias . 'Controller';
 		}
 		
-//		\Zend\Debug\Debug::dump($controllers); exit;
 		return $controllers;
 	}
 	
@@ -164,6 +163,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 			$em->persist($block);
 
 			$content = new \Wiss\Entity\Content;
+			$content->setTitle('Default page content');
 			$content->setPage($page);
 			$content->setBlock($block);
 			$content->setZone($page->getLayout()->getMainZone());

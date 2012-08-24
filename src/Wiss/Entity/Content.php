@@ -16,6 +16,12 @@ class Content
      * @ORM\Column(type="integer")
 	 */
 	protected $id;
+	
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $title;
 
 	/**
 	 *
@@ -39,7 +45,7 @@ class Content
 	 *
      * @ORM\Column(type="array")
 	 */
-	protected $defaults;
+	protected $defaults = array();
 		
 	public function getId() {
 		return $this->id;
@@ -47,6 +53,14 @@ class Content
 
 	public function setId($id) {
 		$this->id = $id;
+	}
+		
+	public function getTitle() {
+		return $this->title;
+	}
+
+	public function setTitle($title) {
+		$this->title = $title;
 	}
 
 	public function getPage() {

@@ -4,3 +4,35 @@
 	<li><a href="<?= $this->url('page/properties', array('id' => $page->getId())) ?>">Properties</a></li>
 	<li class="active"><a href="<?= $this->url('page/content', array('id' => $page->getId())) ?>">Content</a></li>
 </ul>
+
+<?php foreach($zones as $zone) : ?>
+
+<h2><?= $zone->getTitle() ?></h2>
+<ul class="blocks unstyled">
+	<?php foreach ($used[$zone->getId()] as $content) : ?>
+	<li class="block rounded-small">
+		<h3><?= $content->getTitle() ?></h3>
+		<dl class="dl-horizontal">
+			<dt>Block</dt>
+			<dd><?= $content->getBlock()->getTitle() ?></dd>
+			<dt>Controller</dt>
+			<dd><?= $content->getBlock()->getController() ?></dd>
+			<dt>Action</dt>
+			<dd><?= $content->getBlock()->getAction() ?></dd>
+			<?php foreach ($content->getDefaults() as $name => $param) : ?>
+			<dt><?= $name ?></dt>
+			<dd><?= $param ?></dd>
+			<?php endforeach ?>
+		</dl>
+		<div class="form-actions">
+			<a href="" class="btn btn-small btn-primary">Properties</a>
+			<a href="" class="btn btn-small">Remove</a>
+		</div>
+	</li>
+	<?php endforeach ?>
+	<li class="block rounded-small empty">
+		Drag blocks in here...
+	</li>
+</ul>
+
+<?php endforeach; ?>

@@ -47,8 +47,21 @@ class PageController extends AbstractActionController
 	{
 		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
 		$page = $repo->find($this->params('id'));
-					
-		return compact('page');
+		
+		$zones = $page->getLayout()->getZones();
+		
+		$used = array();
+		foreach($zones as $zone) {
+			$used[$zone->getId()] = array();
+		}
+		
+		$pageContent = $page->getContent();
+		foreach($pageContent as $content) {
+			$zoneId = $content->getZone()->getId();
+			$used[$zoneId][] = $content;
+		}
+		
+		return compact('page', 'zones', 'used');
 	}
 			
 	/**
