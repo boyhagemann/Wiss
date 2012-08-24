@@ -4,7 +4,7 @@
 <ul class="unstyled">
 	<?php foreach($pages as $page) : ?>
 	<li>
-		<h2><a href="<?= $this->url('page/view', array('id' => $page->getId())) ?>"><?= $page->getTitle() ?></a></h2>
+		<h2><a href="<?= $this->url('page/content', array('id' => $page->getId())) ?>"><?= $page->getTitle() ?></a></h2>
 	</li>
 	<?php endforeach ?>
 </ul>
