@@ -16,7 +16,7 @@ return array(
                     'route'    => '*',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Wiss\Controller',
-                        'controller'    => 'page-content',
+                        'controller'    => 'pageContent',
                         'action'        => 'route',
                     ),
                 ),                
@@ -48,7 +48,7 @@ return array(
 					'view' => array(
 						'type'    => 'Segment',
 						'options' => array(
-							'route'    => '/view/[:id]',
+							'route'    => '/view/:id',
 							'constraints' => array(
 								'id' => '[0-9-]*',
 							),
@@ -235,6 +235,10 @@ return array(
 						)
 					),
 				) 
+			),
+			'navigation' => array(
+				'label' => 'Navigation',
+				'route' => 'navigation',
 			),
 			'install' => array(
 				'label' => 'Install',

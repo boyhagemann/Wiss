@@ -16,13 +16,30 @@ class PageController extends AbstractActionController
 {
 	protected $entityManager;
 	
+	/**
+	 * SFSDGSDGSDGSGSF
+	 * SD
+	 * SD
+	 * FSD
+	 * FSDFSFDFSDFDSFSD
+	 *
+	 * @return array 
+	 */
     public function indexAction()
     {
 		$pages = $this->getEntityManager()->getRepository('Wiss\Entity\Page')->findAll();
-		
+				
 		return compact('pages');
     }
 		
+	/**
+	 *
+	 * ADASDSAD
+	 * A
+	 * SD
+	 * ASDSAD
+	 * @return type 
+	 */
 	public function viewAction()
 	{
 		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
