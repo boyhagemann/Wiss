@@ -18,7 +18,7 @@ class Navigation extends NestedTreeRepository
 	{
 		if(!isset($config['navigation'])) {
 			return;
-		}
+		}		
 		
 		$navigation = $config['navigation'];		
 		$parent = $this->getContentNavigation();
@@ -27,7 +27,7 @@ class Navigation extends NestedTreeRepository
 		foreach($navigation as $name => $navigationData) {
 			$this->createNavigationFromArray($name, $navigationData, $parent);
 		}
-				
+			
 		// Save entities
 		$this->getEntityManager()->flush();
 	}
@@ -62,16 +62,20 @@ class Navigation extends NestedTreeRepository
 	{		
 		$em = $this->getEntityManager();
 		
+		
+		\Zend\Debug\Debug::dump($name); 
+		
 		if(!key_exists('label', $data)) {
 			
-			key_exists('pages', $data) ?: $data = $data['pages']; 
-			
+			if(key_exists('pages', $data)) {
+				$data = $data['pages'];
+			}
+			 
 			foreach($data as $childName =>  $childData) {
 				$this->createNavigationFromArray($childName, $childData, $this->getNavigation($name));
 			}
 		}
 		else {
-			\Zend\Debug\Debug::dump($data);
 
 			$navigation = new \Wiss\Entity\Navigation;
 			$navigation->setLabel($data['label']);
@@ -109,12 +113,14 @@ class Navigation extends NestedTreeRepository
 	public function buildNavigationConfigArray($navigation)
 	{
 		$config = array();
-		
+					
 		if(!$navigation instanceof \ArrayAccess) {
 			return $config;
 		}
-		
+			
 		foreach($navigation as $node) {
+			
+		
 			
 			$name = $node->getName();
 			$config[$name] = array(
@@ -145,7 +151,7 @@ class Navigation extends NestedTreeRepository
 			// We have to use a route for the navigation, so just grab
 			// a neutral route
 			$route = $this->getEntityManager()->getRepository('Wiss\Entity\Route')->findOneBy(array(
-				'name' => 'module'
+				'name' => 'model'
 			));
 			
 			// Insert navigation

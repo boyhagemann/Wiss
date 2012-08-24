@@ -22,7 +22,25 @@ class NavigationController extends AbstractActionController
 		$tree = $repo->childrenHierarchy(
 			null, /* starting from root nodes */
 			false, /* load all children, not only direct */
-			array('decorate' => true)
+			array(
+				'rootOpen' => '<ul class="tree">',
+				'decorate' => true,    
+				'nodeDecorator' => function($node) use($repo) {
+					
+					$node = $repo->find($node['id']);
+					$label = $node->getLabel();
+					
+					if(!$node->getParent()) {
+						return $label;
+					}
+					else {						
+						$id = $node->getRoute()->getPage()->getId();
+						$url = $this->url()->fromRoute('page/content', array('id' => $id));
+						return sprintf('<a href="%s">%s</a>', $url, $label);
+					}
+					
+				}
+			)
 		);
 		
 		return compact('tree');

@@ -17,11 +17,6 @@ class PageController extends AbstractActionController
 	protected $entityManager;
 	
 	/**
-	 * SFSDGSDGSDGSGSF
-	 * SD
-	 * SD
-	 * FSD
-	 * FSDFSFDFSDFDSFSD
 	 *
 	 * @return array 
 	 */
@@ -34,13 +29,21 @@ class PageController extends AbstractActionController
 		
 	/**
 	 *
-	 * ADASDSAD
-	 * A
-	 * SD
-	 * ASDSAD
-	 * @return type 
+	 * @return array 
 	 */
-	public function viewAction()
+	public function propertiesAction()
+	{
+		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
+		$page = $repo->find($this->params('id'));
+					
+		return compact('page');
+	}
+		
+	/**
+	 *
+	 * @return array 
+	 */
+	public function contentAction()
 	{
 		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
 		$page = $repo->find($this->params('id'));

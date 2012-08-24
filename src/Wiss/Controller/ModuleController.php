@@ -81,8 +81,6 @@ class ModuleController extends AbstractActionController
 		if(method_exists($zfModule, 'getConfig')) {
 			$config = $zfModule->getConfig();
 			
-			\Zend\Debug\Debug::dump($config);
-			
 			// Import from config
 			$em->getRepository('Wiss\Entity\Page')->import($config);
 			$em->getRepository('Wiss\Entity\Navigation')->import($config);

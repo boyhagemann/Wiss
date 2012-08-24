@@ -32,28 +32,28 @@ return array(
 					),
 				),
 				'may_terminate' => true,
-				'child_routes' => array(	
-					'default' => array(
+				'child_routes' => array(		
+					'properties' => array(
 						'type'    => 'Segment',
 						'options' => array(
-							'route'    => '/[:action]',
-							'constraints' => array(
-								'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-							),
-							'defaults' => array(
-								'action' => 'index',
-							),
-						),
-					),				
-					'view' => array(
-						'type'    => 'Segment',
-						'options' => array(
-							'route'    => '/view/:id',
+							'route'    => '/properties/[:id]',
 							'constraints' => array(
 								'id' => '[0-9-]*',
 							),
 							'defaults' => array(
-								'action' => 'view',
+								'action' => 'properties',
+							),
+						),
+					),	
+					'content' => array(
+						'type'    => 'Segment',
+						'options' => array(
+							'route'    => '/content/[:id]',
+							'constraints' => array(
+								'id' => '[0-9-]*',
+							),
+							'defaults' => array(
+								'action' => 'content',
 							),
 						),
 					),
