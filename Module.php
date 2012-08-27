@@ -20,16 +20,25 @@ class Module
 		$evm = $e->getApplication()->getEventManager();		
 		$evm->attach(MvcEvent::EVENT_ROUTE, function($e) {
 				
-			$config = $e->getApplication()->getConfig();
+			$config = $e->getApplication()->getConfig();	
+			$route = $e->getRouteMatch();	
+			$current = $route->getMatchedRouteName();	
+				
+			// Go to the install page first if there is no valid database connection
+			if($current != 'install' && $config['doctrine']['connection']['orm_default']['params']['password'] == 'password') {
+				$sm = $e->getApplication()->getServiceManager();
+				
+				$route->setParam('controller', 'Wiss\Controller\Index');
+				$route->setParam('action', 'install');				
+			}
 			
+			// Check if there are zones used
 			if($config['application']['use_zones']) {
 				
 				// Rewrite all incoming uri's to a single entry point
-				$route = $e->getRouteMatch();
-				$current = $route->getMatchedRouteName();	
 				$route->setParam('controller', 'Wiss\Controller\PageContent');
 				$route->setParam('action', 'route');
-				$route->setParam('route', $current);				
+				$route->setParam('route', $current);			
 				
 			}
 

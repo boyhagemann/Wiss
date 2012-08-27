@@ -114,6 +114,7 @@ class Model extends Form
 						''			=> 'No element assigned yet...',
 						'Zend\Form\Element\Text'		=> 'Text',
 						'Zend\Form\Element\Textarea'	=> 'Textarea',
+						'Wiss\Form\Element\DatePicker'	=> 'DatePicker',
 					)
 				)
 			));

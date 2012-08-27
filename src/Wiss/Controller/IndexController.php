@@ -21,7 +21,48 @@ class IndexController extends AbstractActionController
      */
     public function installAction()
     {
-        $em = $this->getEntityManager();
+		$form = new \Wiss\Form\Install();				
+		
+		$data = $this->getServiceLocator()->get('config');
+		
+		$form->setData($data['doctrine']['connection']['orm_default']['params']);
+		
+		if($this->getRequest()->isPost()) {
+			$form->setData($this->getRequest()->getPost());
+			
+			if($form->isValid()) {
+				
+				$file = 'config/autoload/connection.global.php';
+				
+				$config = array(
+					'doctrine' => array(
+						'connection' => array(
+							'orm_default' => array(
+								'params' => $form->getData()
+							),
+						),
+					)
+				);
+				
+				// Write the config to disk in the config autoload folder
+				$writer = new \Zend\Config\Writer\PhpArray();
+				$writer->toFile($file, $config);
+				
+				$this->install();	
+				
+				$this->redirect()->toRoute('module/default', array(
+					'action' => 'uninstalled'
+				));
+			}
+		}
+					
+		
+		return compact('form');
+    }
+	
+	public function install()
+	{
+		$em = $this->getEntityManager();
         $classes = array(
           $em->getClassMetadata('Wiss\Entity\Page'),
           $em->getClassMetadata('Wiss\Entity\Route'),
@@ -86,13 +127,7 @@ class IndexController extends AbstractActionController
 		$em->persist($navigation2);
 				
 		$em->flush();
-				
-		$this->redirect()->toRoute('module/default', array(
-			'action' => 'uninstalled'
-		));
-		
-		return false;
-    }
+	}
 	
 	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
 	{
