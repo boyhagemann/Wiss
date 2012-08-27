@@ -31,6 +31,7 @@ class NavigationController extends AbstractActionController
 					$label = $node->getLabel();
 					
 					if(!$node->getParent()) {
+						return sprintf('<a href="">%s</a>', $label);
 						return $label;
 					}
 					else {						
