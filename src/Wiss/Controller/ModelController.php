@@ -190,9 +190,9 @@ class ModelController extends AbstractActionController
 					
 		// Create the body for in the __construct method
 		$body = sprintf('parent::__construct(\'%s\');', $className) . PHP_EOL . PHP_EOL;
-		$body .= '$this->setHydrator(new ClassMethodsHydrator());' . PHP_EOL . PHP_EOL;
-		
-		
+		$body .= '$this->setHydrator(new ClassMethodsHydrator());' . PHP_EOL;
+		$body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
+				
 		// Add the elements 
 		foreach($elements as $name => $element) {
 			
@@ -204,10 +204,23 @@ class ModelController extends AbstractActionController
 			$body .= '$this->add(array(' . PHP_EOL;
 			$body .= sprintf('  \'name\' => \'%s\',', $name) . PHP_EOL;
 			$body .= sprintf('  \'type\' => \'%s\',', $element['type']) . PHP_EOL;
-			$body .= '  \'options\' => array(' . PHP_EOL;
-			$body .= sprintf('    \'label\' => \'%s\'', $element['label']) . PHP_EOL;
+			$body .= '	\'attributes\' => array(' . PHP_EOL;
+			$body .= sprintf('    \'label\' => \'%s\',', $element['label']) . PHP_EOL;
 			$body .= ')));' . PHP_EOL . PHP_EOL;
 		}
+		
+		
+			
+		$body .= '// submit' . PHP_EOL;
+		$body .= '$this->add(array(' . PHP_EOL;
+		$body .= sprintf('  \'name\' => \'%s\',', 'submit') . PHP_EOL;
+		$body .= sprintf('  \'type\' => \'%s\',', 'Zend\Form\Element\Submit') . PHP_EOL;
+		$body .= '	\'attributes\' => array(' . PHP_EOL;
+		$body .= sprintf('    \'value\' => \'%s\',', 'Save') . PHP_EOL;
+		$body .= sprintf('    \'class\' => \'%s\',', 'btn btn-primary') . PHP_EOL;
+		$body .= ')));' . PHP_EOL . PHP_EOL;
+		
+		
 		
 		$namespace = 'Application\Form'; 
 		$folder = 'module/Application/src/Application/Form';
