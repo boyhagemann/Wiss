@@ -11,49 +11,68 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Doctrine\ORM\EntityManager;
 
 class PageContentController extends AbstractActionController
 {
+    /**
+     *
+     * @var EntityManager
+     */
 	protected $entityManager;
 			
+    /**            
+     * This action dispatches multiple other controller actions into
+     * so called zones.
+     *
+     */
 	public function routeAction()
 	{
         $em = $this->getEntityManager();
-		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array('name' => $this->params('route')));		
-		$page = $route->getPage();
+        
+        // Get the route this found in the original routeMatch
+		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
+            'name' => $this->params('route')
+        ));		
+        
+        // Get the page, layout and routematch
+		$page       = $route->getPage();
+        $layout     = $page->getLayout();
 		$routeMatch = $this->getEvent()->getRouteMatch();
 		
+        // Start a new view model
 		$view = new ViewModel();
 		$view->setTemplate('wiss/page-content/route');
-		$view->setOption('layout', $page->getLayout()->getPath());
+		$view->setOption('layout', $layout->getPath());
 					
-		// Split the content into zones
+		// Collect the content per zone
 		$zones = array();
 		foreach($page->getContent() as $content) {
-			$zones[$content->getZone()->getId()][] = $content;
+            $zoneId = $content->getZone()->getId();
+			$zones[$zoneId][] = $content;
 		}
 				
+        // Walk each zone and process the blocks
 		foreach($zones as $blocks) {
-
-			$zone = $content->getZone();
 			
 			// Build a zone view model
 			$viewZone = new ViewModel();
 			$viewZone->setTemplate('page-content/zone');
-			$viewZone->setCaptureTo($zone->getName());	
+			$viewZone->setCaptureTo($content->getZone()->getName());	
 			$view->addChild($viewZone);
 			
 			// Add content to this zone
 			foreach($blocks as $content) {
 
+                // Get the block from this content part
 				$block = $content->getBlock();
 
-				// Alter the current controller's routeMatch			
+				// Alter the current controller's routeMatch		
 				$routeMatch->setParam('controller', $block->getController());
 				$routeMatch->setParam('action', $block->getAction());
 				
 				// Inject all defaults
-				foreach((array)$content->getDefaults() as $key => $value) {
+				foreach($content->getDefaults() as $key => $value) {
 					$routeMatch->setParam($key, $value);
 				}
 
@@ -69,46 +88,17 @@ class PageContentController extends AbstractActionController
 	}
 	
     /**
-     * 
+     *
+     * @param EntityManager $entityManager
      */
-    public function generateAction()
-    {
-        $em = $this->getEntityManager();
-        $classes = array(
-          $em->getClassMetadata('Page\Entity\Content'),
-          $em->getClassMetadata('Page\Entity\Block'),
-        );
-        
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-        
-        try {
-            $tool->dropSchema($classes);
-        }
-        catch(Exception $e) {
-            print $e->getMessage();
-        }
-        $tool->createSchema($classes);
-			
-		$layout = $em->find('Page\Entity\Layout', 1);
-		
-		// Insert zone
-		$zone2 = new \Page\Entity\Zone;
-		$zone2->setTitle('Sidebar content');
-		$zone2->setName('sidebar');
-		$zone2->setLayout($layout);
-		$em->persist($zone2);
-				
-		$em->flush();
-    }
-	
-	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
+	public function setEntityManager(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 	}
 	
 	/**
 	 *
-	 * @return type 
+	 * @return EntityManager 
 	 */
 	public function getEntityManager()
 	{
