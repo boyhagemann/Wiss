@@ -312,12 +312,33 @@ class ModelController extends AbstractActionController
 					),
 				),
 				'child_routes' => array(
+					'create' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/create',
+							'defaults' => array(
+								'action' => 'create',
+							),
+						)
+					),
 					'edit' => array(
 						'type' => 'Segment',
 						'options' => array(
 							'route' => '/edit/:id',
 							'defaults' => array(
 								'action' => 'edit',
+							),
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+						)
+					),
+					'delete' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete/:id',
+							'defaults' => array(
+								'action' => 'delete',
 							),
 							'constraints' => array(
 								'id' => '[0-9]+',

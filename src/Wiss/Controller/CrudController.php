@@ -46,6 +46,57 @@ class CrudController extends AbstractActionController
 		return $viewModel;
 	}
 		
+	/**
+	 *
+	 * @return \Zend\View\Model\ViewModel 
+	 */
+	public function createAction()
+	{
+		// Get the main model
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');
+		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
+		
+		$entityClass = $model->getEntityClass();
+		$entity = new $entityClass();
+		
+		$class = $model->getFormClass();
+		$form = new $class();
+		$form->bind($entity);
+		
+		if($this->getRequest()->isPost()) {
+			
+			$form->setData($this->getRequest()->getPost());
+			if($form->isValid()) {
+				
+				// Save changes
+				$em->persist($form->getData());
+				$em->flush();
+				
+				// Show a flash message
+				$this->flashMessenger()->addMessage('Create new record succesfully');
+				
+				// Redirect
+				$this->redirect()->toRoute('crud', array(
+					'name' => $model->getSlug(),
+				));
+			}
+		}
+		
+		// Create the params for the view
+		$params = compact('model', 'form');
+							
+		// Create view model
+		$viewModel = new ViewModel($params);
+		$viewModel->setTemplate('wiss/crud/create');
+		
+		return $viewModel;
+	}
+		
+	/**
+	 *
+	 * @return \Zend\View\Model\ViewModel 
+	 */
 	public function editAction()
 	{
 		// Get the main model
@@ -85,6 +136,53 @@ class CrudController extends AbstractActionController
 		// Create view model
 		$viewModel = new ViewModel($params);
 		$viewModel->setTemplate('wiss/crud/edit');
+		
+		return $viewModel;
+	}
+		
+	/**
+	 *
+	 * @return \Zend\View\Model\ViewModel 
+	 */
+	public function deleteAction()
+	{
+		// Get the main model
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');
+		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
+		
+		$entityClass = $model->getEntityClass();
+		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
+		
+		$class = $model->getFormClass();
+		$form = new $class();
+		$form->bind($entity);
+		
+		if($this->getRequest()->isPost()) {
+			
+			$form->setData($this->getRequest()->getPost());
+			if($form->isValid()) {
+				
+				// Save changes
+				$em->remove($form->getData());
+				$em->flush();
+				
+				// Show a flash message
+				$this->flashMessenger()->addMessage('Saved changes succesfully');
+				
+				// Redirect
+				$this->redirect()->toRoute('crud', array(
+					'name' => $model->getSlug(),
+				));
+			}
+		}
+		
+		// Create the params for the view
+		$params = compact('model', 'entity', 'form');
+							
+		// Create view model
+		$viewModel = new ViewModel($params);
+		$viewModel->setTemplate('wiss/crud/delete');
 		
 		return $viewModel;
 	}
