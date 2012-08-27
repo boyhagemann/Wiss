@@ -11,25 +11,37 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Doctrine\ORM\EntityManager;
 
 class ModuleController extends AbstractActionController
 {
 	protected $entityManager;
 	
+    /**
+     * Lists the installed modules
+     *
+     * @return array
+     */
     public function indexAction()
     {
-		$modules = $this->getEntityManager()->getRepository('Wiss\Entity\Module')->findAll();		
+    	$modules = $this->getEntityManager()->getRepository('Wiss\Entity\Module')->findAll();	
 		return compact('modules');
     }
 	
+    /**
+     * Lists the uninstalled modules
+     *
+     * @return array
+     */
 	public function uninstalledAction()
-	{
-		$config = $this->getServiceLocator()->get('applicationconfig');
-		$paths = $config['module_listener_options']['module_paths'];
-		$installed = $this->getInstalledModules();
-		$modules = array();
+	{        
+		$config     = $this->getServiceLocator()->get('applicationconfig');
+		$paths      = $config['module_listener_options']['module_paths'];
+		$installed  = $this->getInstalledModulesAsArray();
+		$modules    = array();
 		
 		foreach($paths as $path) {
+            
 			$iterator = new \DirectoryIterator($path);
 			foreach($iterator as $folder) {
 				
@@ -62,8 +74,8 @@ class ModuleController extends AbstractActionController
 	 */
 	public function installAction()
 	{
-		$name = $this->params('name');
-		$em = $this->getEntityManager();
+		$name   = $this->params('name');
+		$em     = $this->getEntityManager();
 		$module = $em->getRepository('Wiss\Entity\Module')->findOneBy(array('name' => $name));
 		
 		if(!$module) {
@@ -73,6 +85,7 @@ class ModuleController extends AbstractActionController
 			$em->flush();
 		}				
 		
+        // Get the Module object from the Module.php file in the module
 		$moduleManager = $this->getServiceLocator()->get('modulemanager');
 		$zfModule = $moduleManager->getModule($module->getName());
 		
@@ -85,8 +98,7 @@ class ModuleController extends AbstractActionController
 			$em->getRepository('Wiss\Entity\Page')->import($config);
 			$em->getRepository('Wiss\Entity\Navigation')->import($config);
 		}
-		
-						
+								
 		// Show flash message
 		$message = sprintf('Module %s is installed', $this->params('name'));
 		$this->flashMessenger()->addMessage($message);
@@ -117,7 +129,7 @@ class ModuleController extends AbstractActionController
 	 *
 	 * @return array 
 	 */
-	public function getInstalledModules()
+	public function getInstalledModulesAsArray()
 	{
 		$modules = $this->getEntityManager()->getRepository('Wiss\Entity\Module')->findAll();
 		$installed = array();
@@ -130,16 +142,16 @@ class ModuleController extends AbstractActionController
 	
 	/**
 	 *
-	 * @param \Doctrine\ORM\EntityManager $entityManager 
+	 * @param EntityManager $entityManager 
 	 */
-	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
+	public function setEntityManager(\EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 	}
 	
 	/**
 	 *
-	 * @return type 
+	 * @return EntityManager 
 	 */
 	public function getEntityManager()
 	{
