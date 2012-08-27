@@ -57,7 +57,7 @@ class PageContentController extends AbstractActionController
 			
 			// Build a zone view model
 			$viewZone = new ViewModel();
-			$viewZone->setTemplate('page-content/zone');
+			$viewZone->setTemplate('wiss/page-content/zone');
 			$viewZone->setCaptureTo($content->getZone()->getName());	
 			$view->addChild($viewZone);
 			
