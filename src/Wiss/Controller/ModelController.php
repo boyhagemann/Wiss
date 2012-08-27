@@ -16,28 +16,41 @@ use Zend\Code\Annotation\Parser;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Generator\FileGenerator;
+use Doctrine\ORM\EntityManager;
+use Wiss\Entity\Model;
+use Wiss\Form\Model as ModelForm;
 
 class ModelController extends AbstractActionController
 {
+    /**
+     *
+     * @param EntityManager $entityManager
+     */
 	protected $entityManager;
 	
+    /**
+     * Shows a list of all models that are currently installed
+     *
+     */
     public function indexAction()
     {
-		$models = $this->getEntityManager()->getRepository('Wiss\Entity\Model')->findAll();
-		
+		$models = $this->getInstalledModels();		
 		return compact('models');
     }
 	
+    /**
+     * Edit the models properties
+     *
+     */
 	public function editAction()
 	{	
-		
-		
+        // Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');
 		$model = $repo->find($this->params('id'));
 		
-		$form = new \Wiss\Form\Model;
-		
+        // Get the form
+		$form = new \Wiss\Form\Model;		
 		$form->bind($model);
 		
 		if($this->getRequest()->isPost()) {
@@ -70,27 +83,31 @@ class ModelController extends AbstractActionController
 	 */
 	public function installAction()
 	{
+        // Get the class from the url params
 		$class = $this->params('class');
 		$class = str_replace('-', '\\', $class);
+        
+        // Get the title based on the class
 		$title = explode('\\', $class);
 		$title = end($title);
 		
+        // Find the model with this class
 		$em = $this->getEntityManager();
 		$model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
 			'entityClass' => $class
 		));
 		
 		// Return if a model already exists
-//		if($model) {
-//			
-//			// Show a flash message
-//			$this->flashMessenger()->addMessage('The model is already installed');
-//				
-//			// Redirect
-//			$this->redirect()->toRoute('cms/content/' . $model->getSlug());
-//			
-//			return false;			
-//		}
+		if($model) {
+			
+			// Show a flash message
+			$this->flashMessenger()->addMessage('The model is already installed');
+				
+			// Redirect
+			$this->redirect()->toRoute('cms/content/' . $model->getSlug());
+			
+			return false;			
+		}
 		
 		// Get data from entity annotations
 		$data = $this->getDataFromAnnotations($class);
@@ -111,17 +128,15 @@ class ModelController extends AbstractActionController
 				
 				// Add the model form and controller class
 				$data = $form->getData() + array(
-					'form_class'		=> $this->createForm($form),
-					'controller_class'	=> $this->createController($form)
+					'form_class'		=> $this->generateForm($form),
+					'controller_class'	=> $this->generateController($form)
 				);
 				
-				// Create the new model
+				// Create the model
 				$model = $this->createModel($data);
-
-				// Create navigation for the model
+                
+                // Create the routes and navigation
 				$this->createRoutes($model);
-
-				// Create navigation for the model
 				$this->createNavigation($model, $data);
 				
 				// Show a flash message
@@ -158,19 +173,21 @@ class ModelController extends AbstractActionController
 	/**
 	 *
 	 * @param array $data 
-	 * @return \Wiss\Entity\Model
+	 * @return Model
 	 */
 	public function createModel(Array $data)
 	{
 		$em = $this->getEntityManager();
 		
 		// Create a new model
-		$model = new \Wiss\Entity\Model;
+		$model = new Model;
 		$model->setTitle($data['title']);
 		$model->setEntityClass($data['entity_class']);
 		$model->setTitleField($data['title_field']);
 		$model->setFormClass($data['form_class']);
 		$model->setControllerClass($data['controller_class']);
+        
+        // Save this new model
 		$em->persist($model);
 		$em->flush();
 		
@@ -179,13 +196,13 @@ class ModelController extends AbstractActionController
 	
 	/**
 	 * 
-	 * @param \Wiss\Form\Model $form
+	 * @param ModelForm $form
 	 * @return string
 	 */
-	public function createForm(\Wiss\Form\Model $form)
+	public function generateForm(ModelForm $form)
 	{
 		$data = $form->getData();
-		$elements = $data['elements'];
+		$elementData = $data['elements'];
 		$className = substr($data['entity_class'], 1 + strrpos($data['entity_class'], '\\'));
 					
 		// Create the body for in the __construct method
@@ -194,12 +211,13 @@ class ModelController extends AbstractActionController
 		$body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
 				
 		// Add the elements 
-		foreach($elements as $name => $element) {
+		foreach($elementData as $name => $element) {
 			
 			if(!$element['type']) {
 				continue;
 			}
 			
+            // Create the element method
 			$body .= '// ' . $name . PHP_EOL;
 			$body .= '$this->add(array(' . PHP_EOL;
 			$body .= sprintf('  \'name\' => \'%s\',', $name) . PHP_EOL;
@@ -207,10 +225,9 @@ class ModelController extends AbstractActionController
 			$body .= '	\'attributes\' => array(' . PHP_EOL;
 			$body .= sprintf('    \'label\' => \'%s\',', $element['label']) . PHP_EOL;
 			$body .= ')));' . PHP_EOL . PHP_EOL;
-		}
+		}		
 		
-		
-			
+		// Create the submit method
 		$body .= '// submit' . PHP_EOL;
 		$body .= '$this->add(array(' . PHP_EOL;
 		$body .= sprintf('  \'name\' => \'%s\',', 'submit') . PHP_EOL;
@@ -219,13 +236,13 @@ class ModelController extends AbstractActionController
 		$body .= sprintf('    \'value\' => \'%s\',', 'Save') . PHP_EOL;
 		$body .= sprintf('    \'class\' => \'%s\',', 'btn btn-primary') . PHP_EOL;
 		$body .= ')));' . PHP_EOL . PHP_EOL;
+				
+		// Set the names for file generation
+		$namespace  = 'Application\Form'; 
+		$folder     = 'module/Application/src/Application/Form';
+		$filename   = sprintf('%s/%s.php', $folder, $className);
 		
-		
-		
-		$namespace = 'Application\Form'; 
-		$folder = 'module/Application/src/Application/Form';
-		$filename = sprintf('%s/%s.php', $folder, $className);
-		
+        // Build the file holding the php class
 		$fileData = array(
 			'filename' => $filename,
 			'namespace' => $namespace,
@@ -247,19 +264,23 @@ class ModelController extends AbstractActionController
 			),
 		);				
 		
+        // Create the folder if it does not exist yet
 		@mkdir($folder, 0755);
+        
+        // Generate the file and save it to disk
 		$generator = FileGenerator::fromArray($fileData);
 		$generator->write();
 		
+        // Return the classname to be used later
 		return $namespace . '\\' . $className;
 	}
 	
 	/**
 	 *
-	 * @param \Wiss\Form\Model $form
+	 * @param ModelForm $form
 	 * @return string 
 	 */
-	public function createController(\Wiss\Form\Model $form)
+	public function generateController(ModelForm $form)
 	{
 		$data = $form->getData();
 		$className = substr($data['entity_class'], 1 + strrpos($data['entity_class'], '\\'));
@@ -294,13 +315,12 @@ class ModelController extends AbstractActionController
 	
 	/**
 	 *
-	 * @param \Wiss\Entity\Model $model 
+	 * @param Model $model 
 	 */
-	public function createRoutes(\Wiss\Entity\Model $model)
-	{
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Page');
-		$config = array(		
+	public function createRoutes(Model $model)
+	{        
+        // Build the config, starting from router.routes
+		$config['router']['routes']  = array(		
 			$model->getSlug() => array(
 				'type' => 'Literal',
 				'may_terminate' => true,
@@ -349,58 +369,46 @@ class ModelController extends AbstractActionController
 			)
 		);
 		
-		$total['router']['routes'] = $config;
-		$repo->import($total);
-		
+        // Import the config thru the Page entity repository
+    	$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Page');
+		$repo->import($config);		
 	}
 	
 	/**
 	 *
-	 * @param \Wiss\Entity\Model $model
-	 * @return \Wiss\Entity\Model
+	 * @param Model $model
 	 */
-	public function createNavigation(\Wiss\Entity\Model $model)
-	{			
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Navigation');
-		$config = array(
+	public function createNavigation(Model $model)
+	{			        
+        // Build the config, starting from navigation
+		$config['navigation']  = array(
 			$model->getSlug() => array(
 				'label' => $model->getTitle(),
 				'route' => $model->getSlug(),
 				'pages' => array(
+    				'create' => array(
+						'label' => 'Create',
+						'route' => $model->getSlug() . '/create',
+					),
 					'edit' => array(
 						'label' => 'Edit',
 						'route' => $model->getSlug() . '/edit',
-					)
+					),
 				)
 			)
 		);
 		
-		$total['navigation'] = $config;
-		$repo->import($total);
-		
-//		// Insert the list navigation
-//		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array('name' => 'crud'));
-//		$navigation = new \Wiss\Entity\Navigation;
-//		$navigation->setParent($this->getContentNavigation());
-//		$navigation->setRoute($route);
-//		$navigation->setLabel($data['title']);
-//		$navigation->setParams(array('name' => $model->getSlug()));			
-//		$em->persist($navigation);
-//
-//		// Insert the edit navigation
-//		$route2 = $em->getRepository('Wiss\Entity\Route')->findOneBy(array('name' => 'crud/edit'));
-//		$navigation2 = new \Wiss\Entity\Navigation;
-//		$navigation2->setParent($navigation);
-//		$navigation2->setRoute($route2);
-//		$navigation2->setLabel('Properties');
-//		$navigation2->setParams(array('name' => $model->getSlug()));			
-//		$em->persist($navigation2);
-		
+        // Import the config thru the Navigation entity repository
+    	$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Navigation');
+		$repo->import($config);
 	}
 	
 	/**
-	 *
+	 * Read some useful information from the annotations regarding
+     * list overviews
+     *
 	 * @param string $class
 	 * @return array 
 	 */
@@ -433,6 +441,7 @@ class ModelController extends AbstractActionController
 	 */
 	public function uninstalledAction()
 	{
+        // Get the scanned and installed models
 		$scanned = $this->getScannedEntities();
 		$models = $this->getInstalledModels();
 		
@@ -450,16 +459,20 @@ class ModelController extends AbstractActionController
 	 */
 	public function getInstalledModels()
 	{		
-		$models = $this->getEntityManager()->getRepository('Wiss\Entity\Model')->findAll();
-		return $models;
+		return $this->getEntityManager()->getRepository('Wiss\Entity\Model')->findAll();
 	}
 	
+    /**
+     *
+     * @return array
+     */
 	public function getScannedEntities()
 	{
-		$config = $this->getServiceLocator()->get('applicationconfig');
-		$paths = $config['module_listener_options']['module_paths'];
-		$drivers = $this->getEntityManager()->getConfiguration()->getMetadataDriverImpl()->getDrivers();
-		$entities = array();
+        $em         = $this->getEntityManager();
+		$config     = $this->getServiceLocator()->get('applicationconfig');
+	    $paths      = $config['module_listener_options']['module_paths'];
+		$drivers    = $em->getConfiguration()->getMetadataDriverImpl()->getDrivers();
+		$entities   = array();
 							
 		foreach($paths as $basepath) {
 					
@@ -467,43 +480,46 @@ class ModelController extends AbstractActionController
 
 				foreach($driver->getPaths() as $path) {
 
+                    // Build the path to the file
 					$filePattern = '%s/%s/src/%s%s';
 					$file = sprintf($filePattern, $basepath, $namespace, $namespace, $path);
 					
+                    // Check if the file exists
 					if(!file_exists($file)) {
 						continue;
 					}
 					
+                    // Walk each file in the directory to see if there is
+                    // a valid entity
 					$directory = new \DirectoryIterator($file);
 					foreach($directory as $file) {
 						
+                        // Only use real files
 						if($file->isDot() || $file->isDir()) {
 							continue;
-						}
-									
-						try {							
+						}													
 							
-							$scanner = new \Zend\Code\Scanner\FileScanner($file->getPathname());
-							foreach($scanner->getClassNames() as $class) {
-								
-								try {
-									$entity = $this->getEntityManager()->getRepository($class);
-									$entities[$class] = $entity;
-								}
-								catch(\Exception $e) {
-									
-								}
+                        // Start a file scanner, to check for classes inside the file
+						$scanner = new \Zend\Code\Scanner\FileScanner($file->getPathname());
+                        
+                        // Check the file for classes                            
+						foreach($scanner->getClassNames() as $class) {
+							
+							try {
+                                
+                                // See if we can build an entity without throwing an exception.
+                                // If no exception is thrown, then we have a valid entity
+								$entity = $this->getEntityManager()->getRepository($class);
+								$entities[$class] = $entity;
+                                
 							}
-							
+							catch(\Exception $e) {
+								// Just skip to the next
+							}
 						}
-						catch(\Exception $e) {
-						}
-
 					}
-				}
-				
-			}
-			
+				}				
+			}			
 		}
 		
 		return $entities;
@@ -511,16 +527,16 @@ class ModelController extends AbstractActionController
 				
 	/**
 	 *
-	 * @param \Doctrine\ORM\EntityManager $entityManager 
+	 * @param EntityManager $entityManager 
 	 */
-	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
+	public function setEntityManager(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 	}
 	
 	/**
 	 *
-	 * @return type 
+	 * @return EntityManager 
 	 */
 	public function getEntityManager()
 	{
