@@ -264,13 +264,6 @@ return array(
         ),
     ),
     'view_manager' => array(
-		'helper_map' => array(
-//			'flashMessenger' => 'Wiss\View\Helper\FlashMessenger',
-		),
-        'template_map' => array(
-            'page-content/zone' => __DIR__ . '/../view/wiss/page-content/zone.phtml',
-            'navigation/menu' => __DIR__ . '/../view/wiss/navigation/menu.phtml',
-		),
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
