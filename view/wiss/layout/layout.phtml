@@ -32,7 +32,11 @@
         <div class="container">
           <a class="brand" href="<?php echo $this->url('home') ?>">CMS</a>
           <div class="nav-collapse">
-            <?php echo $this->navigation('cms')->menu()->setMinDepth(0)->setMaxDepth(1)->setOnlyActiveBranch(false)->setUlClass('nav pills')->setPartial('navigation/menu') ?>
+            <?php echo $this->navigation('cms')->menu()->setMinDepth(0)
+                                                       ->setMaxDepth(1)
+                                                       ->setOnlyActiveBranch(false)
+                                                       ->setUlClass('nav pills')
+                                                       ->setPartial('wiss/navigation/menu') ?>
           </div><!--/.nav-collapse -->
         </div>
       </div>
