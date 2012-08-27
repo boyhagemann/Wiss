@@ -11,29 +11,84 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Form\Annotation\AnnotationBuilder;
-use Zend\Code\Annotation\Parser;
-use Zend\Code\Annotation\AnnotationManager;
-use Zend\Code\Reflection\ClassReflection;
-use Zend\StdLib\Hydrator\ClassMethods as ClassMethodsHydrator;
+use Zend\Form\Form;
+use Wiss\Entity\Model;
+use Doctrine\ORM\EntityManager;
 
 class CrudController extends AbstractActionController
 {
+    /**
+     * This is the name of the model, used in this crud controller.
+     *
+     * @var string
+     */
 	protected $modelName;
 	
+    /**
+     * The model itself
+     *
+     * @var Model
+     */
+    protected $model;
+    
+    /**
+     * The form used for create and edit an entity
+     *
+     * @var Form
+     */
+    protected $form;
+    
+    /**
+     *
+     * @var Doctrine\ORM\EntityManager $entityManager
+     */
 	protected $entityManager;
+    
+    /**
+     * The template used for the indexAction. It lists the entities
+     *
+     * @var string
+     */
+    protected $indexTemplate = 'wiss/crud/index';
 	
+    /**
+     * The template used for the createAction. It show a form to
+     * create the entity
+     *
+     * @var string
+     */
+    protected $editTemplate = 'wiss/crud/create';
+    
+    
+    /**
+     * The template used for the editAction. It show a form to
+     * edit the entity properties
+     *
+     * @var string
+     */
+    protected $editTemplate = 'wiss/crud/edit';
+    
+    /**
+     * The template used for the deleteAction. It shows a form to 
+     * confirm the deletion 
+     *
+     * @var string
+     */
+    protected $dleteTemplate = 'wiss/crud/delete';
+    
+    /**
+     * This action lists all the records for the model. It shows them in
+     * a list. Each record can then be edited or deleted.
+     *
+     */
     public function indexAction()
 	{
-		// Get the main model
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
+    	// Get the main model that holds the entity information
+        $model = $this->getModel();
+		$entities = $this->getEntities();
 		
-		// Get the entity that the model is using
-		$entityClass = $model->getEntityClass();
-		$entities = $this->getEntityManager()->getRepository($entityClass)->findAll();
-		
+        // Build the getter method to render the label for
+        // the list.
 		$labelGetter = 'get' . ucfirst($model->getTitleField());
 		
 		// Create the params for the view
@@ -41,35 +96,34 @@ class CrudController extends AbstractActionController
 		
 		// Create view model
 		$viewModel = new ViewModel($params);
-		$viewModel->setTemplate('wiss/crud/index');
+		$viewModel->setTemplate($this->indexTemplate);
 		
 		return $viewModel;
 	}
 		
 	/**
 	 *
-	 * @return \Zend\View\Model\ViewModel 
+	 * @return ViewModel 
 	 */
 	public function createAction()
 	{
-		// Get the main model
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
+    	// Get the model, entity and form
+        $model      = $this->getModel();
+        $entity     = $this->createEntity();
+        $form       = $this->getForm();
+        $request    = $this->getRequest();
 		
-		$entityClass = $model->getEntityClass();
-		$entity = new $entityClass();
-		
-		$class = $model->getFormClass();
-		$form = new $class();
-		$form->bind($entity);
-		
-		if($this->getRequest()->isPost()) {
+        // Check if data is posted
+		if($request->isPost()) {
 			
-			$form->setData($this->getRequest()->getPost());
+            // Set the post data to the form, in order to validate it
+			$form->setData($request->getPost());
+            
+            // Now check if the form is valid
 			if($form->isValid()) {
 				
 				// Save changes
+                $em = $this->getEntityManager();
 				$em->persist($form->getData());
 				$em->flush();
 				
@@ -88,35 +142,34 @@ class CrudController extends AbstractActionController
 							
 		// Create view model
 		$viewModel = new ViewModel($params);
-		$viewModel->setTemplate('wiss/crud/create');
+		$viewModel->setTemplate($this->createTemplate);
 		
 		return $viewModel;
 	}
 		
 	/**
 	 *
-	 * @return \Zend\View\Model\ViewModel 
+	 * @return ViewModel 
 	 */
 	public function editAction()
 	{
-		// Get the main model
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
+        // Get the model, entity and form
+        $model      = $this->getModel();
+        $entity     = $this->createEntity();
+        $form       = $this->getForm();
+        $request    = $this->getRequest();
 		
-		$entityClass = $model->getEntityClass();
-		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
-		
-		$class = $model->getFormClass();
-		$form = new $class();
-		$form->bind($entity);
-		
-		if($this->getRequest()->isPost()) {
+        // Check if data is posted
+		if($request->isPost()) {
 			
-			$form->setData($this->getRequest()->getPost());
+            // Set the post data to the form, in order to validate it
+			$form->setData($request->getPost());
+            
+            // Now check if the form is valid
 			if($form->isValid()) {
 				
 				// Save changes
+                $em = $this->getEntityManager();
 				$em->persist($form->getData());
 				$em->flush();
 				
@@ -135,35 +188,34 @@ class CrudController extends AbstractActionController
 							
 		// Create view model
 		$viewModel = new ViewModel($params);
-		$viewModel->setTemplate('wiss/crud/edit');
+		$viewModel->setTemplate($this->editTemplate);
 		
 		return $viewModel;
 	}
 		
 	/**
 	 *
-	 * @return \Zend\View\Model\ViewModel 
+	 * @return ViewModel 
 	 */
 	public function deleteAction()
 	{
-		// Get the main model
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Model');
-		$model = $repo->findOneBy(array('slug' => $this->getModelName()));
+        // Get the model, entity and form
+        $model      = $this->getModel();
+        $entity     = $this->getEntity();
+        $form       = $this->getForm();
+        $request    = $this->getRequest();
 		
-		$entityClass = $model->getEntityClass();
-		$entity = $this->getEntityManager()->find($entityClass, $this->params('id'));
-		
-		$class = $model->getFormClass();
-		$form = new $class();
-		$form->bind($entity);
-		
-		if($this->getRequest()->isPost()) {
+        // Check if data is posted
+		if($request->isPost()) {
 			
-			$form->setData($this->getRequest()->getPost());
+            // Set the post data to the form, in order to validate it
+			$form->setData($request->getPost());
+            
+            // Now check if the form is valid
 			if($form->isValid()) {
 				
 				// Save changes
+                $em = $this->getEntityManager();
 				$em->remove($form->getData());
 				$em->flush();
 				
@@ -182,67 +234,159 @@ class CrudController extends AbstractActionController
 							
 		// Create view model
 		$viewModel = new ViewModel($params);
-		$viewModel->setTemplate('wiss/crud/delete');
+		$viewModel->setTemplate($this->deleteTemplate);
 		
 		return $viewModel;
 	}
-	
-	/**
-	 *
-	 * @param string $entityClass
-	 * @return \Zend\Form\Form 
-	 */
-	public function buildForm($entityClass)
-	{		
-		$listener = new \Wiss\Form\Annotation\ElementAnnotationsListener;
-		$builder = new AnnotationBuilder();
-		$builder->getEventManager()->attachAggregate($listener);
-		
-        $parser = new Parser\DoctrineAnnotationParser();
-		$parser->registerAnnotation('Wiss\Form\Mapping\Text');
-		$parser->registerAnnotation('Wiss\Form\Mapping\Textarea');
-		$parser->registerAnnotation('desc');
-		
-		$annotationManager = $builder->getAnnotationManager();
-		$annotationManager->attach($parser);
-				
-		$form = $builder->createForm($entityClass);
-		
-		$form->add(array(
-			'name' => 'submit',
-			'attributes' => array(
-				'type' => 'submit',
-				'value' => 'Save',
-				'class' => 'btn btn-primary btn-large',
-			)
-		));
-		
-		
-		return $form;
-	}
+    
+    /**
+     * Get the model that holds all the information to manage an entity. It holds
+     * information about the entity, form and this controller class itself.
+     *
+     * @return Model
+     */
+    public function getModel()
+    {        
+        if($this->model) {
+            return $this->model;
+        }
+        
+        // Get the model from the entity manager
+    	$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');
+		return $repo->findOneBy(array('slug' => $this->getModelName()));
+    }
+    
+    /**
+     *
+     * @param Model $model
+     */
+    public function setModel(Model $model)
+    {
+        $this->model = $model;
+    }
+    
+    /**
+     * Get a list of entities
+     *
+     * @return \Doctrine\ORM\Collection
+     */
+    public function getEntities()
+    {        
+    	// Get the entity that the model is using
+        $qb = $this->getIndexQueryBuilder();
+        return $qb->getQuery()->execute();
+    }
+    
+    /**
+     * This is the queryy that is used in the indexAction. It shows
+     * the entites based on a query that is build here.
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getIndexQueryBuilder()
+    {
+        $entityClass = $this->getModel()->getEntityClass();
+        $qb = $this->getEntityManger()->getRepository($entityClass);
+        return $qb;
+    }
+    
+    /**
+     *
+     * @return object A valid entity
+     */
+    public function getEntity()
+    {      
+        $model = $this->getModel();
+    	$entityClass = $model->getEntityClass();
+        $id = $this->getId();
+        $em = $this->getEntityManager();        
+		return $em->find($entityClass, $id);
+    }
+    
+    /**
+     *
+     * @return object A valid entity
+     */
+    public function createEntity()
+    {       
+        $entityClass = $model->getEntityClass();
+        return new $entityClass();
+    }
+    
+    /**
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->params('id');
+    }
+    
+    /**
+     *
+     * @return Form
+     */
+    public function getForm()
+    {        
+        if($this->form) {
+            return $this->form;
+        }
+        
+        // Build the new form
+    	$class = $model->getFormClass();
+        $form = new $class();
+        
+        // Bind the entity to the form if possible.
+        // This automatically transfers data between the
+        // form and the entity
+        if($this->getId()) {
+            $entity = $this->getEntity();
+        	$form->bind($entity);
+        }
+        
+		return new $class();
+    }
+    
+    /**
+     *
+     * @return Form
+     */ 
+    public function setForm(Form $form)
+    {
+        $this->form = $form;
+    }
 			
 	/**
 	 *
-	 * @param \Doctrine\ORM\EntityManager $entityManager 
+	 * @param EntityManager $entityManager 
 	 */
-	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
+	public function setEntityManager(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 	}
 	
 	/**
 	 *
-	 * @return type 
+	 * @return EntityManager 
 	 */
 	public function getEntityManager()
 	{
 		return $this->entityManager;
 	}
 	
+    /**
+     *
+     * @return string
+     */
 	public function getModelName() {
 		return $this->modelName;
 	}
 
+    /**
+     *
+     * @param string $modelName
+     */
 	public function setModelName($modelName) {
 		$this->modelName = $modelName;
 	}
