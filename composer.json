@@ -34,6 +34,7 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "dev-master",
+		"doctrine/doctrine-module": "dev-master",
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
 		"ZfcTwitterBootstrap": "dev-master",
