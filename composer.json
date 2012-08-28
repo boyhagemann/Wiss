@@ -2,34 +2,6 @@
     "name": "boyhagemann/wiss",
     "description": "Wiss CMS",
     "license": "BSD-3-Clause",
-	"repositories": [
-        {
-            "type": "package",
-            "package": {
-                "version": "master",
-                "name": "boyhagemann/ZfcTwitterBootstrap",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/boyhagemann/ZfcTwitterBootstrap",
-                    "reference": "master"
-                } 
-            }
-
-        },
-        {
-            "type": "package",
-            "package": {
-                "version": "master",
-                "name": "widmogrod/zf2AsseticModule",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/widmogrod/zf2-assetic-module",
-                    "reference": "master"
-                } 
-            }
-
-        }
-    ],
 	"minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
@@ -38,6 +10,6 @@
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
 		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
-		"widmogrod/zf2AsseticModule": "master"
+		"widmogrod/zf2-assetic-module": "master"
     }
 }
