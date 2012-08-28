@@ -1,0 +1,28 @@
+{
+    "name": "boyhagemann/wiss",
+    "description": "Wiss CMS",
+    "license": "BSD-3-Clause",
+	"repositories": [
+        {
+            "type": "package",
+            "package": {
+                "version": "master",
+                "name": "ZfcTwitterBootstrap",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/boyhagemann/ZfcTwitterBootstrap",
+                    "reference": "master"
+                } 
+            }
+
+        },
+    ],
+	"minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "dev-master",
+		"doctrine/doctrine-orm-module": "dev-master",
+		"gedmo/doctrine-extensions": "dev-master",
+		"widmogrod/zf2-assetic-module": "dev-master"
+    }
+}
