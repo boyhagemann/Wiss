@@ -15,6 +15,19 @@
                 } 
             }
 
+        },
+        {
+            "type": "package",
+            "package": {
+                "version": "master",
+                "name": "zf2AsseticModule",
+                "source": {
+                    "type": "git",
+                    "url": "https://github.com/widmogrod/zf2-assetic-module",
+                    "reference": "master"
+                } 
+            }
+
         }
     ],
 	"minimum-stability": "dev",
@@ -23,6 +36,7 @@
         "zendframework/zendframework": "dev-master",
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
-		"widmogrod/zf2-assetic-module": "dev-master"
+		"ZfcTwitterBootstrap": "dev-master",
+		"zf2AsseticModule": "master"
     }
 }
