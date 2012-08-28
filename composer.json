@@ -7,7 +7,7 @@
             "type": "package",
             "package": {
                 "version": "master",
-                "name": "ZfcTwitterBootstrap",
+                "name": "boyhagemann/ZfcTwitterBootstrap",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/boyhagemann/ZfcTwitterBootstrap",
@@ -20,7 +20,7 @@
             "type": "package",
             "package": {
                 "version": "master",
-                "name": "zf2AsseticModule",
+                "name": "widmogrod/zf2AsseticModule",
                 "source": {
                     "type": "git",
                     "url": "https://github.com/widmogrod/zf2-assetic-module",
@@ -37,7 +37,7 @@
 		"doctrine/doctrine-module": "dev-master",
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
-		"ZfcTwitterBootstrap": "dev-master",
-		"zf2AsseticModule": "master"
+		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
+		"widmogrod/zf2AsseticModule": "master"
     }
 }
