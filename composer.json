@@ -10,6 +10,12 @@
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
 		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
-		"widmogrod/zf2-assetic-module": "master"
+		"widmogrod/zf2-assetic-module": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "ZfcTwitterBootstrap": "boyhagemann/ZfcTwitterBootstrap/src",
+            "AsseticBundle": "widmogrod/zf2-assetic-module/src"
+        }
     }
 }
