@@ -1,0 +1,53 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+
+.breadcrumbs {
+	font-size: 11px;
+	margin-bottom: 30px;
+}
+
+h1 {
+	margin-bottom: 30px;
+}
+
+
+
+ul.blocks {
+	margin: 10px 0;
+	padding: 10px 10px 0 10px;
+	border: 3px dashed #ddd;
+}
+ul.blocks li.block {
+	margin-bottom: 10px;
+	background: #f5f5f5;
+	padding: 10px;
+}
+ul.blocks li.block.empty {
+	color: #999;
+	background: none;
+	font-style: italic;
+}
+ul.blocks li.block h2 {
+	margin-top: 0;
+}
+ul.blocks li.block div.form-actions {
+	margin: 10px 0 0 0;
+	padding: 3px 3px 3px 20px;
+	border-top: 0;
+	background: none;
+}
+
+
+
+
+.rounded-small {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+
