@@ -40,5 +40,11 @@
 		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
 		"boyhagemann/zf2-assetic-module": "dev-master",
         "kriswallsmith/assetic": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "AsseticBundle": "vendor/boyhagemann/zf2-assetic-module/src/",
+            "ZfcTwitterBootstrap": "vendor/boyhagemann/ZfcTwitterBootstrap/src/"
+        }
     }
 }
