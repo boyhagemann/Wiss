@@ -279,5 +279,37 @@ return array(
                 'paths' => array(__NAMESPACE__ . '/Entity'),
             ),
         ),
-    )
+    ),
+    'assetic_configuration' => array(
+		
+		'routes' => array(
+			'model' => array(
+				'@wiss_css'
+			)
+		),
+		
+		'modules' => array(
+			'wiss' => array(				
+				'root_path' => __DIR__ . '/../assets',
+				'collections' => array(				
+					'wiss_css' => array(
+						'assets' => array(
+							'css/bootstrap.min.css',
+							'css/bootstrap-responsive.min.css',
+							'css/style.css',
+						)
+					),
+					'wiss_js' => array(
+						'assets' => array(
+							'js/jquery-1.7.2.min.js',
+							'js/bootstrap.dropdown.js',
+							'js/bootstrap.min.js',
+							'js/jquery.tree.js',
+							'js/site.js',
+						)
+					),
+				)
+			)
+		)
+	),
 );
