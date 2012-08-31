@@ -3,25 +3,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+	<base href="<?php echo $this->basePath() ?>/" />
     <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
+	<?php
+//	echo $this->plugin('HeadLink');
+	
+//	echo $this->plugin('HeadStyle');
+//	echo $this->plugin('HeadScript');
+//	echo $this->plugin('InlineScript');
+	?>
+	<link type="text/css" rel="stylesheet" media="screen" href="assets/wiss_css.css?1346417280">
     <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
-    <!-- Le styles -->
-    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'))
-                    ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
-                    ->prependStylesheet($this->basePath() . '/css/style.css')
-                    ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
-                    ->prependStylesheet($this->basePath() . '/bootstrap/css/datepicker.css') ?>
-
-    <!-- Scripts -->
-    <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                                  ->prependFile($this->basePath() . '/js/jquery-1.7.2.min.js')
-                                  ->appendFile($this->basePath() . '/js/bootstrap.min.js')
-//                                  ->appendFile($this->basePath() . '/js/bootstrap.alert.js')
-                                  ->appendFile($this->basePath() . '/js/jstree/jquery.jstree.js')
-                                  ->appendFile($this->basePath() . '/js/bootstrap/js/bootstrap-datepicker.js')
-                                  ->appendFile($this->basePath() . '/js/site.js') ?>
 
   </head>
 
