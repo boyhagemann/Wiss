@@ -144,7 +144,7 @@ class ModuleController extends AbstractActionController
 	 *
 	 * @param EntityManager $entityManager 
 	 */
-	public function setEntityManager(\EntityManager $entityManager)
+	public function setEntityManager(EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
 	}
