@@ -38,6 +38,7 @@
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
 		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
-		"boyhagemann/zf2-assetic-module": "dev-master"
+		"boyhagemann/zf2-assetic-module": "dev-master",
+        "kriswallsmith/assetic": "dev-master"
     }
 }

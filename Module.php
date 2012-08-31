@@ -29,7 +29,7 @@ class Module
         
         // Hook in to the route event, where is determined
         // which controller/action has to be used
-		$evm->attach(MvcEvent::EVENT_ROUTE, function($e) {
+		$evm->attach(MvcEvent::EVENT_ROUTE, function($e) use($config) {
 				
             // Get the matched route and its name	
 			$route = $e->getRouteMatch();	
