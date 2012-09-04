@@ -21,6 +21,7 @@ class IndexController extends AbstractActionController
      */
     public function installAction()
     {
+		$em = $this->getEntityManager();
 		$form = new \Wiss\Form\Install();				
 		$form->setAttribute('action', $this->url()->fromRoute('wiss/install'));
 				
@@ -46,11 +47,12 @@ class IndexController extends AbstractActionController
 				
 				// Do the actual install
 				$this->install();	
-
-				// Import the route and navigation config
-				$this->forward()->dispatch('Wiss\Controller\Module', array(
-					'action' => 'sync-with-config',
-				));
+				
+				// Import and export the route and navigation config		
+				$em->getRepository('Wiss\Entity\Route')->import($config);
+				$em->getRepository('Wiss\Entity\Navigation')->import($config);		
+				$em->getRepository('Wiss\Entity\Route')->export();
+				$em->getRepository('Wiss\Entity\Navigation')->export();		
 		
 				// Update the config with the application installed
 				$file = 'module/Application/config/module.config.php';	
