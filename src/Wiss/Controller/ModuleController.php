@@ -89,15 +89,10 @@ class ModuleController extends AbstractActionController
 		$moduleManager = $this->getServiceLocator()->get('modulemanager');
 		$zfModule = $moduleManager->getModule($module->getName());
 		
-		// Get the module config
-		$config = array();
-		if(method_exists($zfModule, 'getConfig')) {
-			$config = $zfModule->getConfig();
-			
-			// Import from config
-			$em->getRepository('Wiss\Entity\Route')->import($config);
-			$em->getRepository('Wiss\Entity\Navigation')->import($config);
-		}
+		// Import the route and navigation config
+		$this->forward()->dispatch(__CLASS__, array(
+			'action' => 'import',
+		));
 								
 		// Show flash message
 		$message = sprintf('Module %s is installed', $this->params('name'));
@@ -105,6 +100,17 @@ class ModuleController extends AbstractActionController
 		
 		// Redirect
 		$this->redirect()->toRoute('wiss/module/export');
+		
+		return false;
+	}
+	
+	public function importAction()
+	{
+		$config = $this->getServiceLocator()->get('config');
+		$em     = $this->getEntityManager();
+		
+		$em->getRepository('Wiss\Entity\Route')->import($config);
+		$em->getRepository('Wiss\Entity\Navigation')->import($config);
 		
 		return false;
 	}

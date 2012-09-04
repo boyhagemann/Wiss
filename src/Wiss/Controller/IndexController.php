@@ -46,7 +46,12 @@ class IndexController extends AbstractActionController
 				
 				// Do the actual install
 				$this->install();	
-				
+
+				// Import the route and navigation config
+				$this->forward()->dispatch('Wiss\Controller\Module', array(
+					'action' => 'import',
+				));
+		
 				// Update the config with the application installed
 				$file = 'module/Application/config/module.config.php';	
 				$config = \Zend\Config\Factory::fromFile($file);
