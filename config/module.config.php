@@ -206,19 +206,19 @@ return array(
 		'cms' => array(
 			'administration' => array(
 				'label' => 'Administration',
-				'route' => 'module',
+				'route' => 'wiss/module',
 				'pages' => array(
 					'module' => array(
 						'label' => 'Modules',
-						'route' => 'module',
+						'route' => 'wiss/module',
 						'pages' => array(
 							'installed' => array(
 								'label' => 'Installed',
-								'route' => 'module',
+								'route' => 'wiss/module',
 							),
 							'uninstalled' => array(
 								'label' => 'Uninstalled',
-								'route' => 'module/default',
+								'route' => 'wiss/module/default',
 								'params' => array(
 									'action' => 'uninstalled'
 								)
@@ -227,22 +227,22 @@ return array(
 					),
 					'models' => array(
 						'label' => 'Models',
-						'route' => 'model',
+						'route' => 'wiss/model',
 						'pages' => array(
 							'installed' => array(
 								'label' => 'Installed',
-								'route' => 'model',
+								'route' => 'wiss/model',
 							),
 							'uninstalled' => array(
 								'label' => 'Uninstalled',
-								'route' => 'model/default',
+								'route' => 'wiss/model/default',
 								'params' => array(
 									'action' => 'uninstalled'
 								),
 								'pages' => array(
 									'install' => array(
 										'label' => 'Install',
-										'route' => 'model/install'
+										'route' => 'wiss/model/install'
 									),
 								)
 							),
@@ -252,11 +252,11 @@ return array(
 			),
 			'navigation' => array(
 				'label' => 'Navigation',
-				'route' => 'navigation',
+				'route' => 'wiss/navigation',
 			),
 			'install' => array(
 				'label' => 'Install',
-				'route' => 'install',
+				'route' => 'wiss/install',
 			)
 		)
 	),
