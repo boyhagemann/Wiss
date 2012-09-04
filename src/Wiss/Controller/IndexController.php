@@ -49,12 +49,7 @@ class IndexController extends AbstractActionController
 
 				// Import the route and navigation config
 				$this->forward()->dispatch('Wiss\Controller\Module', array(
-					'action' => 'import',
-				));
-
-				// Export the route and navigation config
-				$this->forward()->dispatch('Wiss\Controller\Module', array(
-					'action' => 'export',
+					'action' => 'syncWithConfig',
 				));
 		
 				// Update the config with the application installed
