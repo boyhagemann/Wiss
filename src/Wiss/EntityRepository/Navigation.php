@@ -61,10 +61,7 @@ class Navigation extends NestedTreeRepository
 	public function createNavigationFromArray($name, Array $data, $parent = null)
 	{		
 		$em = $this->getEntityManager();
-		
-		
-		\Zend\Debug\Debug::dump($name); 
-		
+				
 		if(!key_exists('label', $data)) {
 			
 			if(key_exists('pages', $data)) {

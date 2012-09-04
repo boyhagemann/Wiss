@@ -170,8 +170,7 @@ class Route extends \Doctrine\ORM\EntityRepository
 				$this->createPageFromRoute($name, $childRoute, $route);
 			}
 		}		
-		
-		$em->persist($page);				
+						
 	}
 		
 	/**
