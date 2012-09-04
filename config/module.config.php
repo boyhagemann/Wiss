@@ -21,171 +21,185 @@ return array(
                     ),
                 ),                
             ),
-			'page' => array(
-				'type'    => 'Literal',
+			'wiss' => array(
+				'type' => 'Literal',
 				'options' => array(
-					'route'    => '/pages',
+					'route' => '/wiss',
 					'defaults' => array(
                         '__NAMESPACE__' => 'Wiss\Controller',
-                        'controller' => 'page',
-                        'action' => 'index',
-					),
+                        'controller' => 'index',
+                        'action' => 'index',						
+					)
 				),
 				'may_terminate' => true,
-				'child_routes' => array(		
-					'properties' => array(
-						'type'    => 'Segment',
+				'child_routes' => array(
+					'page' => array(
+						'type'    => 'Literal',
 						'options' => array(
-							'route'    => '/properties/[:id]',
-							'constraints' => array(
-								'id' => '[0-9-]*',
-							),
+							'route'    => '/pages',
 							'defaults' => array(
-								'action' => 'properties',
+								'__NAMESPACE__' => 'Wiss\Controller',
+								'controller' => 'page',
+								'action' => 'index',
 							),
 						),
-					),	
-					'content' => array(
-						'type'    => 'Segment',
-						'options' => array(
-							'route'    => '/content/[:id]',
-							'constraints' => array(
-								'id' => '[0-9-]*',
+						'may_terminate' => true,
+						'child_routes' => array(		
+							'properties' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/properties/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'properties',
+									),
+								),
+							),	
+							'content' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/content/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'content',
+									),
+								),
 							),
+						)
+					),
+					'navigation' => array(
+						'type'    => 'Literal',
+						'options' => array(
+							'route'    => '/navigation',
 							'defaults' => array(
-								'action' => 'content',
+								'__NAMESPACE__' => 'Wiss\Controller',
+								'controller' => 'navigation',
+								'action' => 'index',
 							),
-						),
+						)
 					),
-				)
-			),
-			'navigation' => array(
-				'type'    => 'Literal',
-				'options' => array(
-					'route'    => '/navigation',
-					'defaults' => array(
-                        '__NAMESPACE__' => 'Wiss\Controller',
-                        'controller' => 'navigation',
-                        'action' => 'index',
-					),
-				)
-			),
-			'model' => array(
-				'type'    => 'Literal',
-				'options' => array(
-					'route'    => '/models',
-					'defaults' => array(
-                        '__NAMESPACE__' => 'Wiss\Controller',
-                        'controller' => 'model',
-                        'action' => 'index',
-					),
-				),
-				'may_terminate' => true,
-				'child_routes' => array(	
-					'default' => array(
-						'type'    => 'Segment',
+					'model' => array(
+						'type'    => 'Literal',
 						'options' => array(
-							'route'    => '/[:action]',
-							'constraints' => array(
-								'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+							'route'    => '/models',
+							'defaults' => array(
+								'__NAMESPACE__' => 'Wiss\Controller',
+								'controller' => 'model',
+								'action' => 'index',
 							),
 						),
-					),	
+						'may_terminate' => true,
+						'child_routes' => array(	
+							'default' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/[:action]',
+									'constraints' => array(
+										'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+									),
+								),
+							),	
+							'install' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/install/[:class]',
+									'constraints' => array(
+										'class'     => '[A-Z][a-zA-Z0-9_-]*',
+									),
+									'defaults' => array(
+										'action' => 'install',
+									),
+								),
+							),
+							'export' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/export/[:name]',
+									'constraints' => array(
+										'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+									),
+									'defaults' => array(
+										'action' => 'export',
+									),
+								),
+							),
+							'edit' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/edit/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'edit',
+									),
+								),
+							),
+						)
+					),
+					'module' => array(
+						'type'    => 'Literal',
+						'options' => array(
+							'route'    => '/modules',
+							'defaults' => array(
+								'__NAMESPACE__' => 'Wiss\Controller',
+								'controller'    => 'module',
+								'action'        => 'index',
+							),
+						),
+						'may_terminate' => true,
+						'child_routes' => array(
+							'default' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/[:action]',
+									'constraints' => array(
+										'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+									),
+									'defaults' => array(
+									),
+								),
+							),
+							'install' => array(
+								'type'    => 'Segment',
+								'options' => array(
+									'route'    => '/install/[:name]',
+									'constraints' => array(
+										'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+									),
+									'defaults' => array(
+										'action' => 'install'
+									),
+								),
+							),
+							'export' => array(
+								'type'    => 'Literal',
+								'options' => array(
+									'route'    => '/export',
+									'defaults' => array(
+										'action' => 'export'
+									),
+								),
+							),
+						),
+					),
 					'install' => array(
-						'type'    => 'Segment',
+						'type'    => 'Literal',
 						'options' => array(
-							'route'    => '/install/[:class]',
-							'constraints' => array(
-								'class'     => '[A-Z][a-zA-Z0-9_-]*',
-							),
+							'route'    => '/install',
 							'defaults' => array(
-								'action' => 'install',
+								'__NAMESPACE__' => 'Wiss\Controller',
+								'controller'    => 'index',
+								'action'        => 'install',
 							),
 						),
-					),
-					'export' => array(
-						'type'    => 'Segment',
-						'options' => array(
-							'route'    => '/export/[:name]',
-							'constraints' => array(
-								'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-							),
-							'defaults' => array(
-								'action' => 'export',
-							),
-						),
-					),
-					'edit' => array(
-						'type'    => 'Segment',
-						'options' => array(
-							'route'    => '/edit/[:id]',
-							'constraints' => array(
-								'id' => '[0-9-]*',
-							),
-							'defaults' => array(
-								'action' => 'edit',
-							),
-						),
-					),
+					),					
 				)
-			),
-            'module' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/modules',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Wiss\Controller',
-                        'controller'    => 'module',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:action]',
-                            'constraints' => array(
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                    'install' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/install/[:name]',
-                            'constraints' => array(
-                                'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-								'action' => 'install'
-                            ),
-                        ),
-                    ),
-                    'export' => array(
-                        'type'    => 'Literal',
-                        'options' => array(
-                            'route'    => '/export',
-                            'defaults' => array(
-								'action' => 'export'
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'install' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/install',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Wiss\Controller',
-                        'controller'    => 'index',
-                        'action'        => 'install',
-                    ),
-                ),
-            ),
+			)
         ),
     ),
 	'navigation' => array(

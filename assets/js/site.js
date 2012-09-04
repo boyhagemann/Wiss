@@ -4,7 +4,7 @@ $(document).ready(function(e) {
 	
 	$('.dropdown-toggle').dropdown();
 	$('.alert').alert();
-	$('.datepicker').datepicker();
+//	$('.datepicker').datepicker();
 
   $('.treeview').jstree({
     core : { 
