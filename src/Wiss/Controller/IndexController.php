@@ -51,6 +51,11 @@ class IndexController extends AbstractActionController
 				$this->forward()->dispatch('Wiss\Controller\Module', array(
 					'action' => 'import',
 				));
+
+				// Export the route and navigation config
+				$this->forward()->dispatch('Wiss\Controller\Module', array(
+					'action' => 'export',
+				));
 		
 				// Update the config with the application installed
 				$file = 'module/Application/config/module.config.php';	
@@ -60,9 +65,7 @@ class IndexController extends AbstractActionController
 				$writer->toFile($file, $config);
 				
 				// Redirect 
-				$this->redirect()->toRoute('wiss/module/default', array(
-					'action' => 'uninstalled'
-				));
+				$this->redirect()->toRoute('wiss/module');
 			}
 		}
 					

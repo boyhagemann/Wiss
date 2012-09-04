@@ -98,8 +98,13 @@ class ModuleController extends AbstractActionController
 		$message = sprintf('Module %s is installed', $this->params('name'));
 		$this->flashMessenger()->addMessage($message);
 		
+		// Export the route and navigation config
+		$this->forward()->dispatch(__CLASS__, array(
+			'action' => 'export',
+		));
+
 		// Redirect
-		$this->redirect()->toRoute('wiss/module/export');
+		$this->redirect()->toRoute('wiss/module');
 		
 		return false;
 	}
@@ -125,8 +130,6 @@ class ModuleController extends AbstractActionController
 		$em = $this->getEntityManager();
 		$em->getRepository('Wiss\Entity\Route')->export();
 		$em->getRepository('Wiss\Entity\Navigation')->export();		
-				
-		$this->redirect()->toRoute('wiss/module');
 
 		return false;
 	}
