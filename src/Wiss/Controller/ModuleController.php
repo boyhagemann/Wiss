@@ -117,7 +117,7 @@ class ModuleController extends AbstractActionController
 	{		
 		// Build the config
 		$em = $this->getEntityManager();
-		$em->getRepository('Wiss\Entity\Page')->export();
+		$em->getRepository('Wiss\Entity\Route')->export();
 		$em->getRepository('Wiss\Entity\Navigation')->export();		
 				
 		$this->redirect()->toRoute('wiss/module');
