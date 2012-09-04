@@ -64,13 +64,13 @@ class Route
 	protected $constraints;
 
 	/**
-     * @ORM\ManyToOne(targetEntity="Page", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Route", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent;	
 
     /**
-     * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Route", mappedBy="parent")
      */
     protected $children;
 
