@@ -145,6 +145,16 @@ class IndexController extends AbstractActionController
 		$navigation2 = new \Wiss\Entity\Navigation;
 		$navigation2->setLabel('Cms');
 		$em->persist($navigation2);
+		
+		// Insert module
+		$module = new \Wiss\Entity\Module;
+		$module->setName('Application');
+		$em->persist($module);
+		
+		// Insert module
+		$module2 = new \Wiss\Entity\Module;
+		$module2->setName('Wiss');
+		$em->persist($module2);
 				
 		$em->flush();
 	}
