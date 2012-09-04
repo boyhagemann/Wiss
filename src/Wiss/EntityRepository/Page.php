@@ -148,12 +148,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 			$page->setTitle($name);
 			$page->setName($name);
 			$page->setLayout($em->find('Wiss\Entity\Layout', 1));
-			$page->setRoute($route);
-						
-			if($parent) {
-				$page->setParent($parent);
-			}
-			
+			$page->setRoute($route);			
 			$em->persist($page);
 			
 			$block = new \Wiss\Entity\Block;
