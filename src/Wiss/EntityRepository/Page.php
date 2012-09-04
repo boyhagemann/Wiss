@@ -105,24 +105,21 @@ class Page extends \Doctrine\ORM\EntityRepository
 	 *
 	 * @param string $name
 	 * @param array $routeData
-	 * @param Wiss\Entity\Page $parent 
+	 * @param Wiss\Entity\Route $parentRoute 
 	 */
-	public function createPageFromRoute($name, $routeData, $parent = null)
+	public function createPageFromRoute($name, $routeData, $parentRoute = null)
 	{		
 		$em = $this->getEntityManager();
 		
 		// Build the params to check if the page exists
 		$params = array('name' => $name);
-		if($parent) {
-			$params['parent'] = $parent->getId();
+		if($parentRoute) {
+			$params['parent'] = $parentRoute->getId();
 		}
 		
 		// Check if the page exists
 		$route = $this->findOneBy($params);		
-		if($route) {			
-			$page = $route->getPage();
-		}
-		else {
+		if(!$route) {
 			
 			// Start a new route
 			$route = new \Wiss\Entity\Route;
@@ -170,7 +167,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 				
 		if(key_exists('child_routes', $routeData)) {
 			foreach($routeData['child_routes'] as $name => $childRoute) {
-				$this->createPageFromRoute($name, $childRoute, $page);
+				$this->createPageFromRoute($name, $childRoute, $route);
 			}
 		}		
 		
