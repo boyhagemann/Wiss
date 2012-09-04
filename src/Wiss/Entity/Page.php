@@ -57,17 +57,6 @@ class Page
      */
     protected $layout;
 		
-    /**
-     * @ORM\ManyToOne(targetEntity="Page", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
-     */
-    protected $children;
-	
 	
     /**
      * @ORM\OneToMany(targetEntity="Content", mappedBy="page")
@@ -120,23 +109,7 @@ class Page
 
 	public function setLayout(Layout $layout) {
 		$this->layout = $layout;
-	}
-
-	public function getParent() {
-		return $this->parent;
-	}
-
-	public function setParent(Page $parent) {
-		$this->parent = $parent;
-	}
-
-	public function getChildren() {
-		return $this->children;
-	}
-
-	public function setChildren($children) {
-		$this->children = $children;
-	}		
+	}	
 	
 	public function getContent() {
 		return $this->content;
@@ -145,7 +118,5 @@ class Page
 	public function setContent($content) {
 		$this->content = $content;
 	}
-
-
-
+	
 }
