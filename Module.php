@@ -46,7 +46,7 @@ class Module
 				// Change to route before it is dispatched. It now goes to the
                 // install action.
 				$route->setParam('controller', 'Wiss\Controller\Index');
-				$route->setParam('action', 'install');				
+				$route->setParam('action', 'redirectToInstall');				
 			}
 			
 			// Check if there are zones used

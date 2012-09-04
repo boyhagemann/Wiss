@@ -59,6 +59,18 @@ class IndexController extends AbstractActionController
     }
 	
 	/**
+	 *
+	 * @return boolean 
+	 */
+	public function redirectToInstallAction()
+	{
+		// Redirect 
+		$this->redirect()->toRoute('wiss/install');		
+		
+		return false;
+	}
+	
+	/**
 	 * 
 	 */
 	public function install()
