@@ -118,9 +118,11 @@ class Page extends \Doctrine\ORM\EntityRepository
 		}
 		
 		// Check if the page exists
-		$page = $this->findOneBy($params);		
-		if(!$page) {
-
+		$route = $this->findOneBy($params);		
+		if($route) {			
+			$page = $route->getPage();
+		}
+		else {
 			
 			// Start a new route
 			$route = new \Wiss\Entity\Route;
@@ -164,7 +166,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 			$content->setZone($page->getLayout()->getMainZone());
 			$em->persist($content);	
 			
-		}
+		}		
 				
 		if(key_exists('child_routes', $routeData)) {
 			foreach($routeData['child_routes'] as $name => $childRoute) {
