@@ -62,7 +62,18 @@ class Route
      * @ORM\Column(type="array")
 	 */
 	protected $constraints;
-	
+
+	/**
+     * @ORM\ManyToOne(targetEntity="Page", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $parent;	
+
+    /**
+     * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
+     */
+    protected $children;
+
 	public function getId() {
 		return $this->id;
 	}
@@ -125,6 +136,21 @@ class Route
 
 	public function setConstraints(Array $constraints) {
 		$this->constraints = $constraints;
+	}
+	public function getParent() {
+		return $this->parent;
+	}
+
+	public function setParent($parent) {
+		$this->parent = $parent;
+	}
+
+	public function getChildren() {
+		return $this->children;
+	}
+
+	public function setChildren($children) {
+		$this->children = $children;
 	}
 
 }

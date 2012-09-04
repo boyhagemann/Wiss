@@ -153,8 +153,8 @@ class Page extends \Doctrine\ORM\EntityRepository
 			
 			$block = new \Wiss\Entity\Block;
 			$block->setTitle($page->getTitle());
-			$block->setAction($this->findDefault('action', $page));
-			$block->setController($this->findController($page));
+			$block->setAction($this->findDefault('action', $route));
+			$block->setController($this->findController($route));
 			$em->persist($block);
 
 			$content = new \Wiss\Entity\Content;
@@ -180,13 +180,13 @@ class Page extends \Doctrine\ORM\EntityRepository
 	 * @param \Page\Entity\Page $page
 	 * @return string 
 	 */
-	public function findController($page)
+	public function findController($route)
 	{
-		$controller = $this->findDefault('__NAMESPACE__', $page);
+		$controller = $this->findDefault('__NAMESPACE__', $route);
 		if($controller) {
 			$controller .= '\\';
 		}
-		$controller .= ucfirst($this->findDefault('controller', $page));
+		$controller .= ucfirst($this->findDefault('controller', $route));
 		
 		return $controller;
 	}
@@ -194,20 +194,20 @@ class Page extends \Doctrine\ORM\EntityRepository
 	/**
 	 *
 	 * @param string $key
-	 * @param \Page\Entity\Page $page
+	 * @param \Page\Entity\Route $route
 	 * @return string 
 	 */
-	public function findDefault($key, $page)
+	public function findDefault($key, $route)
 	{
-		$defaults = (array) $page->getRoute()->getDefaults();
+		$defaults = (array) $route->getDefaults();
 		if(key_exists($key, $defaults)) {
 			return $defaults[$key];
 		}
 		
-		if(!$page->getParent()) {
+		if(!$route->getParent()) {
 			return '';
 		}
 		
-		return $this->findDefault($key, $page->getParent());
+		return $this->findDefault($key, $route->getParent());
 	}
 }
