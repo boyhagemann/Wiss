@@ -91,7 +91,7 @@ class ModuleController extends AbstractActionController
 		
 		// Import the route and navigation config
 		$this->forward()->dispatch(__CLASS__, array(
-			'action' => 'syncWithConfig',
+			'action' => 'sync-with-config',
 		));
 								
 		// Show flash message

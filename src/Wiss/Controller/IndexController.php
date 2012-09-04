@@ -49,7 +49,7 @@ class IndexController extends AbstractActionController
 
 				// Import the route and navigation config
 				$this->forward()->dispatch('Wiss\Controller\Module', array(
-					'action' => 'syncWithConfig',
+					'action' => 'sync-with-config',
 				));
 		
 				// Update the config with the application installed
