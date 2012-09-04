@@ -34,14 +34,10 @@ class Module
             // Get the matched route and its name	
 			$route = $e->getRouteMatch();	
 			$currentRoute = $route->getMatchedRouteName();	
-				
-            // Check the db connection. Is the password still 'password'? Then the
-            // connection is not set yet.
-            $dbParams = $config['doctrine']['connection']['orm_default']['params'];
             
     		// Go to the install page first if there is no valid database connection
             // Only go there is the current route is not 'install' already
-			if($currentRoute != 'install' && $dbParams['password'] == 'password') {
+			if($currentRoute != 'wiss/install' && $config['application']['installed'] === false) {
 				
 				// Change to route before it is dispatched. It now goes to the
                 // install action.
