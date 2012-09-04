@@ -25,10 +25,10 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="<?php echo $this->url('home') ?>">CMS</a>
+          <a class="brand" href="<?php echo $this->url('wiss') ?>">CMS</a>
           <div class="nav-collapse">
-            <?php echo $this->navigation('cms')->menu()->setMinDepth(0)
-                                                       ->setMaxDepth(1)
+            <?php echo $this->navigation('cms')->menu()->setMinDepth(1)
+                                                       ->setMaxDepth(2)
                                                        ->setOnlyActiveBranch(false)
                                                        ->setUlClass('nav pills')
                                                        ->setPartial('wiss/navigation/menu') ?>

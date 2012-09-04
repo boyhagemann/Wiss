@@ -50,7 +50,7 @@ class IndexController extends AbstractActionController
 				
 				$this->install();	
 				
-				$this->redirect()->toRoute('module/default', array(
+				$this->redirect()->toRoute('wiss/module/default', array(
 					'action' => 'uninstalled'
 				));
 			}

@@ -104,7 +104,7 @@ class ModuleController extends AbstractActionController
 		$this->flashMessenger()->addMessage($message);
 		
 		// Redirect
-		$this->redirect()->toRoute('module/export');
+		$this->redirect()->toRoute('wiss/module/export');
 		
 		return false;
 	}
@@ -120,7 +120,7 @@ class ModuleController extends AbstractActionController
 		$em->getRepository('Wiss\Entity\Page')->export();
 		$em->getRepository('Wiss\Entity\Navigation')->export();		
 				
-		$this->redirect()->toRoute('module');
+		$this->redirect()->toRoute('wiss/module');
 
 		return false;
 	}
