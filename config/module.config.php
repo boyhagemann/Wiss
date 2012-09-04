@@ -284,8 +284,8 @@ return array(
 		
 		'routes' => array(
 			'model' => array(
-				'@wiss_css',
 				'@wiss_js',
+				'@wiss_css',
 				'@wiss_images',
 			)
 		),
@@ -299,7 +299,7 @@ return array(
 							'css/bootstrap.min.css',
 							'css/bootstrap-responsive.min.css',
 							'css/style.css',
-							'js/jstree/*.css',
+							'js/jstree/themes/default/style.css',
 						)
 					),
 					'wiss_js' => array(
