@@ -47,6 +47,13 @@ class IndexController extends AbstractActionController
 				// Do the actual install
 				$this->install();	
 				
+				// Update the config with the application installed
+				$file = 'module/Application/config/module.config.php';	
+				$config = \Zend\Config\Factory::fromFile($file);
+				$config['application']['installed'] = true;
+				$writer = new \Zend\Config\Writer\PhpArray();
+				$writer->toFile($file, $config);
+				
 				// Redirect 
 				$this->redirect()->toRoute('wiss/module/default', array(
 					'action' => 'uninstalled'
