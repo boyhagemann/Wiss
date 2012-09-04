@@ -23,18 +23,12 @@ class IndexController extends AbstractActionController
     {
 		$form = new \Wiss\Form\Install();				
 		$form->setAttribute('action', $this->url()->fromRoute('wiss/install'));
-		
-		$data = $this->getServiceLocator()->get('config');
-		
-		$form->setData($data['doctrine']['connection']['orm_default']['params']);
-		
+				
 		if($this->getRequest()->isPost()) {
 			$form->setData($this->getRequest()->getPost());
 			
 			if($form->isValid()) {
-				
-				$file = 'config/autoload/connection.global.php';
-				
+							
 				$config = array(
 					'doctrine' => array(
 						'connection' => array(
@@ -46,11 +40,14 @@ class IndexController extends AbstractActionController
 				);
 				
 				// Write the config to disk in the config autoload folder
+				$file = 'config/autoload/connection.global.php';	
 				$writer = new \Zend\Config\Writer\PhpArray();
 				$writer->toFile($file, $config);
 				
+				// Do the actual install
 				$this->install();	
 				
+				// Redirect 
 				$this->redirect()->toRoute('wiss/module/default', array(
 					'action' => 'uninstalled'
 				));
@@ -61,6 +58,9 @@ class IndexController extends AbstractActionController
 		return compact('form');
     }
 	
+	/**
+	 * 
+	 */
 	public function install()
 	{
 		$em = $this->getEntityManager();
