@@ -371,7 +371,7 @@ class ModelController extends AbstractActionController
 		
         // Import the config thru the Page entity repository
     	$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Page');
+		$repo = $em->getRepository('Wiss\Entity\Route');
 		$repo->import($config);		
 	}
 	

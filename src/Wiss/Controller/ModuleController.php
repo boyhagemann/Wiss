@@ -95,7 +95,7 @@ class ModuleController extends AbstractActionController
 			$config = $zfModule->getConfig();
 			
 			// Import from config
-			$em->getRepository('Wiss\Entity\Page')->import($config);
+			$em->getRepository('Wiss\Entity\Route')->import($config);
 			$em->getRepository('Wiss\Entity\Navigation')->import($config);
 		}
 								

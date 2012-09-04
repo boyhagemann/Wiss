@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * 
  */
-class Page extends \Doctrine\ORM\EntityRepository
+class Route extends \Doctrine\ORM\EntityRepository
 {	
 	/**
 	 * 
@@ -36,12 +36,12 @@ class Page extends \Doctrine\ORM\EntityRepository
 	 */
 	public function export()
 	{
-		$rootPages = $this->findBy(array(
+		$roots = $this->findBy(array(
 			'parent' => null,
 		));
 		
 		// Build the route config as array
-		$config['router']['routes'] = $this->buildRouteConfigArray($rootPages);
+		$config['router']['routes'] = $this->buildRouteConfigArray($roots);
 		
 		// Also build the controllers currently used
 		$config['controllers']['invokables'] = $this->buildControllerInvokables();
@@ -53,16 +53,15 @@ class Page extends \Doctrine\ORM\EntityRepository
 		
 	/**
 	 *
-	 * @param array $tree
+	 * @param array $routes
 	 * @return array 
 	 */
-	public function buildRouteConfigArray($pages)
+	public function buildRouteConfigArray($routes)
 	{
 		$config = array();
-		foreach($pages as $page) {
+		foreach($routes as $route) {
 			
-			$name = $page->getName();
-			$route = $page->getRoute();
+			$name = $route->getPage()->getName();
 			$config[$name] = array(
 				'type' => 'Segment',
 				'may_terminate' => true,
@@ -73,7 +72,7 @@ class Page extends \Doctrine\ORM\EntityRepository
 				)
 			);
 			
-			$children = $page->getChildren();			
+			$children = $route->getChildren();			
 			if(count($children)) {
 				$config[$name]['child_routes'] = $this->buildRouteConfigArray($children);
 			}
