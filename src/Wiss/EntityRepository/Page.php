@@ -126,8 +126,8 @@ class Page extends \Doctrine\ORM\EntityRepository
 			$route->setRoute($routeData['options']['route']);
 			
 			$routeName = '';
-			if($parent) {
-				$routeName .= $parent->getRoute()->getName() . '/';
+			if($parentRoute) {
+				$routeName .= $parentRoute->getName() . '/';
 			}
 			$routeName .= $name;	
 			$route->setName($routeName);
