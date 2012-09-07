@@ -45,11 +45,11 @@ class IndexController extends AbstractActionController
 				$writer->toFile($file, $config);
 				
 				// Update the config with the application installed
-				$file = 'module/Application/config/module.config.php';	
-				$config = \Zend\Config\Factory::fromFile($file);
-				$config['application']['installed'] = true;
-				$writer = new \Zend\Config\Writer\PhpArray();
-				$writer->toFile($file, $config);
+				$this->writeToApplicationConfig(array(
+					'application' => array(
+						'installed' => true
+					)
+				));
 		
 				// Redirect to the actual install
 				$this->redirect()->toRoute('wiss/install-models');
@@ -149,6 +149,14 @@ class IndexController extends AbstractActionController
 		$em->getRepository('Wiss\Entity\Route')->export();
 		$em->getRepository('Wiss\Entity\Navigation')->export();		
 
+		// Update the config with the models installed
+		$this->writeToApplicationConfig(array(
+			'application' => array(
+				'installed' => true,
+				'use_zones' => true,
+			)
+		));
+				
 		// Redirect 
 		$this->redirect()->toRoute('wiss/module');
 		
@@ -179,5 +187,18 @@ class IndexController extends AbstractActionController
 	public function getEntityManager()
 	{
 		return $this->entityManager;
+	}
+	
+	/**
+	 * 
+	 * @param array $config
+	 */
+	public function writeToApplicationConfig(Array $config)
+	{		
+		$file = 'module/Application/config/module.config.php';	
+		$original = \Zend\Config\Factory::fromFile($file);
+		$configToWrite = $config + $original;
+		$writer = new \Zend\Config\Writer\PhpArray();
+		$writer->toFile($file, $configToWrite);
 	}
 }

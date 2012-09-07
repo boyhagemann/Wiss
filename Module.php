@@ -51,7 +51,7 @@ class Module
 				// Rewrite all incoming uri's to a single entry point
 				$route->setParam('controller', 'Wiss\Controller\PageContent');
 				$route->setParam('action', 'route');
-				$route->setParam('route', $current);				
+				$route->setParam('route', $currentRoute);				
 			}
 
 		});
