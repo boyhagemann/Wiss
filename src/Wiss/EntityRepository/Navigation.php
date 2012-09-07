@@ -3,7 +3,6 @@
 namespace Wiss\EntityRepository;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * 
@@ -16,6 +15,7 @@ class Navigation extends NestedTreeRepository
 	 */
 	public function import(Array $config)
 	{
+		
 		if(!isset($config['navigation'])) {
 			return;
 		}		
@@ -37,16 +37,14 @@ class Navigation extends NestedTreeRepository
 	 */
 	public function export()
 	{		
-		$navigation = $this->findBy(array(
-			'parent' => null,
-		));				
+		$navigation = $this->childrenHierarchy();
 		
 		// Build the route config as array
 		$config = array();
 		foreach($navigation as $node) {
-			$config['navigation'][$node->getName()] = $this->buildNavigationConfigArray($node->getChildren());
-		}
-		
+			$config['navigation'][$node['name']] = $this->buildNavigationConfigArray($node['__children']);
+		}		
+							
 		// Write the config to disk in the config autoload folder
 		$writer = new \Zend\Config\Writer\PhpArray();
 		$writer->toFile('config/autoload/navigation.global.php', $config);
@@ -107,17 +105,13 @@ class Navigation extends NestedTreeRepository
 	 * @param array $navigation
 	 * @return array 
 	 */
-	public function buildNavigationConfigArray($navigation)
+	public function buildNavigationConfigArray(Array $navigation)
 	{
 		$config = array();
-					
-		if(!$navigation instanceof \ArrayAccess) {
-			return $config;
-		}
 			
-		foreach($navigation as $node) {
+		foreach($navigation as $data) {
 			
-		
+			$node = $this->find($data['id']);
 			
 			$name = $node->getName();
 			$config[$name] = array(
@@ -129,7 +123,8 @@ class Navigation extends NestedTreeRepository
 				$config[$name]['params'] = $node->getParams();
 			}
 
-			$config[$name]['pages'] = $this->buildNavigationConfigArray($node->getChildren());
+			if($data['__children'])
+			$config[$name]['pages'] = $this->buildNavigationConfigArray($data['__children']);
 		}
 				
 		return $config;

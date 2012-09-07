@@ -49,8 +49,9 @@ class IndexController extends AbstractActionController
 				$this->install();	
 				
 				// Import and export the route and navigation config		
+				$config = $this->getServiceLocator()->get('config');				
 				$em->getRepository('Wiss\Entity\Route')->import($config);
-				$em->getRepository('Wiss\Entity\Navigation')->import($config);		
+				$em->getRepository('Wiss\Entity\Navigation')->import($config);
 				$em->getRepository('Wiss\Entity\Route')->export();
 				$em->getRepository('Wiss\Entity\Navigation')->export();		
 		
