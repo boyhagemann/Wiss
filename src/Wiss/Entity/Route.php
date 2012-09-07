@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Route")
+ * @Gedmo\Tree(type="nested")
  */
 class Route
 {
@@ -63,6 +64,31 @@ class Route
 	 */
 	protected $constraints;
 
+	
+	/**
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer")
+     */
+    private $lft;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    private $lvl;
+
+    /**
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    private $rgt;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @ORM\Column(name="root", type="integer", nullable=true)
+     */
+    private $root;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="Route", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
@@ -137,6 +163,39 @@ class Route
 	public function setConstraints(Array $constraints) {
 		$this->constraints = $constraints;
 	}
+	
+	public function getLft() {
+		return $this->lft;
+	}
+
+	public function setLft($lft) {
+		$this->lft = $lft;
+	}
+
+	public function getLvl() {
+		return $this->lvl;
+	}
+
+	public function setLvl($lvl) {
+		$this->lvl = $lvl;
+	}
+
+	public function getRgt() {
+		return $this->rgt;
+	}
+
+	public function setRgt($rgt) {
+		$this->rgt = $rgt;
+	}
+
+	public function getRoot() {
+		return $this->root;
+	}
+
+	public function setRoot($root) {
+		$this->root = $root;
+	}
+
 	public function getParent() {
 		return $this->parent;
 	}

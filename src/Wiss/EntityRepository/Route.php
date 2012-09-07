@@ -2,13 +2,12 @@
 
 namespace Wiss\EntityRepository;
 
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * 
  */
-class Route extends \Doctrine\ORM\EntityRepository
+class Route extends NestedTreeRepository
 {	
 	/**
 	 * 
@@ -36,12 +35,13 @@ class Route extends \Doctrine\ORM\EntityRepository
 	 */
 	public function export()
 	{
-		$roots = $this->findBy(array(
-			'parent' => null,
-		));
+		$routes = $this->childrenHierarchy();
+		\Zend\Debug\Debug::dump($routes); exit;
 		
 		// Build the route config as array
-		$config['router']['routes'] = $this->buildRouteConfigArray($roots);
+		$config['router']['routes'] = $this->buildRouteConfigArray($routes);
+		
+		\Zend\Debug\Debug::dump($config['router']['routes']['wiss']); exit;
 		
 		// Also build the controllers currently used
 		$config['controllers']['invokables'] = $this->buildControllerInvokables();
@@ -59,8 +59,9 @@ class Route extends \Doctrine\ORM\EntityRepository
 	public function buildRouteConfigArray($routes)
 	{
 		$config = array();
-		foreach($routes as $route) {
+		foreach($routes as $data) {
 			
+			$route = $this->find($data['id']);
 			$name = $route->getPage()->getName();
 			$config[$name] = array(
 				'type' => 'Segment',
@@ -71,10 +72,9 @@ class Route extends \Doctrine\ORM\EntityRepository
 					'constraints' => $route->getConstraints(),
 				)
 			);
-			
-			$children = $route->getChildren();			
-			if(count($children)) {
-				$config[$name]['child_routes'] = $this->buildRouteConfigArray($children);
+			;			
+			if($data['__children']) {
+				$config[$name]['child_routes'] = $this->buildRouteConfigArray($data['__children']);
 			}
 		}
 		
