@@ -197,6 +197,17 @@ return array(
 								'action'        => 'install',
 							),
 						),
+					),			
+					'install-models' => array(
+						'type'    => 'Literal',
+						'options' => array(
+							'route'    => '/install-models',
+							'defaults' => array(
+								'__NAMESPACE__' => 'Wiss\Controller',
+								'controller'    => 'index',
+								'action'        => 'install-models',
+							),
+						),
 					),					
 				)
 			)

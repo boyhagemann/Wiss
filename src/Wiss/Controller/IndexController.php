@@ -20,8 +20,7 @@ class IndexController extends AbstractActionController
      * 
      */
     public function installAction()
-    {
-		$em = $this->getEntityManager();
+    {								
 		$form = new \Wiss\Form\Install();				
 		$form->setAttribute('action', $this->url()->fromRoute('wiss/install'));
 				
@@ -45,25 +44,15 @@ class IndexController extends AbstractActionController
 				$writer = new \Zend\Config\Writer\PhpArray();
 				$writer->toFile($file, $config);
 				
-				// Do the actual install
-				$this->install();	
-				
-				// Import and export the route and navigation config		
-				$config = $this->getServiceLocator()->get('config');				
-				$em->getRepository('Wiss\Entity\Route')->import($config);
-				$em->getRepository('Wiss\Entity\Navigation')->import($config);
-				$em->getRepository('Wiss\Entity\Route')->export();
-				$em->getRepository('Wiss\Entity\Navigation')->export();		
-		
 				// Update the config with the application installed
 				$file = 'module/Application/config/module.config.php';	
 				$config = \Zend\Config\Factory::fromFile($file);
 				$config['application']['installed'] = true;
 				$writer = new \Zend\Config\Writer\PhpArray();
 				$writer->toFile($file, $config);
-				
-				// Redirect 
-				$this->redirect()->toRoute('wiss/module');
+		
+				// Redirect to the actual install
+				$this->redirect()->toRoute('wiss/install-models');
 			}
 		}
 					
@@ -72,23 +61,12 @@ class IndexController extends AbstractActionController
     }
 	
 	/**
-	 *
-	 * @return boolean 
-	 */
-	public function redirectToInstallAction()
-	{
-		// Redirect 
-		$this->redirect()->toRoute('wiss/install');		
-		
-		return false;
-	}
-	
-	/**
 	 * 
 	 */
-	public function install()
-	{
+	public function installModelsAction()
+	{				
 		$em = $this->getEntityManager();
+		
         $classes = array(
           $em->getClassMetadata('Wiss\Entity\Page'),
           $em->getClassMetadata('Wiss\Entity\Route'),
@@ -163,8 +141,32 @@ class IndexController extends AbstractActionController
 		$em->persist($module2);
 				
 		$em->flush();
+		
+		// Import and export the route and navigation config		
+		$config = $this->getServiceLocator()->get('config');						
+		$em->getRepository('Wiss\Entity\Route')->import($config);
+		$em->getRepository('Wiss\Entity\Navigation')->import($config);
+		$em->getRepository('Wiss\Entity\Route')->export();
+		$em->getRepository('Wiss\Entity\Navigation')->export();		
+
+		// Redirect 
+		$this->redirect()->toRoute('wiss/module');
+		
+		return false;
 	}
 	
+	/**
+	 *
+	 * @return boolean 
+	 */
+	public function redirectToInstallAction()
+	{
+		// Redirect 
+		$this->redirect()->toRoute('wiss/install');		
+		
+		return false;
+	}
+		
 	public function setEntityManager(\Doctrine\ORM\EntityManager $entityManager)
 	{
 		$this->entityManager = $entityManager;
