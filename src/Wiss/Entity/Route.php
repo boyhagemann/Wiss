@@ -40,6 +40,12 @@ class Route
      * @ORM\Column
 	 */
 	protected $name;
+	
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $fullName;
 
 	/**
 	 * 
@@ -64,7 +70,6 @@ class Route
 	 */
 	protected $constraints;
 
-	
 	/**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
@@ -89,16 +94,18 @@ class Route
      */
     private $root;
 	
-	/**
+    /**
+     * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Route", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $parent;	
+    private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Route", mappedBy="parent")
+     * @ORM\OrderBy({"lft" = "ASC"})
      */
-    protected $children;
+    private $children;
 
 	public function getId() {
 		return $this->id;
@@ -130,6 +137,14 @@ class Route
 
 	public function setName($name) {
 		$this->name = $name;
+	}
+	
+	public function getFullName() {
+		return $this->fullName;
+	}
+
+	public function setFullName($fullName) {
+		$this->fullName = $fullName;
 	}
 
 	public function getRoute() {

@@ -32,7 +32,7 @@ class PageContentController extends AbstractActionController
         
         // Get the route this found in the original routeMatch
 		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
-            'name' => $this->params('route')
+            'fullName' => $this->params('route')
         ));		
         
         // Get the page, layout and routematch

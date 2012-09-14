@@ -36,12 +36,9 @@ class Route extends NestedTreeRepository
 	public function export()
 	{
 		$routes = $this->childrenHierarchy();
-		\Zend\Debug\Debug::dump($routes); exit;
 		
 		// Build the route config as array
 		$config['router']['routes'] = $this->buildRouteConfigArray($routes);
-		
-		\Zend\Debug\Debug::dump($config['router']['routes']['wiss']); exit;
 		
 		// Also build the controllers currently used
 		$config['controllers']['invokables'] = $this->buildControllerInvokables();
@@ -62,7 +59,7 @@ class Route extends NestedTreeRepository
 		foreach($routes as $data) {
 			
 			$route = $this->find($data['id']);
-			$name = $route->getPage()->getName();
+			$name = $route->getName();
 			$config[$name] = array(
 				'type' => 'Segment',
 				'may_terminate' => true,
@@ -123,13 +120,14 @@ class Route extends NestedTreeRepository
 			// Start a new route
 			$route = new \Wiss\Entity\Route;
 			$route->setRoute($routeData['options']['route']);
+			$route->setName($name);
 			
 			$routeName = '';
 			if($parentRoute) {
-				$routeName .= $parentRoute->getName() . '/';
+				$routeName .= $parentRoute->getFullName() . '/';
 			}
 			$routeName .= $name;	
-			$route->setName($routeName);
+			$route->setFullName($routeName);
 			$route->setParent($parentRoute);
 			
 			if(isset($routeData['options']['defaults'])) {
