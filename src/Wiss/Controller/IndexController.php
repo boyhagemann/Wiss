@@ -47,7 +47,8 @@ class IndexController extends AbstractActionController
 				// Update the config with the application installed
 				$this->writeToApplicationConfig(array(
 					'application' => array(
-						'installed' => true
+						'installed' => true,
+						'use_zones' => false,
 					)
 				));
 		
