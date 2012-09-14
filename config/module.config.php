@@ -307,7 +307,22 @@ return array(
     ),
     'asset_manager' => array(
 		'resolver_configs' => array(
-			'paths' => __DIR__ . '/../assets',
+			'paths' => array(
+				'Wiss' => __DIR__ . '/../public',
+			),
+			'collections' => array(
+                'js/compiled.js' => array(
+                    'js/jquery-1.7.2.min.js',
+                    'js/bootstrap.min.js',
+                    'js/jstree/jquery.jstree.js',
+                    'js/site.js',
+                ),
+				'css/compiled.css' => array(
+					'css/bootstrap.min.css',
+					'js/jstree/themes/default/style.css',
+					'css/style.css',
+				)
+			)
 		)		
 	),
 );
