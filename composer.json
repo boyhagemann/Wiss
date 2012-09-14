@@ -29,7 +29,6 @@
     },
     "autoload": {
         "psr-0": {
-            "AsseticBundle": "vendor/boyhagemann/zf2-assetic-module/src/",
             "ZfcTwitterBootstrap": "vendor/boyhagemann/ZfcTwitterBootstrap/src/"
         }
     }
