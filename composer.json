@@ -16,19 +16,6 @@
                 } 
             }
 
-        },
-        {
-            "type": "package",
-            "package": {
-                "version": "master",
-                "name": "boyhagemann/zf2-assetic-module",
-                "source": {
-                    "type": "git",
-                    "url": "https://github.com/boyhagemann/zf2-assetic-module",
-                    "reference": "master"
-                } 
-            }
-
         }
     ],
     "require": {
@@ -38,8 +25,7 @@
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
 		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
-		"boyhagemann/zf2-assetic-module": "dev-master",
-        "kriswallsmith/assetic": "dev-master"
+		"rwOverdijk/assetmanager": "dev-master"
     },
     "autoload": {
         "psr-0": {

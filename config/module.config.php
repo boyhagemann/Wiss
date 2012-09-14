@@ -305,44 +305,9 @@ return array(
             ),
         ),
     ),
-    'assetic_configuration' => array(
-		
-		'routes' => array(
-			'model' => array(
-				'@wiss_js',
-				'@wiss_css',
-				'@wiss_images',
-			)
-		),
-		
-		'modules' => array(
-			'wiss' => array(				
-				'root_path' => __DIR__ . '/../assets',
-				'collections' => array(				
-					'wiss_css' => array(
-						'assets' => array(
-							'css/bootstrap.min.css',
-							'css/bootstrap-responsive.min.css',
-							'css/style.css',
-							'js/jstree/themes/default/style.css',
-						)
-					),
-					'wiss_js' => array(
-						'assets' => array(
-							'js/jquery-1.7.2.min.js',
-							'js/bootstrap.min.js',
-							'js/bootstrap.dropdown.js',
-							'js/jstree/jquery.jstree.js',
-							'js/site.js',
-						)
-					),
-					'wiss_images' => array(
-						'assets' => array(
-							'*.png',
-						)
-					),
-				)
-			)
-		)
+    'asset_manager' => array(
+		'resolver_configs' => array(
+			'paths' => __DIR__ . '/../assets',
+		)		
 	),
 );
