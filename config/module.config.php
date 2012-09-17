@@ -308,7 +308,7 @@ return array(
     'asset_manager' => array(
 		'resolver_configs' => array(
 			'paths' => array(
-				'Wiss' => __DIR__ . '/../public',
+				'Wiss' => __DIR__ . '/../assets',
 			),
 			'collections' => array(
                 'js/compiled.js' => array(
