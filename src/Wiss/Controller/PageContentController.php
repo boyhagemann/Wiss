@@ -29,16 +29,17 @@ class PageContentController extends AbstractActionController
 	public function routeAction()
 	{
         $em = $this->getEntityManager();
-        
+			
         // Get the route this found in the original routeMatch
 		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
             'fullName' => $this->params('route')
         ));		
         
         // Get the page, layout and routematch
-		$page       = $route->getPage();
-        $layout     = $page->getLayout();
-		$routeMatch = $this->getEvent()->getRouteMatch();
+		$page			= $route->getPage();
+        $layout			= $page->getLayout();
+		$routeMatch		= $this->getEvent()->getRouteMatch();
+		$originalRoute	= $routeMatch->getParam('originalRoute');
 		
         // Start a new view model
 		$view = new ViewModel();
@@ -69,7 +70,18 @@ class PageContentController extends AbstractActionController
 
 				// Alter the current controller's routeMatch		
 				$routeMatch->setParam('controller', $block->getController());
-				$routeMatch->setParam('action', $block->getAction());
+				
+
+				// Check if the action in the block is the same as the original route found.
+				// If this is true, just use the block action. 
+				// If not, then the route may have an optional [:action], use
+				// this to dispatch this action
+				if($block->getAction() == $originalRoute->getParam('action')) {
+					$routeMatch->setParam('action', $block->getAction());
+				}
+				else {	
+					$routeMatch->setParam('action', $originalRoute->getParam('action'));
+				}
 				
 				// Inject all defaults
 				foreach($content->getDefaults() as $key => $value) {

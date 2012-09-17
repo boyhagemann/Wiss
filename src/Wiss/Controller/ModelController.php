@@ -473,6 +473,7 @@ class ModelController extends AbstractActionController
 	    $paths      = $config['module_listener_options']['module_paths'];
 		$drivers    = $em->getConfiguration()->getMetadataDriverImpl()->getDrivers();
 		$entities   = array();
+		
 							
 		foreach($paths as $basepath) {
 					

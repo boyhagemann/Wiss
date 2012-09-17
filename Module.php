@@ -33,6 +33,7 @@ class Module
 				
             // Get the matched route and its name	
 			$route = $e->getRouteMatch();	
+			$originalRoute = clone $route;
 			$currentRoute = $route->getMatchedRouteName();	
             
     		// Go to the install page first if there is no valid database connection
@@ -52,6 +53,7 @@ class Module
 				$route->setParam('controller', 'Wiss\Controller\PageContent');
 				$route->setParam('action', 'route');
 				$route->setParam('route', $currentRoute);				
+				$route->setParam('originalRoute', $originalRoute);				
 			}
 
 		});
