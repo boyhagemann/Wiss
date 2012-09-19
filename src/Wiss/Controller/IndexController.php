@@ -141,6 +141,15 @@ class IndexController extends AbstractActionController
 		$module2->setName('Wiss');
 		$em->persist($module2);
 				
+		// Insert model page
+		$model = new \Wiss\Entity\Model;
+		$model->setTitle('Page');
+		$model->setEntityClass('Wiss\Entity\Page');
+		$model->setControllerClass('Wiss\Controller\PageController');
+		$model->setFormClass('Wiss\Form\Page');
+		$model->setTitleField('title');
+		$em->persist($model);
+		
 		$em->flush();
 		
 		// Import and export the route and navigation config		

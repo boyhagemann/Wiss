@@ -2,12 +2,13 @@
 
 <?= $this->navigation('cms')->menu()->setMinDepth(2)->setMaxDepth(2)->setOnlyActiveBranch(true)->setUlClass('nav nav-tabs') ?>
 
-<ul class="unstyled">
+<ul class="unstyled list">
 	<?php foreach($models as $model) : ?>
 	<li>
-		<h3><?= $model->getTitle() ?></h3>
+		<h2><a href="<?= $this->url('wiss/model/edit', array('id' => $model->getId())) ?>"><?= $model->getTitle() ?></a></h2>
+		<h3><?= $model->getEntityClass() ?></h3>
 		<dl class="btn-group">
-			<a href="<?= $this->url($model->getSlug(), array('name' => $model->getSlug())) ?>" class="btn btn-small">View records</a>
+			<a href="<?= $this->url('wiss/' . $model->getSlug(), array('name' => $model->getSlug())) ?>" class="btn btn-small">View records</a>
 			<a href="<?= $this->url('wiss/model/edit', array('id' => $model->getId())) ?>" class="btn btn-small">Edit this model</a>
 		</dl>
 	</li>
