@@ -215,6 +215,20 @@ return array(
     ),
 	'navigation' => array(
 		'cms' => array(
+			'navigation' => array(
+				'label' => 'Navigation',
+				'route' => 'wiss/navigation',
+			),
+			'content' => array(
+				'label' => 'Content',
+				'route' => 'wiss/page',
+				'pages' => array(
+					'page' => array(
+						'label' => 'Pages',
+						'route' => 'wiss/page'
+					)
+				)
+			),
 			'administration' => array(
 				'label' => 'Administration',
 				'route' => 'wiss/module',
@@ -260,10 +274,6 @@ return array(
 						)
 					),
 				) 
-			),
-			'navigation' => array(
-				'label' => 'Navigation',
-				'route' => 'wiss/navigation',
 			),
 			'install' => array(
 				'label' => 'Install',
