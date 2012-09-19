@@ -473,71 +473,54 @@ class ModelController extends AbstractActionController
 	    $paths      = $config['module_listener_options']['module_paths'];
 		$drivers    = $em->getConfiguration()->getMetadataDriverImpl()->getDrivers();
 		$entities   = array();
-						
+		
+							
 		foreach($paths as $basepath) {
 					
 			foreach($drivers as $namespace => $driver) {
 
 				foreach($driver->getPaths() as $path) {
 
-					// Build the path to the file
-					$filePattern = '%s/src/%s%s';
-					$file = sprintf($filePattern, $basepath, $namespace, $path);
-					$entities += $this->getEntitiesByPath($file);
-
-					// Build the path to the file
+                    // Build the path to the file
 					$filePattern = '%s/%s/src/%s%s';
 					$file = sprintf($filePattern, $basepath, $namespace, $namespace, $path);
-					$entities += $this->getEntitiesByPath($file);
+					
+                    // Check if the file exists
+					if(!file_exists($file)) {
+						continue;
+					}
+					
+                    // Walk each file in the directory to see if there is
+                    // a valid entity
+					$directory = new \DirectoryIterator($file);
+					foreach($directory as $file) {
+						
+                        // Only use real files
+						if($file->isDot() || $file->isDir()) {
+							continue;
+						}													
+							
+                        // Start a file scanner, to check for classes inside the file
+						$scanner = new \Zend\Code\Scanner\FileScanner($file->getPathname());
+                        
+                        // Check the file for classes                            
+						foreach($scanner->getClassNames() as $class) {
+							
+							try {
+                                
+                                // See if we can build an entity without throwing an exception.
+                                // If no exception is thrown, then we have a valid entity
+								$entity = $this->getEntityManager()->getRepository($class);
+								$entities[$class] = $entity;
+                                
+							}
+							catch(\Exception $e) {
+								// Just skip to the next
+							}
+						}
+					}
 				}				
 			}			
-		}
-		
-		return $entities;
-	}
-	
-	/**
-	 * 
-	 * @param string $path
-	 * @return array
-	 */
-	public function getEntitiesByPath($file)
-	{
-		$entities   = array();
-		
-		// Check if the file exists
-		if(!file_exists($file)) {
-			return $entities;
-		}
-
-		// Walk each file in the directory to see if there is
-		// a valid entity
-		$directory = new \DirectoryIterator($file);
-		foreach($directory as $file) {
-
-			// Only use real files
-			if($file->isDot() || $file->isDir()) {
-				continue;
-			}													
-
-			// Start a file scanner, to check for classes inside the file
-			$scanner = new \Zend\Code\Scanner\FileScanner($file->getPathname());
-
-			// Check the file for classes                            
-			foreach($scanner->getClassNames() as $class) {
-
-				try {
-
-					// See if we can build an entity without throwing an exception.
-					// If no exception is thrown, then we have a valid entity
-					$entity = $this->getEntityManager()->getRepository($class);
-					$entities[$class] = $entity;
-
-				}
-				catch(\Exception $e) {
-					// Just skip to the next
-				}
-			}
 		}
 		
 		return $entities;
