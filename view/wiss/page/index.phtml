@@ -1,10 +1,13 @@
 
 <h1>Pages</h1>
 
-<ul class="unstyled">
+<ul class="unstyled list">
 	<?php foreach($pages as $page) : ?>
 	<li>
 		<h2><a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>"><?= $page->getTitle() ?></a></h2>
+		<h3><?= $page->getLayout()->getTitle() ?> layout</h3>
+		<a href="<?= $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
+		<a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>
 	</li>
 	<?php endforeach ?>
 </ul>
