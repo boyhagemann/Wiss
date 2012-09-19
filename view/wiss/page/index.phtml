@@ -6,8 +6,10 @@
 	<li>
 		<h2><a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>"><?= $page->getTitle() ?></a></h2>
 		<h3><?= $page->getLayout()->getTitle() ?> layout</h3>
-		<a href="<?= $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
-		<a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>
+		<div class="btn-group">
+			<a href="<?= $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
+			<a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>
+		</div>		
 	</li>
 	<?php endforeach ?>
 </ul>

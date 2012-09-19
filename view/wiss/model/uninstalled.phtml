@@ -2,13 +2,13 @@
 
 <?= $this->navigation('cms')->menu()->setMinDepth(2)->setMaxDepth(2)->setOnlyActiveBranch(true)->setUlClass('nav nav-tabs') ?>
 
-<ul class="unstyled">
+<ul class="unstyled list">
 	<?php foreach($scanned as $class => $model) : ?>
 	<li>
-		<h3><?= $class ?></h3>
-		<dl>
+		<h2><?= $class ?></h2>
+		<div class="btn-group">
 			<a href="<?= $this->url('wiss/model/install', array('class' => str_replace('\\', '-', $class))) ?>" class="btn btn-primary btn-small">Install</a>
-		</dl>
+		</div>
 	</li>
 	<?php endforeach ?>
 </ul>
