@@ -26,6 +26,7 @@ class Model extends Form
 		parent::__construct('model');
 		
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
+		$this->setAttribute('class', 'form-horizontal');
 		
 		// Title
 		$title = new Element('title');
@@ -35,7 +36,7 @@ class Model extends Form
 		));
 		
 		// Title field
-		$titleField = new Element('title_field');
+		$titleField = new Element\Select('title_field');
 		$titleField->setAttributes(array(
 			'type' => 'select',
 			'label' => 'Which field is used as title?'
@@ -89,37 +90,32 @@ class Model extends Form
 			
 		
 		foreach($this->getFieldMapping($data['entity_class']) as $field) {
-			
+						
 			$fieldset = new Fieldset($field['fieldName']);
 			$fieldset->setOptions(array(
 				'legend' => $field['fieldName'],
 			));
 			
-			$labelName = sprintf('elements[%s][label]', $field['fieldName']);
-			$fieldset->add(array(
-				'name' => $labelName,
-				'attributes' => array(
-					'type' => 'text',
-					'label' => 'Label',					
-					'placeholder' => sprintf('Label for %s...', $field['fieldName']),
-				)
-			));
 			$elementName = sprintf('elements[%s][type]', $field['fieldName']);
-			$fieldset->add(array(
-				'name' => $elementName,
-				'attributes' => array(
-					'type' => 'select',
-					'label' => 'Label',
-					'options' => array(
-						''			=> 'No element assigned yet...',
-						'Zend\Form\Element\Text'		=> 'Text',
-						'Zend\Form\Element\Textarea'	=> 'Textarea',
-						'Wiss\Form\Element\DatePicker'	=> 'DatePicker',
-					)
-				)
+			$select = new Element\Select($elementName);
+			$select->setAttributes(array(
+				'label' => $field['fieldName'],
 			));
+			$select->setValueOptions(array(
+				''								=> 'No element assigned yet...',
+				'Zend\Form\Element\Text'		=> 'Text',
+				'Zend\Form\Element\Textarea'	=> 'Textarea',
+				'Wiss\Form\Element\DatePicker'	=> 'DatePicker',
+			)); 
+			$fieldset->add($select);
 			
-			$elements->add($fieldset);			
+			
+			
+			$elementName = sprintf('elements[%s][config]', $field['fieldName']);
+			$config = new Element\Hidden($elementName);
+			$fieldset->add($config);
+			
+			$elements->add($fieldset);		
 		}
 		
 		$this->add($elements);
