@@ -225,7 +225,17 @@ return array(
 				'pages' => array(
 					'page' => array(
 						'label' => 'Pages',
-						'route' => 'wiss/page'
+						'route' => 'wiss/page',
+						'pages' => array(
+							'properties' => array(
+								'label' => 'Properties',
+								'route' => 'wiss/page/properties'
+							),
+							'content' => array(
+								'label' => 'Content',
+								'route' => 'wiss/page/content'
+							),
+						)
 					)
 				)
 			),
