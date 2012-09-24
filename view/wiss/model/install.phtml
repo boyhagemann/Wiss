@@ -1,33 +1,30 @@
-<h1>Install model <?= $title ?></h1>
-
+<h1>Install model <em><?= $title ?></em></h1>
+<p>
+	<span class="label label-info">Info</span> You are about to add "<?= $title ?>" as a model to the system. 
+	Here you can enter the properties and define which form elements this model has.
+</p>
 <?= $this->form()->openTag($form) ?>
 
-<div class="tabbable">
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#model-properties" data-toggle="tab">Properties</a>
-		<li><a href="#model-elements" data-toggle="tab">Elements</a>
+<legend>Properties</legend>
+<div class="control-group well">
+	<?= $this->formElementWrapper($form->get('title')) ?>
+	<?= $this->formElementWrapper($form->get('entity_class')) ?>
+	<?= $this->formElementWrapper($form->get('title_field')) ?>
+</div>
+
+<legend>Form elements</legend>
+<div class="control-group">
+	<ul class="unstyled list">
+	<?php foreach($form->get('elements') as $element) : ?>
+		<li>
+			<h2><?= $element->getOption('legend') ?></h2>
+			<?php foreach($element as $child) : ?> 
+			<?= $this->formRow($child) ?>
+			<?php endforeach ?>		
+				<a href="" class="btn btn-small">Configure</a>
+		</li>
+	<?php endforeach ?>
 	</ul>
-	<div class="tab-content">
-		<div class="tab-pane active" id="model-properties">
-			<?= $this->formElementWrapper($form->get('title')) ?>
-			<?= $this->formElementWrapper($form->get('entity_class')) ?>
-			<?= $this->formElementWrapper($form->get('title_field')) ?>
-		</div>
-		
-		<div class="tab-pane" id="model-elements">
-			<ul class="unstyled list">
-			<?php foreach($form->get('elements') as $element) : ?>
-				<li>
-					<h2><?= $element->getOption('legend') ?></h2>
-					<?php foreach($element as $child) : ?> 
-					<?= $this->formRow($child) ?>
-					<?php endforeach ?>		
-						<a href="" class="btn btn-small">Configure</a>
-				</li>
-			<?php endforeach ?>
-			</ul>
-		</div>
-	</div>
 </div>
 			
 <div class="form-actions">
