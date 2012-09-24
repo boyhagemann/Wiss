@@ -96,11 +96,9 @@ class Model extends Form
 				'legend' => $field['fieldName'],
 			));
 			
-			$elementName = sprintf('elements[%s][type]', $field['fieldName']);
-			$select = new Element\Select($elementName);
-			$select->setAttributes(array(
-				'label' => $field['fieldName'],
-			));
+			// Add the select field with the available elements
+			$select = new Element\Select('type');
+			$select->setLabel($field['fieldName']);
 			$select->setValueOptions(array(
 				''								=> 'No element assigned yet...',
 				'Zend\Form\Element\Text'		=> 'Text',
@@ -109,10 +107,15 @@ class Model extends Form
 			)); 
 			$fieldset->add($select);
 			
+			// Add the config button
+			$button = new Element\Button('trigger');
+			$button->setOptions(array(
+				'label' => 'Configure',
+			));
+			$fieldset->add($button);
 			
-			
-			$elementName = sprintf('elements[%s][config]', $field['fieldName']);
-			$config = new Element\Hidden($elementName);
+			// Add the hidden config element
+			$config = new Element\Hidden('button');
 			$fieldset->add($config);
 			
 			$elements->add($fieldset);		
