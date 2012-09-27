@@ -67,7 +67,7 @@ class ModelController extends AbstractActionController
 				$this->flashMessenger()->addMessage('The model is now updated');
 				
 				// Redirect
-				$this->redirect()->toRoute('wiss/model/edit', array(
+				$this->redirect()->toRoute('model/edit', array(
 					'id' => $model->getId(),
 				));
 			}
@@ -104,7 +104,7 @@ class ModelController extends AbstractActionController
 			$this->flashMessenger()->addMessage('The model is already installed');
 				
 			// Redirect
-			$this->redirect()->toRoute('wiss/content/' . $model->getSlug());
+			$this->redirect()->toRoute('content/' . $model->getSlug());
 			
 			return false;			
 		}
@@ -143,7 +143,7 @@ class ModelController extends AbstractActionController
 				$this->flashMessenger()->addMessage('The model is now installed');
 				
 				// Redirect
-				$this->redirect()->toRoute('wiss/model/export', array(
+				$this->redirect()->toRoute('model/export', array(
 					'name' => $model->getSlug()
 				));
 			}
@@ -165,7 +165,7 @@ class ModelController extends AbstractActionController
 		$em->getRepository('Wiss\Entity\Page')->export();
 
 		// Redirect
-		$this->redirect()->toRoute('wiss/model');
+		$this->redirect()->toRoute('model');
 
 		return false;
 	}

@@ -143,7 +143,7 @@ class Navigation extends NestedTreeRepository
 			// We have to use a route for the navigation, so just grab
 			// a neutral route
 			$route = $this->getEntityManager()->getRepository('Wiss\Entity\Route')->findOneBy(array(
-				'fullName' => 'wiss/model'
+				'fullName' => 'model'
 			));
 			
 			// Insert navigation

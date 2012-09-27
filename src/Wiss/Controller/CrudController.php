@@ -49,7 +49,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $indexTemplate = 'wiss/crud/index';
+    protected $indexTemplate = 'crud/index';
 	
     /**
      * The template used for the createAction. It show a form to
@@ -57,7 +57,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $editTemplate = 'wiss/crud/create';
+    protected $editTemplate = 'crud/create';
     
     
     /**
@@ -66,7 +66,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $editTemplate = 'wiss/crud/edit';
+    protected $editTemplate = 'crud/edit';
     
     /**
      * The template used for the deleteAction. It shows a form to 
@@ -74,7 +74,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $dleteTemplate = 'wiss/crud/delete';
+    protected $dleteTemplate = 'crud/delete';
     
     /**
      * This action lists all the records for the model. It shows them in
@@ -131,7 +131,7 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Create new record succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('wiss/crud', array(
+				$this->redirect()->toRoute('crud', array(
 					'name' => $model->getSlug(),
 				));
 			}
@@ -177,7 +177,7 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Saved changes succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('wiss/crud', array(
+				$this->redirect()->toRoute('crud', array(
 					'name' => $model->getSlug(),
 				));
 			}
@@ -223,7 +223,7 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Saved changes succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('wiss/crud', array(
+				$this->redirect()->toRoute('crud', array(
 					'name' => $model->getSlug(),
 				));
 			}
