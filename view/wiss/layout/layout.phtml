@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8">
 	<base href="<?php echo $this->basePath() ?>" />
-    <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
 	<?php echo $this->headLink()->prependStylesheet($this->basePath() . '/css/compiled.css') ?>
 	<?php echo $this->headScript()->appendFile($this->basePath() . '/js/compiled.js') ?>
-    <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
   </head>
 
   <body>
@@ -35,7 +35,7 @@
 		<?php if($this->flashMessenger()->hasMessages()) : ?>
 		<div class="messages">			
 			<?php foreach($this->flashMessenger()->getMessages() as $message) : ?>
-				<div class="alert"><?= $message ?></div>
+				<div class="alert"><?php echo $message ?></div>
 			<?php endforeach ?>
 		</div>
 		<?php endif ?>

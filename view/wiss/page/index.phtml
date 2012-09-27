@@ -4,11 +4,11 @@
 <ul class="unstyled list">
 	<?php foreach($pages as $page) : ?>
 	<li>
-		<h2><a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>"><?= $page->getTitle() ?></a></h2>
-		<h3><?= $page->getLayout()->getTitle() ?> layout</h3>
+		<h2><a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>"><?php echo $page->getTitle() ?></a></h2>
+		<h3><?php echo $page->getLayout()->getTitle() ?> layout</h3>
 		<div class="btn-group">
-			<a href="<?= $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
-			<a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>
+			<a href="<?php echo $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
+			<a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>
 		</div>		
 	</li>
 	<?php endforeach ?>

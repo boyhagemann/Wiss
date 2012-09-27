@@ -1,13 +1,13 @@
-<h1>List <?= $model->getTitle() ?></h1>
+<h1>List <?php echo $model->getTitle() ?></h1>
 
 <div class="form-actions">
-	<a href="<?php echo $this->url($model->getSlug() . '/create') ?>" class="btn btn-primary">Create new <?= $model->getTitle() ?></a>
+	<a href="<?php echo $this->url($model->getSlug() . '/create') ?>" class="btn btn-primary">Create new <?php echo $model->getTitle() ?></a>
 </div>
 
 <ul class="unstyled">
 	<?php foreach($entities as $entity) : ?>
 	<li>
-		<h3><?= $entity->$labelGetter() ?></h3>
+		<h3><?php echo $entity->$labelGetter() ?></h3>
 		<dl>
 			<a href="<?php echo $this->url($model->getSlug() . '/edit', array('id' => $entity->getId())) ?>" class="btn btn-primary btn-small">Edit</a>
 			<a href="<?php echo $this->url($model->getSlug() . '/delete', array('id' => $entity->getId())) ?>" class="btn btn-small">Delete</a>

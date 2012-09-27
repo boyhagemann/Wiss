@@ -1,27 +1,27 @@
-<h1><?= $page->getTitle() ?></h1>
+<h1><?php echo $page->getTitle() ?></h1>
 
 <ul class="nav nav-tabs">
-	<li><a href="<?= $this->url('wiss/page/properties', array('id' => $page->getId())) ?>">Properties</a></li>
-	<li class="active"><a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>">Content</a></li>
+	<li><a href="<?php echo $this->url('wiss/page/properties', array('id' => $page->getId())) ?>">Properties</a></li>
+	<li class="active"><a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>">Content</a></li>
 </ul>
 
 <?php foreach($zones as $zone) : ?>
 
-<h2><?= $zone->getTitle() ?></h2>
+<h2><?php echo $zone->getTitle() ?></h2>
 <ul class="blocks unstyled">
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
 	<li class="block rounded-small">
-		<h3><?= $content->getTitle() ?></h3>
+		<h3><?php echo $content->getTitle() ?></h3>
 		<dl class="dl-horizontal">
 			<dt>Block</dt>
-			<dd><?= $content->getBlock()->getTitle() ?></dd>
+			<dd><?php echo $content->getBlock()->getTitle() ?></dd>
 			<dt>Controller</dt>
-			<dd><?= $content->getBlock()->getController() ?></dd>
+			<dd><?php echo $content->getBlock()->getController() ?></dd>
 			<dt>Action</dt>
-			<dd><?= $content->getBlock()->getAction() ?></dd>
+			<dd><?php echo $content->getBlock()->getAction() ?></dd>
 			<?php foreach ($content->getDefaults() as $name => $param) : ?>
-			<dt><?= $name ?></dt>
-			<dd><?= $param ?></dd>
+			<dt><?php echo $name ?></dt>
+			<dd><?php echo $param ?></dd>
 			<?php endforeach ?>
 		</dl>
 		<div class="form-actions">

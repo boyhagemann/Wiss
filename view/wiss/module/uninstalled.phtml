@@ -1,13 +1,13 @@
 <h1>Modules</h1>
 
-<?= $this->navigation('cms')->menu()->setMinDepth(2)->setMaxDepth(2)->setOnlyActiveBranch(true)->setUlClass('nav nav-tabs') ?>
+<?php echo $this->navigation('cms')->menu()->setMinDepth(2)->setMaxDepth(2)->setOnlyActiveBranch(true)->setUlClass('nav nav-tabs') ?>
 
 <ul class="unstyled">
 	<?php foreach($modules as $module) : ?>
 	<li>
-		<h3><?= $module ?></h3>
+		<h3><?php echo $module ?></h3>
 		<dl>
-			<a href="<?= $this->url('wiss/module/install', array('name' => $module)) ?>" class="btn btn-primary btn-small">Install</a>
+			<a href="<?php echo $this->url('wiss/module/install', array('name' => $module)) ?>" class="btn btn-primary btn-small">Install</a>
 		</dl>
 	</li>
 	<?php endforeach ?>

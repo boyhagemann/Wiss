@@ -1,6 +1,6 @@
-<h1><?= $page->getTitle() ?></h1>
+<h1><?php echo $page->getTitle() ?></h1>
 
 <ul class="nav nav-tabs">
-	<li class="active"><a href="<?= $this->url('wiss/page/properties', array('id' => $page->getId())) ?>">Properties</a></li>
-	<li><a href="<?= $this->url('wiss/page/content', array('id' => $page->getId())) ?>">Content</a></li>
+	<li class="active"><a href="<?php echo $this->url('wiss/page/properties', array('id' => $page->getId())) ?>">Properties</a></li>
+	<li><a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>">Content</a></li>
 </ul>
