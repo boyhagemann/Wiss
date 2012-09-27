@@ -18,6 +18,7 @@ class NavigationController extends AbstractActionController
 	
     public function indexAction()
     {
+        $controller = $this;
 		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Navigation');
 		$tree = $repo->childrenHierarchy(
 			null, /* starting from root nodes */
@@ -25,7 +26,7 @@ class NavigationController extends AbstractActionController
 			array(
 				'rootOpen' => '<ul class="tree">',
 				'decorate' => true,    
-				'nodeDecorator' => function($node) use($repo) {
+				'nodeDecorator' => function($node) use($repo, $controller) {
 					
 					$node = $repo->find($node['id']);
 					$label = $node->getLabel();
@@ -36,7 +37,7 @@ class NavigationController extends AbstractActionController
 					}
 					else {						
 						$id = $node->getRoute()->getPage()->getId();
-						$url = $this->url()->fromRoute('page/content', array('id' => $id));
+						$url = $controller->url()->fromRoute('page/content', array('id' => $id));
 						return sprintf('<a href="%s">%s</a>', $url, $label);
 					}
 					
