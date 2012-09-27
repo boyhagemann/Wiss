@@ -474,9 +474,18 @@ class ModelController extends AbstractActionController
 		$drivers    = $em->getConfiguration()->getMetadataDriverImpl()->getDrivers();
 		$entities   = array();
 		
-							
+		// Walk thru all found paths to search for models
 		foreach($paths as $basepath) {
 					
+            // Do not show all the Wiss models in the list. It can be confusing.
+            // Only show the models found in the website application.
+            if(strpos($basepath, './') === 0 || $pathName == 'Wiss') {
+                continue;
+            }
+
+            // Each path can have folders that are equal to the ones given
+            // in the Doctrine drivers. See if there are folders within
+            // the current path that match with a driver folder.
 			foreach($drivers as $namespace => $driver) {
 
 				foreach($driver->getPaths() as $path) {
@@ -484,13 +493,7 @@ class ModelController extends AbstractActionController
                     // Build the path to the file
 					$filePattern = '%s/%s/src/%s%s';
 					$file = sprintf($filePattern, $basepath, $namespace, $namespace, $path);
-					$entities += $this->getEntitiesByPath($file);
-
-                    // Build the path to the file
-					$filePattern = '%s/src/%s%s';
-					$file = sprintf($filePattern, $basepath, $namespace, $path);
-					$entities += $this->getEntitiesByPath($file);
-					
+					$entities += $this->getEntitiesByPath($file);					
 				}				
 			}			
 		}
