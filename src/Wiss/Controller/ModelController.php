@@ -475,7 +475,7 @@ class ModelController extends AbstractActionController
 		$entities   = array();
 		
 		// Walk thru all found paths to search for models
-		foreach($paths as $basepath) {
+		foreach($paths as $pathName => $basepath) {
 					
             // Do not show all the Wiss models in the list. It can be confusing.
             // Only show the models found in the website application.
