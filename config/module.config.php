@@ -21,181 +21,190 @@ return array(
                                         ),
                                 ),
                         ),
-                        'page' => array(
+                        'wiss' => array(
                                 'type'    => 'Literal',
                                 'options' => array(
-                                        'route'    => '/pages',
+                                        'route'    => '/wiss',
                                         'defaults' => array(
                                                 '__NAMESPACE__' => 'Wiss\Controller',
-                                                'controller' => 'page',
+                                                'controller' => 'index',
                                                 'action' => 'index',
                                         ),
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
-                                        'properties' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/properties/[:id]',
-                                                        'constraints' => array(
-                                                                'id' => '[0-9-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                                'action' => 'properties',
-                                                        ),
-                                                ),
-                                        ),
-                                        'content' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/content/[:id]',
-                                                        'constraints' => array(
-                                                                'id' => '[0-9-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                                'action' => 'content',
-                                                        ),
-                                                ),
-                                        ),
-                                )
-                        ),
-                        'navigation' => array(
-                                'type'    => 'Literal',
-                                'options' => array(
-                                        'route'    => '/navigation',
-                                        'defaults' => array(
-                                                '__NAMESPACE__' => 'Wiss\Controller',
-                                                'controller' => 'navigation',
-                                                'action' => 'index',
-                                        ),
-                                )
-                        ),
-                        'model' => array(
-                                'type'    => 'Literal',
-                                'options' => array(
-                                        'route'    => '/models',
-                                        'defaults' => array(
-                                                '__NAMESPACE__' => 'Wiss\Controller',
-                                                'controller' => 'model',
-                                                'action' => 'index',
-                                        ),
-                                ),
-                                'may_terminate' => true,
-                                'child_routes' => array(
-                                        'default' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/[:action]',
-                                                        'constraints' => array(
-                                                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                                        ),
-                                                ),
-                                        ),
-                                        'install' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/install/[:class]',
-                                                        'constraints' => array(
-                                                                'class'     => '[A-Z][a-zA-Z0-9_-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                                'action' => 'install',
-                                                        ),
-                                                ),
-                                        ),
-                                        'export' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/export/[:name]',
-                                                        'constraints' => array(
-                                                                'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                                'action' => 'export',
-                                                        ),
-                                                ),
-                                        ),
-                                        'edit' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/edit/[:id]',
-                                                        'constraints' => array(
-                                                                'id' => '[0-9-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                                'action' => 'edit',
-                                                        ),
-                                                ),
-                                        ),
-                                )
-                        ),
-                        'module' => array(
-                                'type'    => 'Literal',
-                                'options' => array(
-                                        'route'    => '/modules',
-                                        'defaults' => array(
-                                                '__NAMESPACE__' => 'Wiss\Controller',
-                                                'controller'    => 'module',
-                                                'action'        => 'index',
-                                        ),
-                                ),
-                                'may_terminate' => true,
-                                'child_routes' => array(
-                                        'default' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/[:action]',
-                                                        'constraints' => array(
-                                                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                        ),
-                                                ),
-                                        ),
-                                        'install' => array(
-                                                'type'    => 'Segment',
-                                                'options' => array(
-                                                        'route'    => '/install/[:name]',
-                                                        'constraints' => array(
-                                                                'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                                        ),
-                                                        'defaults' => array(
-                                                                'action' => 'install'
-                                                        ),
-                                                ),
-                                        ),
-                                        'export' => array(
+                                        'page' => array(
                                                 'type'    => 'Literal',
                                                 'options' => array(
-                                                        'route'    => '/export',
+                                                        'route'    => '/pages',
                                                         'defaults' => array(
-                                                                'action' => 'export'
+                                                                'controller' => 'page',
+                                                                'action' => 'index',
+                                                        ),
+                                                ),
+                                                'may_terminate' => true,
+                                                'child_routes' => array(
+                                                        'properties' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/properties/[:id]',
+                                                                        'constraints' => array(
+                                                                                'id' => '[0-9-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                                'action' => 'properties',
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                        'content' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/content/[:id]',
+                                                                        'constraints' => array(
+                                                                                'id' => '[0-9-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                                'action' => 'content',
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                )
+                                        ),
+                                        'navigation' => array(
+                                                'type'    => 'Literal',
+                                                'options' => array(
+                                                        'route'    => '/navigation',
+                                                        'defaults' => array(
+                                                                'controller' => 'navigation',
+                                                                'action' => 'index',
+                                                        ),
+                                                )
+                                        ),
+                                        'model' => array(
+                                                'type'    => 'Literal',
+                                                'options' => array(
+                                                        'route'    => '/models',
+                                                        'defaults' => array(
+                                                                'controller' => 'model',
+                                                                'action' => 'index',
+                                                        ),
+                                                ),
+                                                'may_terminate' => true,
+                                                'child_routes' => array(
+                                                        'default' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/[:action]',
+                                                                        'constraints' => array(
+                                                                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                        'install' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/install/[:class]',
+                                                                        'constraints' => array(
+                                                                                'class'     => '[A-Z][a-zA-Z0-9_-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                                'action' => 'install',
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                        'export' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/export/[:name]',
+                                                                        'constraints' => array(
+                                                                                'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                                'action' => 'export',
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                        'edit' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/edit/[:id]',
+                                                                        'constraints' => array(
+                                                                                'id' => '[0-9-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                                'action' => 'edit',
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                )
+                                        ),
+                                        'module' => array(
+                                                'type'    => 'Literal',
+                                                'options' => array(
+                                                        'route'    => '/modules',
+                                                        'defaults' => array(
+                                                                'controller'    => 'module',
+                                                                'action'        => 'index',
+                                                        ),
+                                                ),
+                                                'may_terminate' => true,
+                                                'child_routes' => array(
+                                                        'default' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/[:action]',
+                                                                        'constraints' => array(
+                                                                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                        'install' => array(
+                                                                'type'    => 'Segment',
+                                                                'options' => array(
+                                                                        'route'    => '/install/[:name]',
+                                                                        'constraints' => array(
+                                                                                'name'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                                                        ),
+                                                                        'defaults' => array(
+                                                                                'action' => 'install'
+                                                                        ),
+                                                                ),
+                                                        ),
+                                                        'export' => array(
+                                                                'type'    => 'Literal',
+                                                                'options' => array(
+                                                                        'route'    => '/export',
+                                                                        'defaults' => array(
+                                                                                'action' => 'export'
+                                                                        ),
+                                                                ),
                                                         ),
                                                 ),
                                         ),
-                                ),
-                        ),
-                        'install' => array(
-                                'type'    => 'Literal',
-                                'options' => array(
-                                        'route'    => '/install',
-                                        'defaults' => array(
-                                                '__NAMESPACE__' => 'Wiss\Controller',
-                                                'controller'    => 'index',
-                                                'action'        => 'install',
+                                        'install' => array(
+                                                'type'    => 'Literal',
+                                                'options' => array(
+                                                        'route'    => '/install',
+                                                        'defaults' => array(
+                                                                'controller'    => 'index',
+                                                                'action'        => 'install',
+                                                        ),
+                                                ),
                                         ),
-                                ),
-                        ),
-                        'install-models' => array(
-                                'type'    => 'Literal',
-                                'options' => array(
-                                        'route'    => '/install-models',
-                                        'defaults' => array(
-                                                '__NAMESPACE__' => 'Wiss\Controller',
-                                                'controller'    => 'index',
-                                                'action'        => 'install-models',
+                                        'install-models' => array(
+                                                'type'    => 'Literal',
+                                                'options' => array(
+                                                        'route'    => '/install-models',
+                                                        'defaults' => array(
+                                                                '__NAMESPACE__' => 'Wiss\Controller',
+                                                                'controller'    => 'index',
+                                                                'action'        => 'install-models',
+                                                        ),
+                                                ),
                                         ),
-                                ),
+                                )
                         ),
                 )
         ),
@@ -203,23 +212,23 @@ return array(
                 'cms' => array(
                         'navigation' => array(
                                 'label' => 'Navigation',
-                                'route' => 'navigation',
+                                'route' => 'wiss/navigation',
                         ),
                         'content' => array(
                                 'label' => 'Content',
-                                'route' => 'page',
+                                'route' => 'wiss/page',
                                 'pages' => array(
                                         'page' => array(
                                                 'label' => 'Pages',
-                                                'route' => 'page',
+                                                'route' => 'wiss/page',
                                                 'pages' => array(
                                                         'properties' => array(
                                                                 'label' => 'Properties',
-                                                                'route' => 'page/properties'
+                                                                'route' => 'wiss/page/properties'
                                                         ),
                                                         'content' => array(
                                                                 'label' => 'Content',
-                                                                'route' => 'page/content'
+                                                                'route' => 'wiss/page/content'
                                                         ),
                                                 )
                                         )
@@ -227,19 +236,19 @@ return array(
                         ),
                         'administration' => array(
                                 'label' => 'Administration',
-                                'route' => 'module',
+                                'route' => 'wiss/module',
                                 'pages' => array(
                                         'module' => array(
                                                 'label' => 'Modules',
-                                                'route' => 'module',
+                                                'route' => 'wiss/module',
                                                 'pages' => array(
                                                         'installed' => array(
                                                                 'label' => 'Installed',
-                                                                'route' => 'module',
+                                                                'route' => 'wiss/module',
                                                         ),
                                                         'uninstalled' => array(
                                                                 'label' => 'Uninstalled',
-                                                                'route' => 'module/default',
+                                                                'route' => 'wiss/module/default',
                                                                 'params' => array(
                                                                         'action' => 'uninstalled'
                                                                 )
@@ -248,22 +257,22 @@ return array(
                                         ),
                                         'models' => array(
                                                 'label' => 'Models',
-                                                'route' => 'model',
+                                                'route' => 'wiss/model',
                                                 'pages' => array(
                                                         'installed' => array(
                                                                 'label' => 'Installed',
-                                                                'route' => 'model',
+                                                                'route' => 'wiss/model',
                                                         ),
                                                         'uninstalled' => array(
                                                                 'label' => 'Uninstalled',
-                                                                'route' => 'model/default',
+                                                                'route' => 'wiss/model/default',
                                                                 'params' => array(
                                                                         'action' => 'uninstalled'
                                                                 ),
                                                                 'pages' => array(
                                                                         'install' => array(
                                                                                 'label' => 'Install',
-                                                                                'route' => 'model/install'
+                                                                                'route' => 'wiss/model/install'
                                                                         ),
                                                                 )
                                                         ),
@@ -273,7 +282,7 @@ return array(
                         ),
                         'install' => array(
                                 'label' => 'Install',
-                                'route' => 'install',
+                                'route' => 'wiss/install',
                         )
                 )
         ),

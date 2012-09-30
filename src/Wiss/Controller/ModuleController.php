@@ -101,7 +101,7 @@ class ModuleController extends AbstractActionController
 		
 
 		// Redirect
-		$this->redirect()->toRoute('module');
+		$this->redirect()->toRoute('wiss/module');
 		
 		return false;
 	}

@@ -131,7 +131,7 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Create new record succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('crud', array(
+				$this->redirect()->toRoute('wiss/crud', array(
 					'name' => $model->getSlug(),
 				));
 			}
@@ -177,7 +177,7 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Saved changes succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('crud', array(
+				$this->redirect()->toRoute('wiss/crud', array(
 					'name' => $model->getSlug(),
 				));
 			}
@@ -223,7 +223,7 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Saved changes succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('crud', array(
+				$this->redirect()->toRoute('wiss/crud', array(
 					'name' => $model->getSlug(),
 				));
 			}

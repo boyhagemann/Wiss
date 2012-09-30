@@ -37,7 +37,7 @@ class NavigationController extends AbstractActionController
 					}
 					else {						
 						$id = $node->getRoute()->getPage()->getId();
-						$url = $controller->url()->fromRoute('page/content', array('id' => $id));
+						$url = $controller->url()->fromRoute('wiss/page/content', array('id' => $id));
 						return sprintf('<a href="%s">%s</a>', $url, $label);
 					}
 					

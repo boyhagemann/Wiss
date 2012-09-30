@@ -5,11 +5,11 @@
 <ul class="unstyled list">
 	<?php foreach($models as $model) : ?>
 	<li>
-		<h2><a href="<?php echo $this->url('model/edit', array('id' => $model->getId())) ?>"><?php echo $model->getTitle() ?></a></h2>
+		<h2><a href="<?php echo $this->url('wiss/model/edit', array('id' => $model->getId())) ?>"><?php echo $model->getTitle() ?></a></h2>
 		<h3><?php echo $model->getEntityClass() ?></h3>
 		<div class="btn-group">
-			<a href="<?php echo $this->url($model->getSlug(), array('name' => $model->getSlug())) ?>" class="btn btn-small">View records</a>
-			<a href="<?php echo $this->url('model/edit', array('id' => $model->getId())) ?>" class="btn btn-small">Edit this model</a>
+			<a href="<?php echo $this->url('wiss/' . $model->getSlug(), array('name' => $model->getSlug())) ?>" class="btn btn-small">View records</a>
+			<a href="<?php echo $this->url('wiss/model/edit', array('id' => $model->getId())) ?>" class="btn btn-small">Edit this model</a>
 		</div>
 	</li>
 	<?php endforeach ?>

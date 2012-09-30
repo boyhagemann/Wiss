@@ -22,7 +22,7 @@ class IndexController extends AbstractActionController
     public function installAction()
     {								
 		$form = new \Wiss\Form\Install();				
-		$form->setAttribute('action', $this->url()->fromRoute('install'));
+		$form->setAttribute('action', $this->url()->fromRoute('wiss/install'));
 				
 		if($this->getRequest()->isPost()) {
 			$form->setData($this->getRequest()->getPost());
@@ -53,7 +53,7 @@ class IndexController extends AbstractActionController
 				));
 		
 				// Redirect to the actual install
-				$this->redirect()->toRoute('install-models');
+				$this->redirect()->toRoute('wiss/install-models');
 			}
 		}
 					
@@ -158,7 +158,7 @@ class IndexController extends AbstractActionController
 		));
 				
 		// Redirect 
-		$this->redirect()->toRoute('module');
+		$this->redirect()->toRoute('wiss/module');
 		
 		return false;
 	}
@@ -170,7 +170,7 @@ class IndexController extends AbstractActionController
 	public function redirectToInstallAction()
 	{
 		// Redirect 
-		$this->redirect()->toRoute('install');		
+		$this->redirect()->toRoute('wiss/install');
 		
 		return false;
 	}
