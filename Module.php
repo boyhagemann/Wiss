@@ -38,7 +38,7 @@ class Module
             
     		// Go to the install page first if there is no valid database connection
             // Only go there is the current route is not 'install' already
-			if($currentRoute != 'install' && $config['application']['installed'] === false) {
+			if($currentRoute != 'wiss/install' && $config['application']['installed'] === false) {
 				
 				// Change to route before it is dispatched. It now goes to the
                 // install action.
