@@ -310,17 +310,19 @@ return array(
                         __DIR__ . '/../view',
                 ),
         ),
-        'doctrine' => array(
-                'driver' => array(
-                        'orm_default' => array(
-                                'drivers' => array(
-                                        'Wiss' => 'wiss_driver'
-                                )
-                        ),
-                        'wiss_driver' => array(
-                                'paths' => array(__NAMESPACE__ . '/Entity'),
-                        ),
-                ),
+        'doctrine' => array(                
+            'driver' => array(
+                'wiss_driver' => array(
+                    'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                    'cache' => 'array',
+                    'paths' => array('Wiss/Entity')
+                ),     
+                'orm_default' => array(
+                    'drivers' => array(
+                        'Wiss' => 'wiss_driver'
+                    )
+                )
+            ),
         ),
         'asset_manager' => array(
                 'resolver_configs' => array(
