@@ -17,7 +17,8 @@ use Zend\InputFilter\InputFilter;
 
 class Model extends Form
 {	
-	protected $entityManager;
+    protected $entityManager;
+    protected $elementConfigUrl;
 	
     public function __construct($em)
     {
@@ -110,8 +111,13 @@ class Model extends Form
 			// Add the config button
 			$button = new Element\Button('trigger');
 			$button->setOptions(array(
-				'label' => 'Configure',
+                            'label' => 'Configure',
 			));
+                        $button->setAttributes(array(
+                            'data-toggle' => 'modal',
+                            'data-target' => "#myModal",
+                            'data-remote' => $data['element-config-url'],
+                        ));
 			$fieldset->add($button);
 			
 			// Add the hidden config element
@@ -157,5 +163,15 @@ class Model extends Form
 	public function setEntityManager($entityManager) {
 		$this->entityManager = $entityManager;
 	}
+        
+        public function getElementConfigUrl() {
+            return $this->elementConfigUrl;
+        }
+
+        public function setElementConfigUrl($elementConfigUrl) {
+            $this->elementConfigUrl = $elementConfigUrl;
+        }
+
+
 
 }

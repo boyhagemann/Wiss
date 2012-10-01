@@ -111,6 +111,7 @@ class ModelController extends AbstractActionController {
         $data += array(
             'title' => $title,
             'entity_class' => $class,
+            'element-config-url' => $this->url()->fromRoute('wiss/model'),
         );
 
         // Create the form
