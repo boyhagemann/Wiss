@@ -7,6 +7,8 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
+namespace Wiss;
+
 return array(
         'router' => array(
                 'routes' => array(
