@@ -18,7 +18,6 @@ use Zend\InputFilter\InputFilter;
 class Model extends Form
 {	
     protected $entityManager;
-    protected $elementConfigUrl;
 	
     public function __construct($em)
     {
@@ -163,15 +162,5 @@ class Model extends Form
 	public function setEntityManager($entityManager) {
 		$this->entityManager = $entityManager;
 	}
-        
-        public function getElementConfigUrl() {
-            return $this->elementConfigUrl;
-        }
-
-        public function setElementConfigUrl($elementConfigUrl) {
-            $this->elementConfigUrl = $elementConfigUrl;
-        }
-
-
 
 }

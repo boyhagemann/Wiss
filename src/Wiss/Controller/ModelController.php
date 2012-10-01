@@ -111,7 +111,7 @@ class ModelController extends AbstractActionController {
         $data += array(
             'title' => $title,
             'entity_class' => $class,
-            'element-config-url' => $this->url()->fromRoute('wiss/model'),
+            'element-config-url' => $this->url()->fromRoute('wiss/model/element-config'),
         );
 
         // Create the form
@@ -164,6 +164,16 @@ class ModelController extends AbstractActionController {
         $this->redirect()->toRoute('wiss/model');
 
         return false;
+    }
+    
+    public function elementConfigAction()
+    {
+        $form = new \Wiss\Form\Install();
+        $viewModel = new ViewModel(array(
+            'form' => $form
+        ));
+                
+        return $viewModel;
     }
 
     /**
