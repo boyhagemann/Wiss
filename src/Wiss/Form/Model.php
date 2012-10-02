@@ -95,16 +95,17 @@ class Model extends Form implements ServiceLocatorAwareInterface
 				'legend' => $field['fieldName'],
 			));
                         
-                        $config = $this->getServiceLocator()->get('config');
-                        $valueOptions = $config['element-config-forms'];
+			// Get the value options from the service manager config
+			$config = $this->getServiceLocator()->get('config');
+			$valueOptions = $config['element-config-forms'];
                         
 			// Add the select field with the available elements
 			$select = new Element\Select('type');
 			$select->setLabel($field['fieldName']);
 			$select->setValueOptions(array('' => 'No element assigned yet...') + $valueOptions); 
-                        $select->setAttributes(array(
-                            'class' => 'form-class',
-                        ));
+			$select->setAttributes(array(
+				'class' => 'form-class',
+			));
 			$fieldset->add($select);
 			
 			// Add the trigger button to show the modal window
@@ -112,16 +113,19 @@ class Model extends Form implements ServiceLocatorAwareInterface
 			$button->setOptions(array(
                             'label' => 'Configure',
 			));
-                        $button->setAttributes(array(
-                            'class' => 'element-config-trigger',
-//                            'data-toggle' => 'modal',
-//                            'data-target' => "#myModal",
-                            'data-remote' => $data['element-config-url'],
-                        ));
+			$button->setAttributes(array(
+				'class' => 'element-config-trigger',
+				'data-target' => "#myModal",
+				'data-remote' => $data['element-config-url'],
+			));
 			$fieldset->add($button);
 			
 			// Store the result of the modal window form in a hidden element
-			$fieldset->add(new Element\Hidden('configuration'));
+			$configuration = new Element\Hidden('configuration');
+			$configuration->setAttributes(array(
+				'class' => 'element-config',
+			));
+			$fieldset->add($configuration);
                         
                         
 			// Add the hidden config element
@@ -161,13 +165,13 @@ class Model extends Form implements ServiceLocatorAwareInterface
 		$this->get('title_field')->setAttribute('options', $options);		
 	}
 
-        public function getServiceLocator() {
-            return $this->serviceLocator;
-        }
+	public function getServiceLocator() {
+		return $this->serviceLocator;
+	}
 
-        public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
-            $this->serviceLocator = $serviceLocator;
-        }
+	public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
+		$this->serviceLocator = $serviceLocator;
+	}
 
 
 }
