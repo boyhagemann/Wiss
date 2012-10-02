@@ -322,6 +322,11 @@ return array(
                         __DIR__ . '/../view',
                 ),
         ),
+        'element-config-forms' => array(
+            'Wiss\Form\ElementConfig\Text'          => 'Text',
+            'Wiss\Form\ElementConfig\Textarea'      => 'Textarea',
+            'Wiss\Form\ElementConfig\DatePicker'    => 'DatePicker',            
+        ),
         'doctrine' => array(                
             'driver' => array(
                 'wiss_driver' => array(

@@ -14,15 +14,14 @@ use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class Model extends Form
+class Model extends Form implements ServiceLocatorAwareInterface
 {	
-    protected $entityManager;
+    protected $serviceLocator;
 	
-    public function __construct($em)
-    {
-		$this->setEntityManager($em);
-		
+    public function __construct()
+    {                
 		parent::__construct('model');
 		
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
@@ -95,16 +94,14 @@ class Model extends Form
 			$fieldset->setOptions(array(
 				'legend' => $field['fieldName'],
 			));
-			
+                        
+                        $config = $this->getServiceLocator()->get('config');
+                        $valueOptions = $config['element-config-forms'];
+                        
 			// Add the select field with the available elements
 			$select = new Element\Select('type');
 			$select->setLabel($field['fieldName']);
-			$select->setValueOptions(array(
-				''								=> 'No element assigned yet...',
-				'Wiss\Form\ElementConfig\Text'		=> 'Text',
-				'Wiss\Form\ElementConfig\Textarea'	=> 'Textarea',
-				'Wiss\Form\ElementConfig\DatePicker'	=> 'DatePicker',
-			)); 
+			$select->setValueOptions(array('' => 'No element assigned yet...') + $valueOptions); 
                         $select->setAttributes(array(
                             'class' => 'form-class',
                         ));
@@ -146,8 +143,9 @@ class Model extends Form
 	 */
 	public function getFieldMapping($class)
 	{
-		$meta = $this->getEntityManager()->getClassMetadata($class);
-		return $meta->fieldMappings;
+            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+            $meta = $em->getClassMetadata($class);
+            return $meta->fieldMappings;
 	}
 	
 	/**
@@ -162,13 +160,14 @@ class Model extends Form
 		}
 		$this->get('title_field')->setAttribute('options', $options);		
 	}
-	
-	public function getEntityManager() {
-		return $this->entityManager;
-	}
 
-	public function setEntityManager($entityManager) {
-		$this->entityManager = $entityManager;
-	}
+        public function getServiceLocator() {
+            return $this->serviceLocator;
+        }
+
+        public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
+            $this->serviceLocator = $serviceLocator;
+        }
+
 
 }
