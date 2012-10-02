@@ -167,7 +167,7 @@ class ModelController extends AbstractActionController {
         // Build the config
         $em = $this->getEntityManager();
         $em->getRepository('Wiss\Entity\Navigation')->export();
-        $em->getRepository('Wiss\Entity\Page')->export();
+        $em->getRepository('Wiss\Entity\Route')->export();
 
         // Redirect
         $this->redirect()->toRoute('wiss/model');
