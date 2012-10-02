@@ -20,10 +20,12 @@ class Model extends Form implements ServiceLocatorAwareInterface
 {	
     protected $serviceLocator;
 	
-    public function __construct()
-    {                
-		parent::__construct('model');
-		
+	/**
+	 * 
+	 * @param array $data
+	 */
+    public function prepareElements(Array $data)
+    {                		
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
 		$this->setAttribute('class', 'form-horizontal');
 		
@@ -66,15 +68,10 @@ class Model extends Form implements ServiceLocatorAwareInterface
 		$inputFilter->add(new Input('title_field'));
 		$inputFilter->add(new Input('entity_class'));
 		$this->setInputFilter($inputFilter);
-	}
 	
-	/**
-	 *
-	 * @param type $data 
-	 */
-	public function setData($data)
-	{
-		parent::setData($data);
+	
+		
+		
 		
 		if(isset($data['entity_class'])) {
 			$this->setTitleFieldOptions($data['entity_class']);
@@ -84,10 +81,9 @@ class Model extends Form implements ServiceLocatorAwareInterface
 		
 		$inputFilter = $this->getInputFilter();
 		$inputFilter->add(new Input('elements', array(
-			'required' => false,
+			'required' => true,
 		)));
 			
-		
 		foreach($this->getFieldMapping($data['entity_class']) as $field) {
 						
 			$fieldset = new Fieldset($field['fieldName']);
@@ -111,10 +107,10 @@ class Model extends Form implements ServiceLocatorAwareInterface
 			// Add the trigger button to show the modal window
 			$button = new Element\Button('trigger');
 			$button->setOptions(array(
-                            'label' => 'Configure',
+				'label' => 'Configure',
 			));
 			$button->setAttributes(array(
-				'class' => 'element-config-trigger',
+				'class' => 'element-config-trigger btn',
 				'data-target' => "#myModal",
 				'data-remote' => $data['element-config-url'],
 			));
@@ -136,8 +132,7 @@ class Model extends Form implements ServiceLocatorAwareInterface
 		}
 		
 		$this->add($elements);
-		
-		
+				
 	}
 	
 	/**

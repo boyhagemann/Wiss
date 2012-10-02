@@ -115,17 +115,21 @@ class ModelController extends AbstractActionController {
         );
 
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Model');
-        $form->setData($data);
+        $form = $this->getServiceLocator()->get('Wiss\Form\Model');   
+		$form->setName('model');
+		$form->prepareElements($data);
+		$form->setData($data);
 
         if ($this->getRequest()->isPost()) {
-
+			
             $form->setData($this->getRequest()->getPost());
+			$form->isValid();
 
             if ($form->isValid()) {
-
+		
                 // Add the model form and controller class
-                $data = $form->getData() + array(
+                $data = $form->getData();
+				$data += array(
                     'form_class' => $this->generateForm($form),
                     'controller_class' => $this->generateController($form)
                 );
@@ -145,6 +149,11 @@ class ModelController extends AbstractActionController {
                     'name' => $model->getSlug()
                 ));
             }
+			else {
+				
+
+		\Zend\Debug\Debug::dump($form->getMessages(), 'Errors'); exit;
+			}
         }
 
         return compact('title', 'form');
@@ -190,7 +199,6 @@ class ModelController extends AbstractActionController {
      */
     public function createModel(Array $data) {
         $em = $this->getEntityManager();
-
         // Create a new model
         $model = new Model;
         $model->setTitle($data['title']);
@@ -198,7 +206,8 @@ class ModelController extends AbstractActionController {
         $model->setTitleField($data['title_field']);
         $model->setFormClass($data['form_class']);
         $model->setControllerClass($data['controller_class']);
-
+		$model->setFormConfig($data['elements']);
+		
         // Save this new model
         $em->persist($model);
         $em->flush();
@@ -224,9 +233,14 @@ class ModelController extends AbstractActionController {
         // Add the elements 
         foreach ($elementData as $name => $element) {
 
-            if (!$element['type']) {
+			$vars = urldecode($element['configuration']);
+			parse_str($vars, $output);
+			
+            if (!$element['type'] || !isset($element['element-config'])) {
                 continue;
             }
+			
+			$config = $output['element-config'];
 
             // Create the element method
             $body .= '// ' . $name . PHP_EOL;
@@ -234,7 +248,7 @@ class ModelController extends AbstractActionController {
             $body .= sprintf('  \'name\' => \'%s\',', $name) . PHP_EOL;
             $body .= sprintf('  \'type\' => \'%s\',', $element['type']) . PHP_EOL;
             $body .= '	\'attributes\' => array(' . PHP_EOL;
-            $body .= sprintf('    \'label\' => \'%s\',', $element['label']) . PHP_EOL;
+            $body .= sprintf('    \'label\' => \'%s\',', $config['label']) . PHP_EOL;
             $body .= ')));' . PHP_EOL . PHP_EOL;
         }
 

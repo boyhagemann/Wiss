@@ -54,6 +54,12 @@ class Model
      * @ORM\Column
 	 */
 	protected $titleField;
+	
+	/**
+	 * 
+     * @ORM\Column(type="array")
+	 */
+	protected $formConfig = array();
 
 	public function getId() {
 		return $this->id;
@@ -105,6 +111,14 @@ class Model
 
 	public function setTitleField($titleField) {
 		$this->titleField = $titleField;
+	}
+	
+	public function getFormConfig() {
+		return $this->formConfig;
+	}
+
+	public function setFormConfig(Array $formConfig) {
+		$this->formConfig = $formConfig;
 	}
 
 }
