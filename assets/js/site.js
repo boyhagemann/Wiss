@@ -30,6 +30,10 @@ $(document).ready(function(e) {
 			var config = $(target).find('form').serialize();
 			var element = trigger.parents('li').find('input.element-config');
 			element.val(config);
+			
+			// Change the button text and class
+			trigger.addClass('btn-success');
+			trigger.text('Configured');
 		});
     });
 	
