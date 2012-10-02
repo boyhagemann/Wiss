@@ -4,7 +4,7 @@
 	With this model you can add dynamic content to the website.
 	You can enter the properties below and define which form elements this model has.
 </p>
-<?php echo $this->form()->openTag($form) ?>
+<?php $form->prepare(); echo $this->form()->openTag($form) ?>
 
 <legend>Properties</legend>
 <div class="control-group well">
@@ -21,6 +21,7 @@
 			<?php echo $this->formLabel($element->get('type')) ?>
 			<?php echo $this->formSelect($element->get('type')) ?>
 			<?php echo $this->formButton($element->get('trigger')) ?>
+			<?php echo $this->formHidden($element->get('configuration')) ?>
 		</li>
 	<?php endforeach ?>
 	</ul>
@@ -34,7 +35,6 @@
 
 
 
-<-- Modal -->
 <div class="modal hide" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

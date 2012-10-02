@@ -107,7 +107,7 @@ class Model extends Form
 			)); 
 			$fieldset->add($select);
 			
-			// Add the config button
+			// Add the trigger button to show the modal window
 			$button = new Element\Button('trigger');
 			$button->setOptions(array(
                             'label' => 'Configure',
@@ -119,6 +119,10 @@ class Model extends Form
                         ));
 			$fieldset->add($button);
 			
+			// Store the result of the modal window form in a hidden element
+			$fieldset->add(new Element\Hidden('configuration'));
+                        
+                        
 			// Add the hidden config element
 			$config = new Element\Hidden('button');
 			$fieldset->add($config);
