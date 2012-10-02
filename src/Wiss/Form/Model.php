@@ -101,10 +101,13 @@ class Model extends Form
 			$select->setLabel($field['fieldName']);
 			$select->setValueOptions(array(
 				''								=> 'No element assigned yet...',
-				'Zend\Form\Element\Text'		=> 'Text',
-				'Zend\Form\Element\Textarea'	=> 'Textarea',
-				'Wiss\Form\Element\DatePicker'	=> 'DatePicker',
+				'Wiss\Form\ElementConfig\Text'		=> 'Text',
+				'Wiss\Form\ElementConfig\Textarea'	=> 'Textarea',
+				'Wiss\Form\ElementConfig\DatePicker'	=> 'DatePicker',
 			)); 
+                        $select->setAttributes(array(
+                            'class' => 'form-class',
+                        ));
 			$fieldset->add($select);
 			
 			// Add the trigger button to show the modal window
@@ -113,8 +116,9 @@ class Model extends Form
                             'label' => 'Configure',
 			));
                         $button->setAttributes(array(
-                            'data-toggle' => 'modal',
-                            'data-target' => "#myModal",
+                            'class' => 'element-config-trigger',
+//                            'data-toggle' => 'modal',
+//                            'data-target' => "#myModal",
                             'data-remote' => $data['element-config-url'],
                         ));
 			$fieldset->add($button);

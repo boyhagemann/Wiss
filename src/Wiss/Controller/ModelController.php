@@ -166,11 +166,18 @@ class ModelController extends AbstractActionController {
         return false;
     }
     
+    /**
+     * 
+     * @return \Zend\View\Model\ViewModel
+     */
     public function elementConfigAction()
     {
-        $form = new \Wiss\Form\Install();
+        $formClass = $this->getRequest()->getQuery('form-class');
+
+        $form = $this->getServiceLocator()->get($formClass);
+        
         $viewModel = new ViewModel(array(
-            'form' => $form
+            'form' => $form,
         ));
                 
         return $viewModel;
