@@ -39,13 +39,13 @@ class Model
 	
 	/**
 	 * 
-     * @ORM\Column
+     * @ORM\Column(nullable=true)
 	 */
 	protected $formClass;
 	
 	/**
 	 * 
-     * @ORM\Column
+     * @ORM\Column(nullable=true)
 	 */
 	protected $controllerClass;
 	

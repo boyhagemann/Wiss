@@ -28,39 +28,19 @@ class ModelExport extends Form
 		
 		// Generate form
 		$this->add(array(
-			'type' => 'Zend\Form\Element\Checkbox',
-			'name' => 'generate_form',
+			'type' => 'Zend\Form\Element\MultiCheckbox',
+			'name' => 'generate',
 			'attributes' => array(
-				'label' => 'Generate form',
+				'class' => 'checkbox',
 			),
-			'options' => array(			
-				'description' => 'You can generate a form based on the given elements',
-			)
-		));
-		
-		// Generate model
-		$this->add(array(
-			'type' => 'Zend\Form\Element\Checkbox',
-			'name' => 'generate_model',
-			'attributes' => array(
-				'label' => 'Generate model',
+			'options' => array(
+				'value_options' => array(
+					'form' => 'Generate a form based on the given elements',
+					'controller' => 'Generate a controller to manage the model',
+					'model' => 'Generate a new model',
+					'config' => 'Generate routes and navigation',
+				),
 			),
-			'options' => array(			
-				'description' => 'You can generate a model based on the given elements',
-			)
-		));
-		
-		// Generate config
-		$this->add(array(
-			'type' => 'Zend\Form\Element\Checkbox',
-			'name' => 'generate_config',
-			'attributes' => array(
-				'label' => 'Generate routes and navigation',
-			),
-			'options' => array(			
-				'hint' => 'You can export the config',
-				'description' => 'You can export the config',
-			)
 		));
 		
 		// Submit
@@ -74,9 +54,7 @@ class ModelExport extends Form
 		));
 
 		$inputFilter = new InputFilter();
-		$inputFilter->add(new Input('generate_form'));
-		$inputFilter->add(new Input('generate_model'));
-		$inputFilter->add(new Input('generate_config'));
+		$inputFilter->add(new Input('generate'));
 		$this->setInputFilter($inputFilter);
 				
 	}

@@ -116,14 +116,10 @@ class ModelController extends AbstractActionController {
             $form->setData($this->getRequest()->getPost());
 
             if ($form->isValid()) {
-		
-                // Add the model form and controller class
-                $data = $form->getData();
-				$data += array(
-                    'form_class' => $this->generateForm($form),
-                    'controller_class' => $this->generateController($form)
-                );
 
+				// Merge the form values with the start data
+				$data = $form->getData() + $data;
+				
                 // Create the model
                 $model = $this->createModel($data);
 
@@ -157,13 +153,35 @@ class ModelController extends AbstractActionController {
         if ($this->getRequest()->isPost()) {
 			
             $form->setData($this->getRequest()->getPost());
-
-            if ($form->isValid()) {	
 		
+            if ($form->isValid()) {	
+				
+				$data = $form->getData();
+				
+				if($data['form']) {
+                    $formClass = $this->generateForm($model);
+					$model->setFormClass($formClass);
+				}
+				
+				if($data['controller']) {
+					$controllerClass = $this->generateController($model);
+					$model->setControllerClass($controllerClass);
+				}
+				
+				if($data['model']) {
+					//...//
+				}
+				
 				// Build the config
-				$em = $this->getEntityManager();
-				$em->getRepository('Wiss\Entity\Navigation')->export();
-				$em->getRepository('Wiss\Entity\Route')->export();
+				if($data['config']) {					
+					$em = $this->getEntityManager();
+					$em->getRepository('Wiss\Entity\Navigation')->export();
+					$em->getRepository('Wiss\Entity\Route')->export();					
+				}
+				
+				// Save the model changes
+				$this->getEntityManager()->persist($model);
+				$this->getEntityManager()->flush();
 		
 				// Redirect
 				$this->redirect()->toRoute('wiss/model');		
@@ -260,8 +278,6 @@ class ModelController extends AbstractActionController {
         $model->setTitle($data['title']);
         $model->setEntityClass($data['entity_class']);
         $model->setTitleField($data['title_field']);
-        $model->setFormClass($data['form_class']);
-        $model->setControllerClass($data['controller_class']);
 		$model->setFormConfig($data['elements']);
 		
         // Save this new model
