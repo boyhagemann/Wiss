@@ -348,7 +348,7 @@ class ModelController extends AbstractActionController {
                 'type' => 'Literal',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/manage/' . $model->getSlug(),
+                    'route' => '/' . $model->getSlug(),
                     'defaults' => array(
                         'controller' => $model->getControllerClass(),
                         'action' => 'index',
