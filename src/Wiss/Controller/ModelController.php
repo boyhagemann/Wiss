@@ -79,20 +79,11 @@ class ModelController extends AbstractActionController {
      *
      * @return array 
      */
-    public function installAction() {
-        // Get the class from the url params
-        $class = $this->params('class');
-        $class = str_replace('-', '\\', $class);
-
-        // Get the title based on the class
-        $title = explode('\\', $class);
-        $title = end($title);
-
-        // Find the model with this class
-        $em = $this->getEntityManager();
-        $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
-            'entityClass' => $class
-                ));
+    public function installAction() 
+	{
+		$class = $this->getClassName();
+		$title = $this->buildTitleFromClass($class);
+		$model = $this->findModelByEntityClass($class);
 
         // Return if a model already exists
         if ($model) {
@@ -123,7 +114,6 @@ class ModelController extends AbstractActionController {
         if ($this->getRequest()->isPost()) {
 			
             $form->setData($this->getRequest()->getPost());
-			$form->isValid();
 
             if ($form->isValid()) {
 		
@@ -149,11 +139,6 @@ class ModelController extends AbstractActionController {
                     'name' => $model->getSlug()
                 ));
             }
-			else {
-				
-
-		\Zend\Debug\Debug::dump($form->getMessages(), 'Errors'); exit;
-			}
         }
 
         return compact('title', 'form');
@@ -163,17 +148,88 @@ class ModelController extends AbstractActionController {
      *
      * @return boolean 
      */
-    public function exportAction() {
-        // Build the config
-        $em = $this->getEntityManager();
-        $em->getRepository('Wiss\Entity\Navigation')->export();
-        $em->getRepository('Wiss\Entity\Route')->export();
+    public function exportAction() 
+	{		
+		$model = $this->findModelBySlug($this->params('name'));
+        $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
+		$form->prepareElements();
+		
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
 
-        // Redirect
-        $this->redirect()->toRoute('wiss/model');
+            if ($form->isValid()) {	
+		
+				// Build the config
+				$em = $this->getEntityManager();
+				$em->getRepository('Wiss\Entity\Navigation')->export();
+				$em->getRepository('Wiss\Entity\Route')->export();
+		
+				// Redirect
+				$this->redirect()->toRoute('wiss/model');		
+			}
+			
+		}
 
-        return false;
+        return compact('form', 'model');
     }
+	
+	/**
+	 * 
+	 * @param string $class
+	 * @return string
+	 */
+	public function buildTitleFromClass($class)
+	{
+        // Get the title based on the class
+        $title = explode('\\', $class);
+        $title = end($title);
+		return $title;
+	}
+	
+	/**
+	 * 
+	 * @return string
+	 */
+	public function getClassName()
+	{		
+        // Get the class from the url params
+        $class = $this->params('class');
+        $class = str_replace('-', '\\', $class);
+		return $class;
+	}
+	
+	/**
+	 * 
+	 * @param string $entityClass
+	 * @return Wiss\Entity\Model
+	 */
+	public function findModelByEntityClass($entityClass)
+	{		
+        // Find the model with this class
+        $em = $this->getEntityManager();
+        $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
+            'entityClass' => $entityClass,
+		));
+		
+		return $model;
+	}
+	
+	/**
+	 * 
+	 * @param string $slug
+	 * @return Wiss\Entity\Model
+	 */
+	public function findModelBySlug($slug)
+	{		
+        // Find the model with this class
+        $em = $this->getEntityManager();
+        $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
+            'slug' => $slug
+		));
+		
+		return $model;
+	}
     
     /**
      * 

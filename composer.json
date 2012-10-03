@@ -8,10 +8,10 @@
             "type": "package",
             "package": {
                 "version": "master",
-                "name": "boyhagemann/ZfcTwitterBootstrap",
+                "name": "mwillbanks/ZfcTwitterBootstrap",
                 "source": {
                     "type": "git",
-                    "url": "https://github.com/boyhagemann/ZfcTwitterBootstrap",
+                    "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap",
                     "reference": "master"
                 } 
             }
@@ -24,12 +24,7 @@
 		"doctrine/doctrine-module": "dev-master",
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
-		"boyhagemann/ZfcTwitterBootstrap": "dev-master",
+		"mwillbanks/ZfcTwitterBootstrap": "master",
 		"rwOverdijk/assetmanager": "dev-master"
-    },
-    "autoload": {
-        "psr-0": {
-            "ZfcTwitterBootstrap": "vendor/boyhagemann/ZfcTwitterBootstrap/src/"
-        }
     }
 }

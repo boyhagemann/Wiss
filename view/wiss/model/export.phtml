@@ -1,0 +1,9 @@
+<h1>Export <?php echo $model->getTitle() ?></h1>
+<p>
+	Here you can choose how you export this model.
+</p>
+<div class="alert"><span class="label label-important">Warning</span> All previous exports will be overwritten.</div>
+
+<?php $form->prepare() ?>
+
+<?php echo $this->formRenderer($form) ?>

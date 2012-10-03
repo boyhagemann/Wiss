@@ -289,6 +289,10 @@ return array(
 										'label' => 'Install',
 										'route' => 'wiss/model/install'
 									),
+									'export' => array(
+										'label' => 'Export',
+										'route' => 'wiss/model/export'
+									),
 								)
 							),
 						)
