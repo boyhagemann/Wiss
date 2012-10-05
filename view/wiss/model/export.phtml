@@ -4,10 +4,5 @@
 </p>
 <div class="alert"><span class="label label-important">Warning</span> All previous exports will be overwritten.</div>
 
-<?php $form->prepare(); echo $this->form()->openTag($form) ?>
-
-<?php echo $this->formElementWrapper($form->get('generate')) ?>
-<?php echo $this->formElementWrapper($form->get('submit')) ?>
-
-<?php echo $this->form()->closeTag($form) ?>
+<?php echo $this->formRenderer($form) ?>
 

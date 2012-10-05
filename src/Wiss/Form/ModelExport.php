@@ -26,22 +26,28 @@ class ModelExport extends Form
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
 		$this->setAttribute('class', 'form-horizontal');
 		
+		$fieldsetForm = new \Zend\Form\Fieldset('form');		
+		
 		// Generate form
-		$this->add(array(
-			'type' => 'Zend\Form\Element\MultiCheckbox',
-			'name' => 'generate',
+		$fieldsetForm->add(array(
+			'type' => 'Zend\Form\Element\Checkbox',
+			'name' => 'generate_form',
 			'attributes' => array(
 				'class' => 'checkbox',
-			),
-			'options' => array(
-				'value_options' => array(
-					'form' => 'Generate a form based on the given elements',
-					'controller' => 'Generate a controller to manage the model',
-					'model' => 'Generate a new model',
-					'config' => 'Generate routes and navigation',
-				),
+				'value' => 1,
+				'help-block' => 'Generate a form based on the given elements',
 			),
 		));
+		
+		
+		$fieldsetController = new \Zend\Form\Fieldset('controller');	
+		$fieldsetModel = new \Zend\Form\Fieldset('model');	
+		$fieldsetConfig = new \Zend\Form\Fieldset('configuration');	
+		
+		$this->add($fieldsetForm);
+		$this->add($fieldsetController);
+		$this->add($fieldsetModel);
+		$this->add($fieldsetConfig);
 		
 		// Submit
 		$this->add(array(

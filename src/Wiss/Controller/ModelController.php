@@ -12,14 +12,12 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Code\Scanner\FileScanner;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Code\Annotation\Parser;
 use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Generator\FileGenerator;
 use Doctrine\ORM\EntityManager;
-use Wiss\Entity\Model;
-use Wiss\Form\Model as ModelForm;
 
 class ModelController extends AbstractActionController {
 
@@ -81,9 +79,12 @@ class ModelController extends AbstractActionController {
      */
     public function installAction() 
 	{
-		$class = $this->getClassName();
-		$title = $this->buildTitleFromClass($class);
-		$model = $this->findModelByEntityClass($class);
+		$em = $this->getEntityManager();
+		$repo = $this->getRepository('Wiss\Entity\Model');
+				
+		$class = $this->buildClassNameFromUrlParam();
+		$title = $repo->buildTitleFromClass($class);
+		$model = $repo->findOneByEntityClass($class);
 
         // Return if a model already exists
         if ($model) {
@@ -116,19 +117,15 @@ class ModelController extends AbstractActionController {
             $form->setData($this->getRequest()->getPost());
 
             if ($form->isValid()) {
-
+				
 				// Merge the form values with the start data
 				$data = $form->getData() + $data;
 				
                 // Create the model
-                $model = $this->createModel($data);
-
-                // Create the routes and navigation
-                $this->createRoutes($model);
-                $this->createNavigation($model, $data);
+                $model = $repo->createFromArray($data);
 
                 // Show a flash message
-                $this->flashMessenger()->addMessage('The model is now installed');
+                $this->flashMessenger()->addMessage('The model is now created');
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/export', array(
@@ -146,7 +143,10 @@ class ModelController extends AbstractActionController {
      */
     public function exportAction() 
 	{		
-		$model = $this->findModelBySlug($this->params('name'));
+		$em = $this->getEntityManager();
+		$repo = $this->getRepository('Wiss\Entity\Model');		
+		$model = $repo->findOneBySlug($this->params('name'));
+		
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
 		$form->prepareElements();
 		
@@ -159,12 +159,12 @@ class ModelController extends AbstractActionController {
 				$data = $form->getData();
 				
 				if($data['form']) {
-                    $formClass = $this->generateForm($model);
+                    $formClass = $repo->generateForm($model);
 					$model->setFormClass($formClass);
 				}
 				
 				if($data['controller']) {
-					$controllerClass = $this->generateController($model);
+					$controllerClass = $repo->generateController($model);
 					$model->setControllerClass($controllerClass);
 				}
 				
@@ -174,7 +174,6 @@ class ModelController extends AbstractActionController {
 				
 				// Build the config
 				if($data['config']) {					
-					$em = $this->getEntityManager();
 					$em->getRepository('Wiss\Entity\Navigation')->export();
 					$em->getRepository('Wiss\Entity\Route')->export();					
 				}
@@ -194,59 +193,14 @@ class ModelController extends AbstractActionController {
 	
 	/**
 	 * 
-	 * @param string $class
 	 * @return string
 	 */
-	public function buildTitleFromClass($class)
-	{
-        // Get the title based on the class
-        $title = explode('\\', $class);
-        $title = end($title);
-		return $title;
-	}
-	
-	/**
-	 * 
-	 * @return string
-	 */
-	public function getClassName()
+	public function buildClassNameFromUrlParam()
 	{		
         // Get the class from the url params
         $class = $this->params('class');
         $class = str_replace('-', '\\', $class);
 		return $class;
-	}
-	
-	/**
-	 * 
-	 * @param string $entityClass
-	 * @return Wiss\Entity\Model
-	 */
-	public function findModelByEntityClass($entityClass)
-	{		
-        // Find the model with this class
-        $em = $this->getEntityManager();
-        $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
-            'entityClass' => $entityClass,
-		));
-		
-		return $model;
-	}
-	
-	/**
-	 * 
-	 * @param string $slug
-	 * @return Wiss\Entity\Model
-	 */
-	public function findModelBySlug($slug)
-	{		
-        // Find the model with this class
-        $em = $this->getEntityManager();
-        $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
-            'slug' => $slug
-		));
-		
-		return $model;
 	}
     
     /**
@@ -256,248 +210,13 @@ class ModelController extends AbstractActionController {
     public function elementConfigAction()
     {
         $formClass = $this->getRequest()->getQuery('form-class');
-
         $form = $this->getServiceLocator()->get($formClass);
         
-        $viewModel = new ViewModel(array(
+        return new ViewModel(array(
             'form' => $form,
         ));
-                
-        return $viewModel;
     }
 
-    /**
-     *
-     * @param array $data 
-     * @return Model
-     */
-    public function createModel(Array $data) {
-        $em = $this->getEntityManager();
-        // Create a new model
-        $model = new Model;
-        $model->setTitle($data['title']);
-        $model->setEntityClass($data['entity_class']);
-        $model->setTitleField($data['title_field']);
-		$model->setFormConfig($data['elements']);
-		
-        // Save this new model
-        $em->persist($model);
-        $em->flush();
-
-        return $model;
-    }
-
-    /**
-     * 
-     * @param ModelForm $form
-     * @return string
-     */
-    public function generateForm(ModelForm $form) {
-        $data = $form->getData();
-        $elementData = $data['elements'];
-        $className = substr($data['entity_class'], 1 + strrpos($data['entity_class'], '\\'));
-
-        // Create the body for in the __construct method
-        $body = sprintf('parent::__construct(\'%s\');', $className) . PHP_EOL . PHP_EOL;
-        $body .= '$this->setHydrator(new ClassMethodsHydrator());' . PHP_EOL;
-        $body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
-
-        // Add the elements 
-        foreach ($elementData as $name => $element) {
-
-			$vars = urldecode($element['configuration']);
-			parse_str($vars, $output);
-			
-            if (!$element['type'] || !isset($element['element-config'])) {
-                continue;
-            }
-			
-			$config = $output['element-config'];
-
-            // Create the element method
-            $body .= '// ' . $name . PHP_EOL;
-            $body .= '$this->add(array(' . PHP_EOL;
-            $body .= sprintf('  \'name\' => \'%s\',', $name) . PHP_EOL;
-            $body .= sprintf('  \'type\' => \'%s\',', $element['type']) . PHP_EOL;
-            $body .= '	\'attributes\' => array(' . PHP_EOL;
-            $body .= sprintf('    \'label\' => \'%s\',', $config['label']) . PHP_EOL;
-            $body .= ')));' . PHP_EOL . PHP_EOL;
-        }
-
-        // Create the submit method
-        $body .= '// submit' . PHP_EOL;
-        $body .= '$this->add(array(' . PHP_EOL;
-        $body .= sprintf('  \'name\' => \'%s\',', 'submit') . PHP_EOL;
-        $body .= sprintf('  \'type\' => \'%s\',', 'Zend\Form\Element\Submit') . PHP_EOL;
-        $body .= '	\'attributes\' => array(' . PHP_EOL;
-        $body .= sprintf('    \'value\' => \'%s\',', 'Save') . PHP_EOL;
-        $body .= sprintf('    \'class\' => \'%s\',', 'btn btn-primary') . PHP_EOL;
-        $body .= ')));' . PHP_EOL . PHP_EOL;
-
-        // Set the names for file generation
-        $namespace = 'Application\Form';
-        $folder = 'module/Application/src/Application/Form';
-        $filename = sprintf('%s/%s.php', $folder, $className);
-
-        // Build the file holding the php class
-        $fileData = array(
-            'filename' => $filename,
-            'namespace' => $namespace,
-            'uses' => array(
-                array('Zend\Form\Form'),
-                array('Zend\StdLib\Hydrator\ClassMethods', 'ClassMethodsHydrator'),
-            ),
-            'class' => array(
-                'name' => $className,
-                'extendedclass' => 'Form',
-                'methods' => array(
-                    array(
-                        'name' => '__construct',
-                        'parameters' => array(),
-                        'flags' => null,
-                        'body' => $body,
-                    )
-                )
-            ),
-        );
-
-        // Create the folder if it does not exist yet
-        @mkdir($folder, 0755);
-
-        // Generate the file and save it to disk
-        $generator = FileGenerator::fromArray($fileData);
-        $generator->write();
-
-        // Return the classname to be used later
-        return $namespace . '\\' . $className;
-    }
-
-    /**
-     *
-     * @param ModelForm $form
-     * @return string 
-     */
-    public function generateController(ModelForm $form) {
-        $data = $form->getData();
-        $className = substr($data['entity_class'], 1 + strrpos($data['entity_class'], '\\'));
-
-        $namespace = 'Application\Controller';
-        $folder = 'module/Application/src/Application/Controller';
-        $filename = sprintf('%s/%sController.php', $folder, $className);
-
-        $slug = \Gedmo\Sluggable\Util\Urlizer::urlize($data['title']);
-
-        $fileData = array(
-            'filename' => $filename,
-            'namespace' => $namespace,
-            'uses' => array(
-                array('Wiss\Controller\CrudController', 'EntityController'),
-            ),
-            'class' => array(
-                'name' => $className . 'Controller',
-                'extendedclass' => 'EntityController',
-                'properties' => array(
-                    array('modelName', $slug, \Zend\Code\Generator\PropertyGenerator::FLAG_PROTECTED),
-                )
-            ),
-        );
-
-        @mkdir($folder, 0755);
-        $generator = FileGenerator::fromArray($fileData);
-        $generator->write();
-
-        return $namespace . '\\' . $className;
-    }
-
-    /**
-     *
-     * @param Model $model 
-     */
-    public function createRoutes(Model $model) {
-        // Build the config, starting from router.routes
-        $config['router']['routes'] = array(
-            $model->getSlug() => array(
-                'type' => 'Literal',
-                'may_terminate' => true,
-                'options' => array(
-                    'route' => '/' . $model->getSlug(),
-                    'defaults' => array(
-                        'controller' => $model->getControllerClass(),
-                        'action' => 'index',
-                    ),
-                ),
-                'child_routes' => array(
-                    'create' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => '/create',
-                            'defaults' => array(
-                                'action' => 'create',
-                            ),
-                        )
-                    ),
-                    'edit' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => '/edit/:id',
-                            'defaults' => array(
-                                'action' => 'edit',
-                            ),
-                            'constraints' => array(
-                                'id' => '[0-9]+',
-                            ),
-                        )
-                    ),
-                    'delete' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => '/delete/:id',
-                            'defaults' => array(
-                                'action' => 'delete',
-                            ),
-                            'constraints' => array(
-                                'id' => '[0-9]+',
-                            ),
-                        )
-                    )
-                )
-            )
-        );
-
-        // Import the config thru the Page entity repository
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('Wiss\Entity\Route');
-        $repo->import($config);
-    }
-
-    /**
-     *
-     * @param Model $model
-     */
-    public function createNavigation(Model $model) {
-        // Build the config, starting from navigation
-        $config['navigation'] = array(
-            $model->getSlug() => array(
-                'label' => $model->getTitle(),
-                'route' => $model->getSlug(),
-                'pages' => array(
-                    'create' => array(
-                        'label' => 'Create',
-                        'route' => $model->getSlug() . '/create',
-                    ),
-                    'edit' => array(
-                        'label' => 'Edit',
-                        'route' => $model->getSlug() . '/edit',
-                    ),
-                )
-            )
-        );
-
-        // Import the config thru the Navigation entity repository
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('Wiss\Entity\Navigation');
-        $repo->import($config);
-    }
 
     /**
      * Read some useful information from the annotations regarding
@@ -615,7 +334,7 @@ class ModelController extends AbstractActionController {
             }
 
             // Start a file scanner, to check for classes inside the file
-            $scanner = new \Zend\Code\Scanner\FileScanner($file->getPathname());
+            $scanner = new FileScanner($file->getPathname());
 
             // Check the file for classes                            
             foreach ($scanner->getClassNames() as $class) {
