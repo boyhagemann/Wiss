@@ -83,7 +83,7 @@ class ModelController extends AbstractActionController {
 		$repo = $em->getRepository('Wiss\Entity\Model');
 				
 		$class = $this->buildClassNameFromUrlParam();
-		$title = $repo->buildTitleFromClass($class);
+		$title = $this->buildTitleFromClass($class);
 		$model = $repo->findOneByEntityClass($class);
 
         // Return if a model already exists
@@ -202,7 +202,20 @@ class ModelController extends AbstractActionController {
         $class = str_replace('-', '\\', $class);
 		return $class;
 	}
-    
+    	
+	/**
+	 * 
+	 * @param string $class
+	 * @return string
+	 */
+	public function buildTitleFromClass($class)
+	{
+        // Get the title based on the class
+        $title = explode('\\', $class);
+        $title = end($title);
+		return $title;
+	}
+	
     /**
      * 
      * @return \Zend\View\Model\ViewModel

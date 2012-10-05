@@ -252,19 +252,6 @@ class Model extends \Doctrine\ORM\EntityRepository
 	
 	/**
 	 * 
-	 * @param string $class
-	 * @return string
-	 */
-	public function buildTitleFromClass($class)
-	{
-        // Get the title based on the class
-        $title = explode('\\', $class);
-        $title = end($title);
-		return $title;
-	}
-	
-	/**
-	 * 
 	 * @param string $entityClass
 	 * @return Wiss\Entity\Model
 	 */
