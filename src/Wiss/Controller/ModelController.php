@@ -80,7 +80,7 @@ class ModelController extends AbstractActionController {
     public function installAction() 
 	{
 		$em = $this->getEntityManager();
-		$repo = $this->getRepository('Wiss\Entity\Model');
+		$repo = $em->getRepository('Wiss\Entity\Model');
 				
 		$class = $this->buildClassNameFromUrlParam();
 		$title = $repo->buildTitleFromClass($class);
@@ -144,7 +144,7 @@ class ModelController extends AbstractActionController {
     public function exportAction() 
 	{		
 		$em = $this->getEntityManager();
-		$repo = $this->getRepository('Wiss\Entity\Model');		
+		$repo = $em->getRepository('Wiss\Entity\Model');		
 		$model = $repo->findOneBySlug($this->params('name'));
 		
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
