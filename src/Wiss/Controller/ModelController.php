@@ -149,6 +149,7 @@ class ModelController extends AbstractActionController {
 		
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
 		$form->prepareElements();
+		$form->setModel($model);
 		
         if ($this->getRequest()->isPost()) {
 			
@@ -157,33 +158,36 @@ class ModelController extends AbstractActionController {
             if ($form->isValid()) {	
 				
 				$data = $form->getData();
-				
-				if($data['form']) {
-                    $formClass = $repo->generateForm($model);
-					$model->setFormClass($formClass);
-				}
-				
-				if($data['controller']) {
-					$controllerClass = $repo->generateController($model);
-					$model->setControllerClass($controllerClass);
-				}
-				
-				if($data['model']) {
+								
+				if($data['generate_model']) {
 					//...//
 				}
 				
+				// Generate controller
+				if($data['generate_controller']) {
+					$controllerClass = $repo->generateController($form);
+					$model->setControllerClass($controllerClass);
+				}
+				
+				// Generate form
+				if($data['generate_form']) {
+                    $formClass = @$repo->generateForm($form);
+					$model->setFormClass($formClass);
+				}
+				
 				// Build the config
-				if($data['config']) {					
-					$em->getRepository('Wiss\Entity\Navigation')->export();
-					$em->getRepository('Wiss\Entity\Route')->export();					
+				if($data['generate_config']) {		
+					
+					$repo->generateRoutes($model);
+					$repo->generateNavigation($model);
 				}
 				
 				// Save the model changes
-				$this->getEntityManager()->persist($model);
-				$this->getEntityManager()->flush();
+				$em->persist($model);
+				$em->flush();
 		
 				// Redirect
-				$this->redirect()->toRoute('wiss/model');		
+//				$this->redirect()->toRoute('wiss/model');		
 			}
 			
 		}
@@ -225,7 +229,8 @@ class ModelController extends AbstractActionController {
      * @param string $class
      * @return array 
      */
-    public function getDataFromAnnotations($class) {
+    public function getDataFromAnnotations($class) 
+	{
         $parser = new Parser\DoctrineAnnotationParser();
         $parser->registerAnnotation('Wiss\Annotation\Overview');
 
@@ -251,7 +256,8 @@ class ModelController extends AbstractActionController {
      *
      * @return array 
      */
-    public function uninstalledAction() {
+    public function uninstalledAction() 
+	{
         // Get the scanned and installed models
         $scanned = $this->getScannedEntities();
         $models = $this->getInstalledModels();
@@ -268,7 +274,8 @@ class ModelController extends AbstractActionController {
      *
      * @return Doctrine\ORM\Collection
      */
-    public function getInstalledModels() {
+    public function getInstalledModels() 
+	{
         return $this->getEntityManager()->getRepository('Wiss\Entity\Model')->findAll();
     }
 
@@ -276,7 +283,8 @@ class ModelController extends AbstractActionController {
      *
      * @return array
      */
-    public function getScannedEntities() {
+    public function getScannedEntities() 
+	{
         $em = $this->getEntityManager();
         $config = $this->getServiceLocator()->get('applicationconfig');
         $paths = $config['module_listener_options']['module_paths'];

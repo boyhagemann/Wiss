@@ -5,20 +5,20 @@ namespace Wiss\EntityRepository;
 use Zend\Code\Generator\FileGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 use Gedmo\Sluggable\Util\Urlizer;
-use Wiss\Form\Model as ModelForm;
+use Wiss\Form\ModelExport as ExportForm;
 
 /**
  * 
  */
 class Model extends \Doctrine\ORM\EntityRepository
 {		
-
     /**
      *
      * @param array $data 
      * @return Model
      */
-    public function createFromArray(Array $data) {
+    public function createFromArray(Array $data)
+	{
         $em = $this->getEntityManager();
         // Create a new model
         $model = new \Wiss\Entity\Model;
@@ -36,9 +36,10 @@ class Model extends \Doctrine\ORM\EntityRepository
 	
     /**
      *
-     * @param Model $model
+     * @param \Wiss\Entity\Model $model
      */
-    public function generateNavigation(Model $model) {
+    public function generateNavigation(\Wiss\Entity\Model $model) 
+	{
         // Build the config, starting from navigation
         $config['navigation'] = array(
             $model->getSlug() => array(
@@ -61,14 +62,16 @@ class Model extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $repo = $em->getRepository('Wiss\Entity\Navigation');
         $repo->import($config);
+		$repo->export();
     }
 	
 	
     /**
      *
-     * @param Model $model 
+     * @param \Wiss\Entity\Model $model 
      */
-    public function generateRoutes(Model $model) {
+    public function generateRoutes(\Wiss\Entity\Model $model) 
+	{
         // Build the config, starting from router.routes
         $config['router']['routes'] = array(
             $model->getSlug() => array(
@@ -122,25 +125,23 @@ class Model extends \Doctrine\ORM\EntityRepository
         // Import the config thru the Page entity repository
         $em = $this->getEntityManager();
         $repo = $em->getRepository('Wiss\Entity\Route');
-        $repo->import($config);
+        $repo->import($config);		
+		$repo->export();	
     }
 	
 	
 
     /**
      *
-     * @param ModelForm $form
+     * @param ExportForm $form
      * @return string 
      */
-    public function generateController(ModelForm $form) {
-        $data = $form->getData();
-        $className = substr($data['entity_class'], 1 + strrpos($data['entity_class'], '\\'));
-
+    public function generateController(ExportForm $form) 
+	{		
+		$model = $form->getModel();
         $namespace = 'Application\Controller';
-        $folder = 'module/Application/src/Application/Controller';
-        $filename = sprintf('%s/%sController.php', $folder, $className);
-
-        $slug = Urlizer::urlize($data['title']);
+        $className = $form->get('controller_class')->getValue();
+		$filename = $form->get('controller_path')->getValue();
 
         $fileData = array(
             'filename' => $filename,
@@ -152,27 +153,27 @@ class Model extends \Doctrine\ORM\EntityRepository
                 'name' => $className . 'Controller',
                 'extendedclass' => 'EntityController',
                 'properties' => array(
-                    array('modelName', $slug, PropertyGenerator::FLAG_PROTECTED),
+                    array('modelName', $model->getSlug(), PropertyGenerator::FLAG_PROTECTED),
                 )
             ),
         );
 
-        @mkdir($folder, 0755);
         $generator = FileGenerator::fromArray($fileData);
         $generator->write();
 
         return $namespace . '\\' . $className;
     }
-	
+		
     /**
      * 
-     * @param ModelForm $form
+     * @param ExportForm $form
      * @return string
      */
-    public function generateForm(ModelForm $form) {
-        $data = $form->getData();
-        $elementData = $data['elements'];
-        $className = substr($data['entity_class'], 1 + strrpos($data['entity_class'], '\\'));
+    public function generateForm(ExportForm $form) 
+	{
+        $model = $form->getModel();
+        $elementData = $model->getFormConfig();
+        $className = $form->get('form_class')->getValue();
 
         // Create the body for in the __construct method
         $body = sprintf('parent::__construct(\'%s\');', $className) . PHP_EOL . PHP_EOL;
@@ -182,10 +183,13 @@ class Model extends \Doctrine\ORM\EntityRepository
         // Add the elements 
         foreach ($elementData as $name => $element) {
 
+			// Decode the element config
 			$vars = urldecode($element['configuration']);
 			parse_str($vars, $output);
 			
-            if (!$element['type'] || !isset($element['element-config'])) {
+			// Check if the element has a type or config, otherwis
+			// there is nothing to do
+            if (!$element['type'] || !isset($output['element-config'])) {
                 continue;
             }
 			
@@ -213,9 +217,9 @@ class Model extends \Doctrine\ORM\EntityRepository
 
         // Set the names for file generation
         $namespace = 'Application\Form';
-        $folder = 'module/Application/src/Application/Form';
-        $filename = sprintf('%s/%s.php', $folder, $className);
+        $filename = $form->get('form_path')->getValue();
 
+					
         // Build the file holding the php class
         $fileData = array(
             'filename' => $filename,
@@ -237,9 +241,6 @@ class Model extends \Doctrine\ORM\EntityRepository
                 )
             ),
         );
-
-        // Create the folder if it does not exist yet
-        @mkdir($folder, 0755);
 
         // Generate the file and save it to disk
         $generator = FileGenerator::fromArray($fileData);
