@@ -83,7 +83,7 @@ class ModelController extends AbstractActionController {
 		$repo = $em->getRepository('Wiss\Entity\Model');
 				
 		$class = $this->buildClassNameFromUrlParam();
-		$title = \Wiss\Entity\Model::buildTitleFromClass($class);
+		$title = $repo->buildTitleFromClass($class);
 		$model = $repo->findOneByEntityClass($class);
 
         // Return if a model already exists
