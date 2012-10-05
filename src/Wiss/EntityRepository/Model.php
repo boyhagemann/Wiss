@@ -6,7 +6,6 @@ use Zend\Code\Generator\FileGenerator;
 use Zend\Code\Generator\PropertyGenerator;
 use Gedmo\Sluggable\Util\Urlizer;
 use Wiss\Form\Model as ModelForm;
-use Wiss\Entity\Model;
 
 /**
  * 
@@ -22,7 +21,7 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function createFromArray(Array $data) {
         $em = $this->getEntityManager();
         // Create a new model
-        $model = new Model;
+        $model = new \Wiss\Entity\Model;
         $model->setTitle($data['title']);
         $model->setEntityClass($data['entity_class']);
         $model->setTitleField($data['title_field']);
