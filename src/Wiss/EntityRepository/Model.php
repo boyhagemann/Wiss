@@ -40,19 +40,21 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateNavigation(\Wiss\Entity\Model $model) 
 	{
+        $namespace = $model->getSlug();
+        
         // Build the config, starting from navigation
         $config['navigation'] = array(
-            $model->getSlug() => array(
+            $namespace => array(
                 'label' => $model->getTitle(),
-                'route' => $model->getSlug(),
+                'route' => $namespace,
                 'pages' => array(
                     'create' => array(
                         'label' => 'Create',
-                        'route' => $model->getSlug() . '/create',
+                        'route' => $namespace . '/create',
                     ),
                     'edit' => array(
                         'label' => 'Edit',
-                        'route' => $model->getSlug() . '/edit',
+                        'route' => $namespace . '/edit',
                     ),
                 )
             )
@@ -72,13 +74,15 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateRoutes(\Wiss\Entity\Model $model) 
 	{
+        $namespace = $model->getSlug();
+        
         // Build the config, starting from router.routes
         $config['router']['routes'] = array(
-            $model->getSlug() => array(
+            $namespace => array(
                 'type' => 'Literal',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/' . $model->getSlug(),
+                    'route' => '/' . $namespace,
                     'defaults' => array(
                         'controller' => $model->getControllerClass(),
                         'action' => 'index',

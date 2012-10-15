@@ -40,6 +40,24 @@ class ModelController extends AbstractActionController {
      *
      * @return array 
      */
+    public function uninstalledAction() 
+	{
+        // Get the scanned and installed models
+        $scanned = $this->getScannedEntities();
+        $models = $this->getInstalledModels();
+
+        // Unset each model that already is installed
+        foreach ($models as $model) {
+            unset($scanned[$model->getEntityClass()]);
+        }
+
+        return compact('scanned');
+    }
+    
+    /**
+     *
+     * @return array 
+     */
     public function createAction() 
 	{
 		$em = $this->getEntityManager();
@@ -66,12 +84,10 @@ class ModelController extends AbstractActionController {
         $data += array(
             'title' => $title,
             'entity_class' => $class,
-            'element-config-url' => $this->url()->fromRoute('wiss/model/element-config'),
         );
 
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Model');   
-		$form->setName('model');
+        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
 		$form->prepareElements($data);
 		$form->setData($data);
 
@@ -80,19 +96,20 @@ class ModelController extends AbstractActionController {
             $form->setData($this->getRequest()->getPost());
 
             if ($form->isValid()) {
-				
-				// Merge the form values with the start data
-				$data = $form->getData() + $data;
-				
+								
                 // Create the model
-                $model = $repo->createFromArray($data);
-
+                $model = $repo->createFromArray($form->getData());
+                
+                // Save the newly created model
+                $em->persist($model);
+                $em->flush();
+                
                 // Show a flash message
                 $this->flashMessenger()->addMessage('The model is now created');
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/model/export', array(
-                    'name' => $model->getSlug()
+                $this->redirect()->toRoute('wiss/model/elements', array(
+                    'id' => $model->getId()
                 ));
             }
         }
@@ -130,8 +147,8 @@ class ModelController extends AbstractActionController {
                 $this->flashMessenger()->addMessage('The model is now created');
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/model/export', array(
-                    'name' => $model->getSlug()
+                $this->redirect()->toRoute('wiss/model/properties', array(
+                    'id' => $model->getId()
                 ));
             }
         }
@@ -172,8 +189,8 @@ class ModelController extends AbstractActionController {
                 $this->flashMessenger()->addMessage('The model is now created');
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/model/export', array(
-                    'name' => $model->getSlug()
+                $this->redirect()->toRoute('wiss/model/elements', array(
+                    'id' => $model->getId()
                 ));
             }
         }
@@ -230,8 +247,13 @@ class ModelController extends AbstractActionController {
 				$em->persist($model);
 				$em->flush();
 		
+                // Show a flash message
+                $this->flashMessenger()->addMessage('The model is succesfully exported!');
+                
 				// Redirect
-//				$this->redirect()->toRoute('wiss/model');		
+                $this->redirect()->toRoute('wiss/model/export', array(
+                    'id' => $model->getId()
+                ));	
 			}
 			
 		}
@@ -240,15 +262,13 @@ class ModelController extends AbstractActionController {
     }
 	
 	/**
+     * Get the class from the url params
 	 * 
 	 * @return string
 	 */
 	public function buildClassNameFromUrlParam()
 	{		
-        // Get the class from the url params
-        $class = $this->params('class');
-        $class = str_replace('-', '\\', $class);
-		return $class;
+        return str_replace('-', '\\', $this->params('class'));
 	}
     
     /**
@@ -260,9 +280,7 @@ class ModelController extends AbstractActionController {
         $formClass = $this->getRequest()->getQuery('form-class');
         $form = $this->getServiceLocator()->get($formClass);
         
-        return new ViewModel(array(
-            'form' => $form,
-        ));
+        return compact('form');
     }
 
 
@@ -275,17 +293,22 @@ class ModelController extends AbstractActionController {
      */
     public function getDataFromAnnotations($class) 
 	{
+        // Build an annotation parser to read the annotations
         $parser = new Parser\DoctrineAnnotationParser();
         $parser->registerAnnotation('Wiss\Annotation\Overview');
 
+        // Add the parser to the annotation manager
         $annotationManager = new AnnotationManager();
         $annotationManager->attach($parser);
 
+        // Use reflection to inspect the class for annotations
         $reflection = new ClassReflection($class);
         $annotations = $reflection->getAnnotations($annotationManager);
 
+        // Walk each found annotations
         foreach ($annotations as $annotation) {
 
+            // Add the overview title fiel
             if ($annotation instanceof \Wiss\Annotation\Overview) {
                 return array(
                     'title_field' => $annotation->getTitleField()
@@ -294,24 +317,6 @@ class ModelController extends AbstractActionController {
         }
 
         return array();
-    }
-
-    /**
-     *
-     * @return array 
-     */
-    public function uninstalledAction() 
-	{
-        // Get the scanned and installed models
-        $scanned = $this->getScannedEntities();
-        $models = $this->getInstalledModels();
-
-        // Unset each model that already is installed
-        foreach ($models as $model) {
-            unset($scanned[$model->getEntityClass()]);
-        }
-
-        return compact('scanned');
     }
 
     /**
