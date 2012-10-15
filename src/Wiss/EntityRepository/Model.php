@@ -24,8 +24,6 @@ class Model extends \Doctrine\ORM\EntityRepository
         $model = new \Wiss\Entity\Model;
         $model->setTitle($data['title']);
         $model->setEntityClass($data['entity_class']);
-        $model->setTitleField($data['title_field']);
-		$model->setFormConfig($data['elements']);
 		
         // Save this new model
         $em->persist($model);
