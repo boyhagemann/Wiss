@@ -299,7 +299,7 @@ return array(
 								'pages' => array(
 									'install' => array(
 										'label' => 'Install',
-										'route' => 'wiss/model/install'
+										'route' => 'wiss/model/create'
 									),
 									'export' => array(
 										'label' => 'Export',
