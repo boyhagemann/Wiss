@@ -289,6 +289,20 @@ return array(
 							'installed' => array(
 								'label' => 'Installed',
 								'route' => 'wiss/model',
+								'pages' => array(
+									'properties' => array(
+										'label' => 'Properties',
+										'route' => 'wiss/model/properties'
+									),
+									'elements' => array(
+										'label' => 'Elements',
+										'route' => 'wiss/model/elements'
+									),
+									'export' => array(
+										'label' => 'Export',
+										'route' => 'wiss/model/export'
+									),
+								)
 							),
 							'uninstalled' => array(
 								'label' => 'Uninstalled',
@@ -297,13 +311,9 @@ return array(
 									'action' => 'uninstalled'
 								),
 								'pages' => array(
-									'install' => array(
-										'label' => 'Install',
+									'create' => array(
+										'label' => 'Create',
 										'route' => 'wiss/model/create'
-									),
-									'export' => array(
-										'label' => 'Export',
-										'route' => 'wiss/model/export'
 									),
 								)
 							),
