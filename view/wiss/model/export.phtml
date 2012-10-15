@@ -1,4 +1,11 @@
-<h1>Export <?php echo $model->getTitle() ?></h1>
+<h1>Model <em><?php echo $model->getTitle() ?></em></h1>
+
+<ul class="nav nav-tabs">
+    <li><a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>">Properties</a></li>
+    <li><a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>">Elements</a></li>
+    <li class="active"><a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>">Export</a></li>
+</ul>
+
 <p>
 	Here you can choose how you export this model.
 </p>
