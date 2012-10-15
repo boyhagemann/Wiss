@@ -147,6 +147,11 @@ class Model extends \Doctrine\ORM\EntityRepository
         $className = $form->get('controller_class')->getValue();
 		$filename = $form->get('controller_path')->getValue();
 
+        // Create the folder if it does not exist
+        if(!file(dirname($filename))) {
+            @mkdir(dirname($filename), 0777, true);
+        }
+        
         $fileData = array(
             'filename' => $filename,
             'namespace' => $namespace,
@@ -225,7 +230,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 
         // Create the folder if it does not exist
         if(!file(dirname($filename))) {
-            @mkdir(dirname($filename), 0777);
+            @mkdir(dirname($filename), 0777, true);
         }
 					
         // Build the file holding the php class
