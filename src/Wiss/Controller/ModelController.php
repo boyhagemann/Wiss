@@ -37,47 +37,10 @@ class ModelController extends AbstractActionController {
     }
 
     /**
-     * Edit the models properties
-     *
-     */
-    public function editAction() {
-        // Get the model
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('Wiss\Entity\Model');
-        $model = $repo->find($this->params('id'));
-
-        // Get the form
-        $form = new \Wiss\Form\Model;
-        $form->bind($model);
-
-        if ($this->getRequest()->isPost()) {
-
-            $form->setData($this->getRequest()->getPost());
-
-            if ($form->isValid()) {
-
-                // Save the changes
-                $em->persist($model);
-                $em->flush();
-
-                // Show a flash message
-                $this->flashMessenger()->addMessage('The model is now updated');
-
-                // Redirect
-                $this->redirect()->toRoute('wiss/model/edit', array(
-                    'id' => $model->getId(),
-                ));
-            }
-        }
-
-        return compact('model', 'form');
-    }
-
-    /**
      *
      * @return array 
      */
-    public function installAction() 
+    public function createAction() 
 	{
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');
@@ -139,13 +102,94 @@ class ModelController extends AbstractActionController {
 
     /**
      *
+     * @return array 
+     */
+    public function propertiesAction() 
+	{
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');				
+        $id = $this->params('id');
+		$model = $repo->find($id);
+
+        // Create the form
+        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
+		$form->setName('model');
+		$form->prepareElements(array());
+		$form->bind($model);
+
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+								
+                // Create the model
+                $model = $repo->createFromArray($data);
+
+                // Show a flash message
+                $this->flashMessenger()->addMessage('The model is now created');
+
+                // Redirect
+                $this->redirect()->toRoute('wiss/model/export', array(
+                    'name' => $model->getSlug()
+                ));
+            }
+        }
+
+        return compact('form', 'model');
+    }
+
+    /**
+     *
+     * @return array 
+     */
+    public function elementsAction() 
+	{
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');		
+        $id = $this->params('id');
+		$model = $repo->find($id);
+
+        // Create the form
+        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Elements');   
+		$form->setName('model');
+		$form->prepareElements($model);
+		$form->bind($model);
+
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+				
+				// Merge the form values with the start data
+				$data = $form->getData() + $data;
+				
+                // Create the model
+                $model = $repo->createFromArray($data);
+
+                // Show a flash message
+                $this->flashMessenger()->addMessage('The model is now created');
+
+                // Redirect
+                $this->redirect()->toRoute('wiss/model/export', array(
+                    'name' => $model->getSlug()
+                ));
+            }
+        }
+
+        return compact('form', 'model');
+    }
+    
+    /*
      * @return boolean 
      */
     public function exportAction() 
 	{		
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
-		$model = $repo->findOneBySlug($this->params('name'));
+        $id = $this->params('id');
+		$model = $repo->find($id);
 		
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
 		$form->prepareElements();
