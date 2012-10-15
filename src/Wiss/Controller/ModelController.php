@@ -182,9 +182,9 @@ class ModelController extends AbstractActionController {
 				// Merge the form values with the start data
 				$data = $form->getData() + $data;
 				
-                // Create the model
-                $model = $repo->createFromArray($data);
-
+                //...
+                
+                
                 // Show a flash message
                 $this->flashMessenger()->addMessage('The model is now created');
 
@@ -220,8 +220,9 @@ class ModelController extends AbstractActionController {
 				
 				$data = $form->getData();
 								
-				if($data['generate_model']) {
-					//...//
+				if($data['generate_entity']) {
+                    $entityClass = $repo->generateEntity($form);
+                    $model->setEntityClass($entityClass);
 				}
 				
 				// Generate controller
@@ -232,7 +233,7 @@ class ModelController extends AbstractActionController {
 				
 				// Generate form
 				if($data['generate_form']) {
-                    $formClass = @$repo->generateForm($form);
+                    $formClass = $repo->generateForm($form);
 					$model->setFormClass($formClass);
 				}
 				

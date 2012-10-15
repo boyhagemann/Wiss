@@ -143,8 +143,8 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateController(ExportForm $form) 
 	{		
 		$model = $form->getModel();
-        $namespace = 'Application\Controller';
         $className = $form->get('controller_class')->getValue();
+        $namespace = substr($className, 0, strrpos($className, '\\'));
 		$filename = $form->get('controller_path')->getValue();
 
         // Create the folder if it does not exist
@@ -172,6 +172,50 @@ class Model extends \Doctrine\ORM\EntityRepository
 
         return $namespace . '\\' . $className;
     }
+    
+    /**
+     * 
+     * @param ExportForm $form
+     * @return string
+     */
+    public function generateEntity(ExportForm $form)
+    {
+        $model = $form->getModel();
+        $elementData = $model->getFormConfig();        
+        $className = $form->get('entity_class')->getValue();
+        $namespace = substr($className, 0, strrpos($className, '\\'));
+        $filename = $form->get('entity_path')->getValue();
+        
+        // Create the folder if it does not exist
+        if(!file(dirname($filename))) {
+            @mkdir(dirname($filename), 0777, true);
+        }
+        
+        // Build the file holding the php class
+        $fileData = array(
+            'filename' => $filename,
+            'namespace' => $namespace,
+            'uses' => array(
+                array('Doctrine\ORM\Mapping', 'ORM'),
+            ),
+            'class' => array(
+                'name' => $className,
+                'properties' => array(
+                    array(
+                        'name' => 'test',
+                        'visibility' => 'protected',
+                    )
+                )
+            ),
+        );
+
+        // Generate the file and save it to disk
+        $generator = FileGenerator::fromArray($fileData);
+        $generator->write();
+
+        // Return the classname to be used later
+        return $namespace . '\\' . $className;
+    }
 		
     /**
      * 
@@ -183,6 +227,8 @@ class Model extends \Doctrine\ORM\EntityRepository
         $model = $form->getModel();
         $elementData = $model->getFormConfig();
         $className = $form->get('form_class')->getValue();
+        $namespace = substr($className, 0, strrpos($className, '\\'));
+        $filename = $form->get('form_path')->getValue();
 
         // Create the body for in the __construct method
         $body = sprintf('parent::__construct(\'%s\');', $className) . PHP_EOL . PHP_EOL;
@@ -224,9 +270,6 @@ class Model extends \Doctrine\ORM\EntityRepository
         $body .= sprintf('    \'class\' => \'%s\',', 'btn btn-primary') . PHP_EOL;
         $body .= ')));' . PHP_EOL . PHP_EOL;
 
-        // Set the names for file generation
-        $namespace = 'Application\Form';
-        $filename = $form->get('form_path')->getValue();
 
         // Create the folder if it does not exist
         if(!file(dirname($filename))) {

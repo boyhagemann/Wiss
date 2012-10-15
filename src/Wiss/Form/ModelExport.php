@@ -97,30 +97,30 @@ class ModelExport extends Form
 		// Generate model
 		$this->add(array(
 			'type' => 'Zend\Form\Element\Checkbox',
-			'name' => 'generate_model',
+			'name' => 'generate_entity',
 			'attributes' => array(
 				'class' => 'checkbox',
 				'value' => 1,
-				'label' => 'Generate model?',
+				'label' => 'Generate entity?',
 				'checked' => 'checked',
 			),
 		));
 		
-		// Model class
+		// Entity class
 		$this->add(array(
 			'type' => 'Zend\Form\Element\Text',
-			'name' => 'model_class',
+			'name' => 'entity_class',
 			'attributes' => array(
-				'label' => 'Model classname',
+				'label' => 'Entity classname',
 			),
 		));
 		
-		// Model path
+		// Entity path
 		$this->add(array(
 			'type' => 'Zend\Form\Element\Text',
-			'name' => 'model_path',
+			'name' => 'entity_path',
 			'attributes' => array(
-				'label' => 'Path to model',
+				'label' => 'Path to entity',
 				'class' => 'span6',
 			),
 		));
@@ -156,9 +156,9 @@ class ModelExport extends Form
 		$inputFilter->add(new Input('generate_controller'));
 		$inputFilter->add(new Input('controller_class'));
 		$inputFilter->add(new Input('controller_path'));
-		$inputFilter->add(new Input('generate_model'));
-		$inputFilter->add(new Input('model_class'));
-		$inputFilter->add(new Input('model_path'));
+		$inputFilter->add(new Input('generate_entity'));
+		$inputFilter->add(new Input('entity_class'));
+		$inputFilter->add(new Input('entity_path'));
 		$inputFilter->add(new Input('generate_config'));
 		$this->setInputFilter($inputFilter);
 				
@@ -178,13 +178,13 @@ class ModelExport extends Form
 			'controller_path' => $this->buildControllerPath(),
 			'form_class' => $this->buildClassName(),
 			'form_path' => $this->buildFormPath(),
-			'model_class' => $this->buildClassName(),
-			'model_path' => $this->buildModelPath(),
+			'entity_class' => $this->buildClassName(),
+			'entity_path' => $this->buildEntityPath(),
 		));
 		
 		// Uncheck the generation of the model, this model
 		// is already generated
-		$this->get('generate_model')->setAttribute('checked', null);
+		$this->get('generate_entity')->setAttribute('checked', null);
 		
 	}
 	
@@ -223,7 +223,7 @@ class ModelExport extends Form
 	 * 
 	 * @return string
 	 */
-	public function buildModelPath()
+	public function buildEntityPath()
 	{
         $folder = 'module/Application/src/Wiss/Entity';
         $filename = sprintf('%s/%s.php', $folder, $this->buildClassName());
