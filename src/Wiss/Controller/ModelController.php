@@ -60,6 +60,7 @@ class ModelController extends AbstractActionController {
      */
     public function createAction() 
 	{
+        $data = array();
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');
 				
@@ -79,12 +80,15 @@ class ModelController extends AbstractActionController {
             return false;
         }
 
-        // Get data from entity annotations
-        $data = $this->getDataFromAnnotations($class);
-        $data += array(
-            'title' => $title,
-            'entity_class' => $class,
-        );
+        if($class) {
+            
+            // Get data from entity annotations
+            $data = $this->getDataFromAnnotations($class);
+            $data += array(
+                'title' => $title,
+                'entity_class' => $class,
+            );
+        }
 
         // Create the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   

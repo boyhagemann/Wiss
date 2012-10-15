@@ -51,7 +51,7 @@ class Model
 	
 	/**
 	 * 
-     * @ORM\Column
+     * @ORM\Column(nullable=true)
 	 */
 	protected $titleField;
 	
