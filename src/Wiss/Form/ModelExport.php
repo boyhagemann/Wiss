@@ -174,11 +174,11 @@ class ModelExport extends Form
 		
 		// Preset the classes en paths, based on the model
 		$this->setData(array(
-			'controller_class' => $this->buildClassName(),
+			'controller_class' => $this->buildClassName('Wiss\Controller'),
 			'controller_path' => $this->buildControllerPath(),
-			'form_class' => $this->buildClassName(),
+			'form_class' => $this->buildClassName('Wiss\Form'),
 			'form_path' => $this->buildFormPath(),
-			'entity_class' => $this->buildClassName(),
+			'entity_class' => $this->buildClassName('Wiss\Entity'),
 			'entity_path' => $this->buildEntityPath(),
 		));
 		
@@ -204,7 +204,7 @@ class ModelExport extends Form
 	public function buildControllerPath()
 	{
         $folder = 'module/Application/src/Wiss/Controller';
-        $filename = sprintf('%s/%sController.php', $folder, $this->buildClassName());
+        $filename = sprintf('%s/%sController.php', $folder, $this->buildClassName('Wiss\Controller'));
 		return $filename;
 	}
 	
@@ -215,7 +215,7 @@ class ModelExport extends Form
 	public function buildFormPath()
 	{
         $folder = 'module/Application/src/Wiss/Form';
-        $filename = sprintf('%s/%s.php', $folder, $this->buildClassName());
+        $filename = sprintf('%s/%s.php', $folder, $this->buildClassName('Wiss\Form'));
 		return $filename;
 	}
 	
@@ -226,7 +226,7 @@ class ModelExport extends Form
 	public function buildEntityPath()
 	{
         $folder = 'module/Application/src/Wiss/Entity';
-        $filename = sprintf('%s/%s.php', $folder, $this->buildClassName());
+        $filename = sprintf('%s/%s.php', $folder, $this->buildClassName('Wiss\Entity'));
 		return $filename;
 	}
 	
@@ -234,10 +234,10 @@ class ModelExport extends Form
 	 * 
 	 * @return string
 	 */
-	public function buildClassName()
+	public function buildClassName($namespace)
 	{
 		$entityClass = $this->getModel()->getEntityClass();
-        $className = substr($entityClass, 1 + strrpos($entityClass, '\\'));
-		return $className;
+        $className = substr($entityClass, strrpos($entityClass, '\\'));
+		return $namespace . $className;
 	}
 }
