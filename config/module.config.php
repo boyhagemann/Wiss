@@ -103,39 +103,51 @@ return array(
 									),
 								),
 							),
-							'install' => array(
+							'create' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/install/[:class]',
+									'route' => '/create/[:class]',
 									'constraints' => array(
 										'class' => '[A-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
-										'action' => 'install',
+										'action' => 'create',
+									),
+								),
+							),
+							'properties' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/properties/[:id]',
+									'constraints' => array(
+										'id' => '[0-9]*',
+									),
+									'defaults' => array(
+										'action' => 'properties',
+									),
+								),
+							),
+							'elements' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/elements/[:id]',
+									'constraints' => array(
+										'id' => '[0-9]*',
+									),
+									'defaults' => array(
+										'action' => 'elements',
 									),
 								),
 							),
 							'export' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/export/[:name]',
+									'route' => '/export/[:id]',
 									'constraints' => array(
-										'name' => '[a-zA-Z][a-zA-Z0-9_-]*',
+										'id' => '[0-9]*',
 									),
 									'defaults' => array(
 										'action' => 'export',
-									),
-								),
-							),
-							'edit' => array(
-								'type' => 'Segment',
-								'options' => array(
-									'route' => '/edit/[:id]',
-									'constraints' => array(
-										'id' => '[0-9-]*',
-									),
-									'defaults' => array(
-										'action' => 'edit',
 									),
 								),
 							),

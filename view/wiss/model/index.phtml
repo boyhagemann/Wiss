@@ -9,7 +9,9 @@
 		<h3><?php echo $model->getEntityClass() ?></h3>
 		<div class="btn-group">
 			<a href="<?php echo $this->url('wiss/' . $model->getSlug()) ?>" class="btn btn-small">View records</a>
-			<a href="<?php echo $this->url('wiss/model/edit', array('id' => $model->getId())) ?>" class="btn btn-small">Edit this model</a>
+			<a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>" class="btn btn-small">Properties</a>
+			<a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>" class="btn btn-small">Elements</a>
+			<a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>" class="btn btn-small">Export</a>
 		</div>
 	</li>
 	<?php endforeach ?>

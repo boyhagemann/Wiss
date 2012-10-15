@@ -1,0 +1,9 @@
+<h1>Edit <?php echo $model->getTitle() ?></h1>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>">Properties</a></li>
+    <li><a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>">Elements</a></li>
+    <li><a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>">Export</a></li>
+</ul>
+
+<?php echo $this->formRenderer($form) ?>
