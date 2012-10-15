@@ -223,6 +223,10 @@ class Model extends \Doctrine\ORM\EntityRepository
         $namespace = 'Application\Form';
         $filename = $form->get('form_path')->getValue();
 
+        // Create the folder if it does not exist
+        if(!file(dirname($filename))) {
+            @mkdir(dirname($filename), 0777);
+        }
 					
         // Build the file holding the php class
         $fileData = array(
