@@ -190,7 +190,7 @@ class ModelController extends AbstractActionController {
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/elements/create', array(
                     'id' => $model->getId(),
-					'element-config-class' => $form->get('class')->getValue(),
+					'element-config-class' => $form->get('element-config-class')->getValue(),
                 ));
             }
         }
