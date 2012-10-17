@@ -21,14 +21,12 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 {	
     protected $serviceLocator;
 
-
     /**
 	 * 
 	 * @param Model $model
 	 */
-    public function prepareElements(Model $model)
+    public function prepareElements()
     {                		
-		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
 		$this->setAttribute('class', 'form-horizontal');
 			
 						
@@ -42,67 +40,23 @@ class Elements extends Form implements ServiceLocatorAwareInterface
         // Get the value options from the service manager config
         $config = $this->getServiceLocator()->get('config');
         $valueOptions = $config['element-config-forms'];
-			
-        $mapping = $this->getFieldMapping($model->getEntityClass());
-		foreach($mapping as $field) {
-						
-//            \Zend\Debug\Debug::dump($field); exit;
-            
-			$fieldset = new Fieldset($field['fieldName']);
-			$fieldset->setOptions(array(
-				'legend' => $field['fieldName'],
-			));
-                        
-			// Add the select field with the available elements
-			$select = new Element\Select('type');
-			$select->setLabel($field['fieldName']);
-			$select->setValueOptions(array('' => 'No element assigned yet...') + $valueOptions); 
-			$select->setAttributes(array(
-				'class' => 'form-class',
-			));
-			$fieldset->add($select);
-			
-			// Add the trigger button to show the modal window
-			$button = new Element\Button('trigger');
-			$button->setOptions(array(
-				'label' => 'Configure',
-			));
-            
-            // Build the element config url
-            $plugins = $this->getServiceLocator()->get('controller-plugin-manager');
-            $url = $plugins->get('url')->fromRoute('wiss/model/element-config');
-            
-			$button->setAttributes(array(
-				'class' => 'element-config-trigger btn',
-				'data-target' => "#myModal",
-				'data-remote' => $url,
-			));
-			$fieldset->add($button);
-			
-			// Store the result of the modal window form in a hidden element
-			$configuration = new Element\Hidden('configuration');
-			$configuration->setAttributes(array(
-				'class' => 'element-config',
-			));
-			$fieldset->add($configuration);
-                        
-                        
-			// Add the hidden config element
-			$config = new Element\Hidden('button');
-			$fieldset->add($config);
-			
-			$elements->add($fieldset);		
-		}
-		
-		$this->add($elements);
-		
-                
+			      
+		// Add the select field with the available elements
+		$select = new Element\Select('type');
+		$select->setLabel($field['fieldName']);
+		$select->setValueOptions(array('' => 'No element assigned yet...') + $valueOptions); 
+		$select->setAttributes(array(
+			'class' => 'form-class',
+		));
+		$this->add($select);
+			    
+		   
         
 		// Submit
 		$submit = new Element('submit');
 		$submit->setAttributes(array(
 			'type'  => 'submit',
-			'value' => 'Save',
+			'value' => 'Continue',
 			'class' => 'btn btn-primary btn-large',
 		));
 
@@ -113,31 +67,6 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 				
 	}
 	
-	/**
-	 *
-	 * @param string $class
-	 * @return array 
-	 */
-	public function getFieldMapping($class)
-	{
-            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $meta = $em->getClassMetadata($class);
-            return $meta->fieldMappings;
-	}
-	
-	/**
-	 *
-	 * @param string $class 
-	 */
-	public function setTitleFieldOptions($class)
-	{
-		$options = array('' => 'Choose a field name...');
-		foreach($this->getFieldMapping($class) as $field) {
-			$options[$field['fieldName']] = $field['fieldName'];
-		}
-		$this->get('title_field')->setAttribute('options', $options);		
-	}
-
 	public function getServiceLocator() {
 		return $this->serviceLocator;
 	}

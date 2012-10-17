@@ -173,7 +173,26 @@ class ModelController extends AbstractActionController {
         $id = $this->params('id');
 		$model = $repo->find($id);
 
-        return compact('model');
+        // Create the form
+        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Elements');   
+		$form->prepareElements();
+		
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+				
+                // Redirect
+                $this->redirect()->toRoute('wiss/model/elements/create', array(
+                    'id' => $model->getId(),
+					'element-config-class' => $form->get('class')->getValue(),
+                ));
+            }
+        }
+		
+		
+        return compact('model', 'form');
     }
 	
 	/**
@@ -181,7 +200,7 @@ class ModelController extends AbstractActionController {
 	 * @return array
 	 */
 	public function createElementAction()
-	{		
+	{				
 		// Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
@@ -189,7 +208,7 @@ class ModelController extends AbstractActionController {
 		$model = $repo->find($id);
 		
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');   
+        $form = $this->getServiceLocator()->get($this->params('element-config-class'));   
 		$form->prepareElements();
 		$form->bind(new \Wiss\Entity\ModelElement());
 

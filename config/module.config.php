@@ -143,9 +143,13 @@ return array(
 									'create' => array(
 										'type' => 'Segment',
 										'options' => array(
-											'route' => '/create',
+											'route' => '/create/[:element-config-class]',
+											'constraints' => array(
+												'element-config-class' => '[A-Z][a-zA-Z0-9_-]*',
+											),
 											'defaults' => array(
 												'action' => 'create-element',
+												'element-config-class' => '',
 											),
 										),
 									),
