@@ -35,8 +35,10 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 			      
 		// Add the select field with the available elements
 		$select = new Element\Select('element-config-class');
-		$select->setLabel('Choose an element');
 		$select->setValueOptions($valueOptions); 
+		$select->setOpttions(array(
+			'label' => 'Choose an element'
+		));
 		$select->setAttributes(array(
 			'class' => 'form-class',
 		));
@@ -47,7 +49,7 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 		$submit = new Element('submit');
 		$submit->setAttributes(array(
 			'type'  => 'submit',
-			'value' => 'Continue',
+			'value' => 'Add new element',
 			'class' => 'btn btn-primary btn-large',
 		));
 
