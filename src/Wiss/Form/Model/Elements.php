@@ -28,29 +28,20 @@ class Elements extends Form implements ServiceLocatorAwareInterface
     public function prepareElements()
     {                		
 		$this->setAttribute('class', 'form-horizontal');
-			
-						
-		$elements = new Fieldset('elements');
-		
-		$inputFilter = $this->getInputFilter();
-		$inputFilter->add(new Input('elements', array(
-			'required' => true,
-		)));
-                        
+			                        
         // Get the value options from the service manager config
         $config = $this->getServiceLocator()->get('config');
         $valueOptions = $config['element-config-forms'];
 			      
 		// Add the select field with the available elements
-		$select = new Element\Select('type');
-		$select->setLabel($field['fieldName']);
-		$select->setValueOptions(array('' => 'No element assigned yet...') + $valueOptions); 
+		$select = new Element\Select('element-config-class');
+		$select->setLabel('Choose an element');
+		$select->setValueOptions($valueOptions); 
 		$select->setAttributes(array(
 			'class' => 'form-class',
 		));
 		$this->add($select);
-			    
-		   
+			    		   
         
 		// Submit
 		$submit = new Element('submit');
@@ -62,6 +53,11 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 
 		$this->add($submit);
 
+		
+		$inputFilter = $this->getInputFilter();
+		$inputFilter->add(new Input('element-config-class', array(
+			'required' => true,
+		)));
 		$this->setInputFilter($inputFilter);
 	
 				
