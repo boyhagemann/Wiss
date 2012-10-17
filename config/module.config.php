@@ -145,7 +145,7 @@ return array(
 										'options' => array(
 											'route' => '/create/[:class]',
 											'constraints' => array(
-												'class' => '[A-Z][a-zA-Z0-9_-\]*',
+												'class' => '[A-Z][a-zA-Z0-9_-]*',
 											),
 											'defaults' => array(
 												'action' => 'create-element',

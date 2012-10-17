@@ -187,10 +187,13 @@ class ModelController extends AbstractActionController {
 
             if ($form->isValid()) {
 								
+				$class = $form->get('element-config-class')->getValue();
+				$encodedClass = str_replace('\\', '-', $class);
+				
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/elements/create', array(
                     'id' => $model->getId(),
-					'class' => $form->get('element-config-class')->getValue(),
+					'class' => $encodedClass,
                 ));
             }
         }
@@ -209,10 +212,11 @@ class ModelController extends AbstractActionController {
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
         $id = $this->params('id');
-		$model = $repo->find($id);
+		$model = $repo->find($id);		
 		
         // Create the form
-        $form = $this->getServiceLocator()->get($this->params('element-config-class'));   
+		$class = $this->buildClassNameFromUrlParam();
+        $form = $this->getServiceLocator()->get($class);   
 		$form->prepareElements();
 		$form->bind(new \Wiss\Entity\ModelElement());
 
