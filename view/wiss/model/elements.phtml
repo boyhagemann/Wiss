@@ -6,23 +6,17 @@
     <li><a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>">Export</a></li>
 </ul>
 
-<?php $form->prepare(); echo $this->form()->openTag($form) ?>
-
-<div class="control-group">
-	<ul class="unstyled list">
-	<?php foreach($form->get('elements') as $element) : ?>
-		<li>
-			<?php echo $this->formLabel($element->get('type')) ?>
-			<?php echo $this->formSelect($element->get('type')) ?>
-			<?php echo $this->formButton($element->get('trigger')) ?>
-			<?php echo $this->formHidden($element->get('configuration')) ?>
-		</li>
+<ul class="unstyled">
+	<?php foreach($model->getElements() as $element) : ?>
+	<li>
+		<h3><?php echo $element->getName() ?></h3>
+		<dl class="btn-group">
+			<a href="<?php echo $this->url('wiss/model/elements/configure', array('id' => $element->getId())) ?>" class="btn btn-small">Configure</a>
+		</dl>
+	</li>
 	<?php endforeach ?>
-	</ul>
-</div>
-	
-<div class="form-actions">
-	<?php echo $this->formElementWrapper($form->get('submit')) ?>
-</div>
+</ul>
 
-<?php echo $this->form()->closeTag() ?>
+<div class="btn-group">
+    <a href="<?php echo $this->url('wiss/model/elements/create') ?>" class="btn btn-large btn-primary">Add new element</a>
+</div>

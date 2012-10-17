@@ -130,7 +130,7 @@ return array(
 							'elements' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/elements/[:id]',
+									'route' => '/elements/',
 									'constraints' => array(
 										'id' => '[0-9]*',
 									),
@@ -138,6 +138,30 @@ return array(
 										'action' => 'elements',
 									),
 								),
+								'may_terminate' => true,
+								'child_routes' => array(
+									'create' => array(
+										'type' => 'Literal',
+										'options' => array(
+											'route' => '/create',
+											'defaults' => array(
+												'action' => 'create-element',
+											),
+										),
+									),
+									'configure' => array(
+										'type' => 'Segment',
+										'options' => array(
+											'route' => '/configure/[:id]',
+											'constraints' => array(
+												'id' => '[0-9]*',
+											),
+											'defaults' => array(
+												'action' => 'configure-element',
+											),
+										),
+									),
+								)
 							),
 							'export' => array(
 								'type' => 'Segment',

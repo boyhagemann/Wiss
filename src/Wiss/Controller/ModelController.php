@@ -171,6 +171,11 @@ class ModelController extends AbstractActionController {
         $id = $this->params('id');
 		$model = $repo->find($id);
 
+        return compact('model');
+    }
+	
+	public function createElementAction()
+	{		
         // Create the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Model\Elements');   
 		$form->setName('model');
@@ -198,9 +203,12 @@ class ModelController extends AbstractActionController {
                 ));
             }
         }
-
-        return compact('form', 'model');
-    }
+	}
+	
+	public function configureElementAction()
+	{
+		
+	}
     
     /*
      * @return boolean 
