@@ -14,10 +14,8 @@ use Zend\Form\Element;
 
 class Text extends Form
 {	    
-    public function __construct()
-    {        
-        parent::__construct('element-config');
-        
+    public function prepareElements()
+    {                
         // Label
         $label = new Element('label');
         $label->setAttributes(array(

@@ -1,28 +1,3 @@
-<h1>Model <em><?php echo $model->getTitle() ?></em></h1>
+<h1>Create new model element</h1>
 
-<ul class="nav nav-tabs">
-    <li><a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>">Properties</a></li>
-    <li class="active"><a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>">Elements</a></li>
-    <li><a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>">Export</a></li>
-</ul>
-
-<?php $form->prepare(); echo $this->form()->openTag($form) ?>
-
-<div class="control-group">
-	<ul class="unstyled list">
-	<?php foreach($form->get('elements') as $element) : ?>
-		<li>
-			<?php echo $this->formLabel($element->get('type')) ?>
-			<?php echo $this->formSelect($element->get('type')) ?>
-			<?php echo $this->formButton($element->get('trigger')) ?>
-			<?php echo $this->formHidden($element->get('configuration')) ?>
-		</li>
-	<?php endforeach ?>
-	</ul>
-</div>
-	
-<div class="form-actions">
-	<?php echo $this->formElementWrapper($form->get('submit')) ?>
-</div>
-
-<?php echo $this->form()->closeTag() ?>
+<?php $this->formRenderer($form) ?>

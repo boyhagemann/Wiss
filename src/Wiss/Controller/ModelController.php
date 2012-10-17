@@ -127,6 +127,7 @@ class ModelController extends AbstractActionController {
      */
     public function propertiesAction() 
 	{
+		// Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');				
         $id = $this->params('id');
@@ -166,6 +167,7 @@ class ModelController extends AbstractActionController {
      */
     public function elementsAction() 
 	{
+		// Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
         $id = $this->params('id');
@@ -174,13 +176,22 @@ class ModelController extends AbstractActionController {
         return compact('model');
     }
 	
+	/**
+	 * 
+	 * @return array
+	 */
 	public function createElementAction()
 	{		
+		// Get the model
+		$em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Model');		
+        $id = $this->params('id');
+		$model = $repo->find($id);
+		
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Elements');   
-		$form->setName('model');
-		$form->prepareElements($model);
-		$form->bind($model);
+        $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');   
+		$form->prepareElements();
+		$form->bind(new \Wiss\Entity\ModelElement());
 
         if ($this->getRequest()->isPost()) {
 			
@@ -188,12 +199,14 @@ class ModelController extends AbstractActionController {
 
             if ($form->isValid()) {
 				
-				// Merge the form values with the start data
-				$data = $form->getData() + $data;
+				// Get the modelElement from the form
+				$modelElement = $form->getData();
+				$modelElement->setModel($model);
 				
-                //...
-                
-                
+				// Save the new modelElement
+                $em->persist($modelElement);
+				$em->flush();
+				
                 // Show a flash message
                 $this->flashMessenger()->addMessage('The model is now created');
 
@@ -203,11 +216,49 @@ class ModelController extends AbstractActionController {
                 ));
             }
         }
+		
+		return compact('model', 'form');
 	}
 	
+	/**
+	 * 
+	 * @return array
+	 */
 	public function configureElementAction()
 	{
+		// Get the modelElement
+		$em = $this->getEntityManager();
+		$modelElement = $em->find('Wiss\Entity\ModelElement', $this->params('id'));		
 		
+        // Create the form
+        $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');   
+		$form->prepareElements();
+		$form->bind($modelElement);
+		
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+				
+				// Get the modelElement from the form
+				$modelElement = $form->getData();
+				
+				// Save the new modelElement
+                $em->persist($modelElement);
+				$em->flush();
+				
+                // Show a flash message
+                $this->flashMessenger()->addMessage('The model is now updated');
+
+                // Redirect
+                $this->redirect()->toRoute('wiss/model/elements', array(
+                    'id' => $modelElement->getModel()->getId()
+                ));
+            }
+        }
+		
+		return compact('modelElement', 'form');
 	}
     
     /*
@@ -284,19 +335,6 @@ class ModelController extends AbstractActionController {
         return str_replace('-', '\\', $this->params('class'));
 	}
     
-    /**
-     * 
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function elementConfigAction()
-    {
-        $formClass = $this->getRequest()->getQuery('form-class');
-        $form = $this->getServiceLocator()->get($formClass);
-        
-        return compact('form');
-    }
-
-
     /**
      * Read some useful information from the annotations regarding
      * list overviews
