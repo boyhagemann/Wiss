@@ -70,16 +70,16 @@ class ModelController extends AbstractActionController {
 
         if($class) {            
 			
-			// Return if a model already exists
-			if ($model) {
-
-				// Show a flash message
-				$this->flashMessenger()->addMessage('The model is already installed');
-
-				// Redirect
-				$this->redirect()->toRoute('wiss/content/' . $model->getSlug());
-				return false;
-			}
+//			// Return if a model already exists
+//			if ($model) {
+//
+//				// Show a flash message
+//				$this->flashMessenger()->addMessage('The model is already installed');
+//
+//				// Redirect
+//				$this->redirect()->toRoute('wiss/content/' . $model->getSlug());
+//				return false;
+//			}
 			
             // Get data from entity annotations
             $data = $this->getDataFromAnnotations($class);
