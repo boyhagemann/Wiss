@@ -77,6 +77,7 @@ class IndexController extends AbstractActionController
           $em->getClassMetadata('Wiss\Entity\Block'),
           $em->getClassMetadata('Wiss\Entity\Module'),
           $em->getClassMetadata('Wiss\Entity\Model'),
+          $em->getClassMetadata('Wiss\Entity\ModelElement'),
           $em->getClassMetadata('Wiss\Entity\Navigation'),
         );
         
