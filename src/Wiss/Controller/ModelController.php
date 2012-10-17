@@ -68,20 +68,19 @@ class ModelController extends AbstractActionController {
 		$title = $repo->buildTitleFromClass($class);
 		$model = $repo->findOneByEntityClass($class);
 
-        // Return if a model already exists
-        if ($model) {
+        if($class) {            
+			
+			// Return if a model already exists
+			if ($model) {
 
-            // Show a flash message
-            $this->flashMessenger()->addMessage('The model is already installed');
+				// Show a flash message
+				$this->flashMessenger()->addMessage('The model is already installed');
 
-            // Redirect
-            $this->redirect()->toRoute('wiss/content/' . $model->getSlug());
-
-            return false;
-        }
-
-        if($class) {
-            
+				// Redirect
+				$this->redirect()->toRoute('wiss/content/' . $model->getSlug());
+				return false;
+			}
+			
             // Get data from entity annotations
             $data = $this->getDataFromAnnotations($class);
             $data += array(
@@ -102,7 +101,7 @@ class ModelController extends AbstractActionController {
             if ($form->isValid()) {
 								
                 // Create the model
-                $model = $repo->createFromArray($form->getData());
+                $model = new \Wiss\Entity\Model();
                 
                 // Save the newly created model
                 $em->persist($model);
