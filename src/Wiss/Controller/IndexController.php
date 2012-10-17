@@ -137,7 +137,6 @@ class IndexController extends AbstractActionController
 		$model->setEntityClass('Wiss\Entity\Page');
 		$model->setControllerClass('Wiss\Controller\PageController');
 		$model->setFormClass('Wiss\Form\Page');
-		$model->setTitleField('title');
 		$em->persist($model);
 		
 		$em->flush();
