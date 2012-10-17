@@ -141,7 +141,7 @@ return array(
 								'may_terminate' => true,
 								'child_routes' => array(
 									'create' => array(
-										'type' => 'Literal',
+										'type' => 'Segment',
 										'options' => array(
 											'route' => '/create',
 											'defaults' => array(
@@ -154,7 +154,7 @@ return array(
 										'options' => array(
 											'route' => '/configure/[:id]',
 											'constraints' => array(
-												'id' => '[0-9]*',
+												'element-id' => '[0-9]*',
 											),
 											'defaults' => array(
 												'action' => 'configure-element',

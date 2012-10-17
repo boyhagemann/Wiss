@@ -11,12 +11,12 @@
 	<li>
 		<h3><?php echo $element->getName() ?></h3>
 		<dl class="btn-group">
-			<a href="<?php echo $this->url('wiss/model/elements/configure', array('id' => $element->getId())) ?>" class="btn btn-small">Configure</a>
+			<a href="<?php echo $this->url('wiss/model/elements/configure', array('id' => $model->getId(), 'element-id' => $element->getId())) ?>" class="btn btn-small">Configure</a>
 		</dl>
 	</li>
 	<?php endforeach ?>
 </ul>
 
 <div class="btn-group">
-    <a href="<?php echo $this->url('wiss/model/elements/create') ?>" class="btn btn-large btn-primary">Add new element</a>
+    <a href="<?php echo $this->url('wiss/model/elements/create', array('id' => $model->getId())) ?>" class="btn btn-large btn-primary">Add new element</a>
 </div>
