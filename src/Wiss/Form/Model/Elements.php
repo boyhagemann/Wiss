@@ -36,7 +36,7 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 		// Add the select field with the available elements
 		$select = new Element\Select('element-config-class');
 		$select->setValueOptions($valueOptions); 
-		$select->setOpttions(array(
+		$select->setOptions(array(
 			'label' => 'Choose an element'
 		));
 		$select->setAttributes(array(
