@@ -50,16 +50,10 @@ class Model
 	protected $controllerClass;
 	
 	/**
-	 * 
-     * @ORM\Column(nullable=true)
+	 *
+	 * @ORM\OneToMany(targetEntity="ModelElement", mappedBy="model")
 	 */
-	protected $titleField;
-	
-	/**
-	 * 
-     * @ORM\Column(type="array")
-	 */
-	protected $formConfig = array();
+	protected $elements;
 
 	public function getId() {
 		return $this->id;
@@ -80,7 +74,11 @@ class Model
 	public function getSlug() {
 		return $this->slug;
 	}
-	
+
+	public function setSlug($slug) {
+		$this->slug = $slug;
+	}
+
 	public function getEntityClass() {
 		return $this->entityClass;
 	}
@@ -88,15 +86,7 @@ class Model
 	public function setEntityClass($entityClass) {
 		$this->entityClass = $entityClass;
 	}
-	
-	public function getControllerClass() {
-		return $this->controllerClass;
-	}
 
-	public function setControllerClass($controllerClass) {
-		$this->controllerClass = $controllerClass;
-	}
-	
 	public function getFormClass() {
 		return $this->formClass;
 	}
@@ -104,21 +94,22 @@ class Model
 	public function setFormClass($formClass) {
 		$this->formClass = $formClass;
 	}
-	
-	public function getTitleField() {
-		return $this->titleField;
+
+	public function getControllerClass() {
+		return $this->controllerClass;
 	}
 
-	public function setTitleField($titleField) {
-		$this->titleField = $titleField;
-	}
-	
-	public function getFormConfig() {
-		return $this->formConfig;
+	public function setControllerClass($controllerClass) {
+		$this->controllerClass = $controllerClass;
 	}
 
-	public function setFormConfig(Array $formConfig) {
-		$this->formConfig = $formConfig;
+	public function getElements() {
+		return $this->elements;
 	}
+
+	public function setElements($elements) {
+		$this->elements = $elements;
+	}
+
 
 }
