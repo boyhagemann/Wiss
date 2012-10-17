@@ -130,7 +130,7 @@ return array(
 							'elements' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/elements/',
+									'route' => '/elements/[:id]',
 									'constraints' => array(
 										'id' => '[0-9]*',
 									),
@@ -143,13 +143,12 @@ return array(
 									'create' => array(
 										'type' => 'Segment',
 										'options' => array(
-											'route' => '/create/[:element-config-class]',
+											'route' => '/create/[:class]',
 											'constraints' => array(
-												'element-config-class' => '[A-Z][a-zA-Z0-9_-]*',
+												'class' => '[A-Z][a-zA-Z0-9_-\]*',
 											),
 											'defaults' => array(
 												'action' => 'create-element',
-												'element-config-class' => '',
 											),
 										),
 									),

@@ -186,11 +186,11 @@ class ModelController extends AbstractActionController {
             $form->setData($this->getRequest()->getPost());
 
             if ($form->isValid()) {
-				
+								
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/elements/create', array(
                     'id' => $model->getId(),
-					'element-config-class' => $form->get('element-config-class')->getValue(),
+					'class' => $form->get('element-config-class')->getValue(),
                 ));
             }
         }
