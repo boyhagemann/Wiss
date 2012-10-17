@@ -54,7 +54,7 @@ class Properties extends Form implements InputFilterProviderInterface
 	
 	public function setData($data) 
 	{		
-		if(!isset($data['class'])) {
+		if(!isset($data['entity_class'])) {
 			$this->remove('entity_class');
 			$this->add(array(
 				'type' => 'Zend\Form\Element\Hidden',

@@ -221,6 +221,7 @@ class ModelController extends AbstractActionController {
 				// Get the modelElement from the form
 				$modelElement = $form->getData();
 				$modelElement->setModel($model);
+				$modelElement->setFormClass(get_class($form));
 				
 				// Save the new modelElement
                 $em->persist($modelElement);
@@ -250,7 +251,7 @@ class ModelController extends AbstractActionController {
 		$modelElement = $em->find('Wiss\Entity\ModelElement', $this->params('id'));		
 		
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');   
+        $form = $this->getServiceLocator()->get($modelElement->getFormClass());   
 		$form->prepareElements();
 		$form->bind($modelElement);
 		

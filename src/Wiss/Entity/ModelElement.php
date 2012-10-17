@@ -22,6 +22,12 @@ class ModelElement
      * @ORM\Column
 	 */
 	protected $name;
+
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $formClass;
 	
 	/**
 	 *
@@ -50,7 +56,15 @@ class ModelElement
 	{
 		$this->name = $name;
 	}
+	
+	public function getFormClass() {
+		return $this->formClass;
+	}
 
+	public function setFormClass($formClass) {
+		$this->formClass = $formClass;
+	}
+	
 	public function getConfiguration() 
 	{
 		return $this->configuration;
