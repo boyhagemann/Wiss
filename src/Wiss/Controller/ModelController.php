@@ -92,7 +92,7 @@ class ModelController extends AbstractActionController {
 
         // Create the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
-		$form->prepareElements($data);
+		$form->prepareElements();
 		$form->setData($data);
 
         if ($this->getRequest()->isPost()) {
