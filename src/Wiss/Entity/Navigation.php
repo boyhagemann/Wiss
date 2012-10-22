@@ -83,7 +83,7 @@ class Navigation
 	
 	public function __construct()
 	{
-		$this->params = new ArrayCollection(array());
+		$this->params = new \ArrayCollection(array());
 	}
 
 	public function getId() {
