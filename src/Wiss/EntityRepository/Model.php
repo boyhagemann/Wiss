@@ -63,6 +63,14 @@ class Model extends \Doctrine\ORM\EntityRepository
         $repo = $em->getRepository('Wiss\Entity\Navigation');
         $repo->import($config);
 		$repo->export();
+		
+		// Bind the navigation node to the model
+		if(!$model->getNode()) {
+			$node = $repo->findOneBy(array('fullName' => $namespace));
+			$model->setNode($node);
+			$em->persist($model);
+			$em->flush();
+		}
     }
 	
 	
