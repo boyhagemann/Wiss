@@ -91,6 +91,11 @@ class ModelController extends AbstractActionController {
         }
 		else {
 			$model = new \Wiss\Entity\Model;
+			
+			// Create the defaults for the form
+			$data = array(
+				'entity_class' => 'Wiss\Entity\\' . $model->getTitle(),
+			);
 		}
 
         // Create the form
