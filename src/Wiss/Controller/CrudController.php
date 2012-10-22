@@ -287,7 +287,7 @@ class CrudController extends AbstractActionController
     public function getIndexQueryBuilder()
     {
         $entityClass = $this->getModel()->getEntityClass();
-        $qb = $this->getEntityManger()->getRepository($entityClass);
+        $qb = $this->getEntityManager()->getRepository($entityClass);
         return $qb;
     }
     
