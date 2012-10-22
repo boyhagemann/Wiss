@@ -187,7 +187,6 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateEntity(ExportForm $form)
     {
         $model = $form->getModel();
-        $elementData = $model->getFormConfig();        
         $className = $form->get('entity_class')->getValue();
         $namespace = substr($className, 0, strrpos($className, '\\'));
         $filename = $form->get('entity_path')->getValue();
