@@ -66,7 +66,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 		
 		// Bind the navigation node to the model
 		if(!$model->getNode()) {
-			$node = $repo->findOneBy(array('fullName' => $namespace));
+			$node = $repo->findOneBy(array('name' => $namespace));
 			$model->setNode($node);
 			$em->persist($model);
 			$em->flush();
