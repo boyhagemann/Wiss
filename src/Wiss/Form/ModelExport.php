@@ -174,11 +174,11 @@ class ModelExport extends Form
 		
 		// Preset the classes en paths, based on the model
 		$this->setData(array(
-			'controller_class' => $this->buildClassName('Wiss\Controller'),
+			'controller_class' => $this->buildClassName('Wiss\Controller\\'),
 			'controller_path' => $this->buildControllerPath(),
-			'form_class' => $this->buildClassName('Wiss\Form'),
+			'form_class' => $this->buildClassName('Wiss\Form\\'),
 			'form_path' => $this->buildFormPath(),
-			'entity_class' => $this->buildClassName('Wiss\Entity'),
+			'entity_class' => $this->buildClassName('Wiss\Entity\\'),
 			'entity_path' => $this->buildEntityPath(),
 		));
 		
@@ -234,10 +234,10 @@ class ModelExport extends Form
 	 * 
 	 * @return string
 	 */
-	public function buildClassName($namespace = '')
+	public function buildClassName($folderSeparator = '')
 	{
 		$entityClass = $this->getModel()->getEntityClass();
         $className = substr($entityClass, strrpos($entityClass, '\\') + 1);
-		return $namespace . $className;
+		return $folderSeparator . $className;
 	}
 }
