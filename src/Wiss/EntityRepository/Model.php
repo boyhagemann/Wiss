@@ -38,7 +38,7 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateNavigation(\Wiss\Entity\Model $model) 
 	{
-        $namespace = 'wiss/' . $model->getSlug();
+        $namespace = 'wiss-' . $model->getSlug();
         
         // Build the config, starting from navigation
         $config['navigation'] = array(
@@ -80,7 +80,7 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateRoutes(\Wiss\Entity\Model $model) 
 	{
-        $namespace = $model->getSlug();
+        $namespace = 'wiss-' . $model->getSlug();
         
         // Build the config, starting from router.routes
         $config['router']['routes'] = array(
