@@ -57,7 +57,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $editTemplate = 'crud/create';
+    protected $createTemplate = 'crud/create';
     
     
     /**
@@ -74,7 +74,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $dleteTemplate = 'crud/delete';
+    protected $deleteTemplate = 'crud/delete';
     
     /**
      * This action lists all the records for the model. It shows them in
