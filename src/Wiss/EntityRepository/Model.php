@@ -176,7 +176,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $generator = FileGenerator::fromArray($fileData);
         $generator->write();
 
-        return $namespace . '\\' . $className;
+        return $className;
     }
     
     /**
@@ -219,7 +219,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $generator->write();
 
         // Return the classname to be used later
-        return $namespace . '\\' . $className;
+        return $className;
     }
 		
     /**
@@ -309,7 +309,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $generator->write();
 
         // Return the classname to be used later
-        return $namespace . '\\' . $className;
+        return $className;
     }
 	
 	/**
