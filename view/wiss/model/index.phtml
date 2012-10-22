@@ -9,8 +9,7 @@
 		<h3><?php echo $model->getEntityClass() ?></h3>
 		<div class="btn-group">			
 			<?php if($model->getNode()) : ?>
-			<?php $route = $model->getNode()->getRoute() ?>
-			<a href="<?php echo $this->url($route->getFullName(), $route->getParams()) ?>" class="btn btn-primary btn-small">View model page</a>
+			<a href="<?php echo $this->url($model->getNode()->getRoute()->getFullName(), $model->getNode()->getParams()) ?>" class="btn btn-primary btn-small">View model page</a>
 			<?php endif ?>
 			<a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>" class="btn btn-small">Properties</a>
 			<a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>" class="btn btn-small">Elements</a>
