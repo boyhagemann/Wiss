@@ -80,6 +80,11 @@ class Navigation
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
+	
+	public function __construct()
+	{
+		$this->params = new ArrayCollection(array());
+	}
 
 	public function getId() {
 		return $this->id;
