@@ -53,7 +53,14 @@ class Model
 	 *
 	 * @ORM\OneToMany(targetEntity="ModelElement", mappedBy="model")
 	 */
-	protected $elements;
+	protected $elements;	
+	
+	/**
+	 *
+	 * @ORM\ManyToOne(targetEntity="Navigation")
+	 */
+	protected $node;
+	
 
 	public function getId() {
 		return $this->id;
@@ -111,5 +118,12 @@ class Model
 		$this->elements = $elements;
 	}
 
+	public function getNode() {
+		return $this->node;
+	}
+
+	public function setNode(Navigation $node) {
+		$this->node = $node;
+	}
 
 }
