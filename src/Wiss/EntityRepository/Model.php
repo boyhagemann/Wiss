@@ -154,7 +154,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$filename = $form->get('controller_path')->getValue();
 
         // Create the folder if it does not exist
-        if(!file(dirname($filename))) {
+        if(!file_exists(dirname($filename))) {
             @mkdir(dirname($filename), 0777, true);
         }
         
@@ -192,7 +192,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $filename = $form->get('entity_path')->getValue();
         
         // Create the folder if it does not exist
-        if(!file(dirname($filename))) {
+        if(!file_exists(dirname($filename))) {
             @mkdir(dirname($filename), 0777, true);
         }
         
@@ -230,7 +230,6 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateForm(ExportForm $form) 
 	{
         $model = $form->getModel();
-        $elementData = $model->getFormConfig();
         $className = $form->get('form_class')->getValue();
         $namespace = substr($className, 0, strrpos($className, '\\'));
         $filename = $form->get('form_path')->getValue();
@@ -241,10 +240,12 @@ class Model extends \Doctrine\ORM\EntityRepository
         $body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
 
         // Add the elements 
-        foreach ($elementData as $name => $element) {
+        foreach ($model->getElements() as $element) {
 
+			$name = $element->getName();
+			
 			// Decode the element config
-			$vars = urldecode($element['configuration']);
+			$vars = urldecode($element->getConfiguration());
 			parse_str($vars, $output);
 			
 			// Check if the element has a type or config, otherwis
@@ -277,7 +278,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 
 
         // Create the folder if it does not exist
-        if(!file(dirname($filename))) {
+        if(!file_exists(dirname($filename))) {
             @mkdir(dirname($filename), 0777, true);
         }
 					
