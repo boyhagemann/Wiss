@@ -81,11 +81,6 @@ class Navigation
      */
     private $children;
 	
-	public function __construct()
-	{
-		$this->params = new \ArrayCollection(array());
-	}
-
 	public function getId() {
 		return $this->id;
 	}
