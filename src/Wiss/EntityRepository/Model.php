@@ -229,7 +229,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 
 		
 		// Export to the database        
-        $tool = new SchemaTool($em);
+        $tool = new SchemaTool($this->getEntityManager());
         $tool->createSchema($classes);
 		
         // Return the classname to be used later
