@@ -137,7 +137,7 @@ class Model
 		$parts = array();
 		foreach($this->getElements() as $element) {
 			if($element->getActAsLabel()) {
-				$getter = 'get' . ucfirst($element->getLabel());
+				$getter = 'get' . ucfirst($element->getName());
 				$parts[] = $entity->$getter();
 			}
 		}
