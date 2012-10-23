@@ -4,6 +4,9 @@
     <li class="active"><a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>">Properties</a></li>
     <li><a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>">Elements</a></li>
     <li><a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>">Export</a></li>
+	<?php if($model->getNode()) : ?>
+    <li><a href="<?php echo $this->url($model->getNode()->getRoute()->getFullName(), (array) $model->getNode()->getParams()) ?>">View records</a></li>	
+	<?php endif ?>
 </ul>
 
 <?php echo $this->formRenderer($form) ?>
