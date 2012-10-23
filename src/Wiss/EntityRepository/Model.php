@@ -207,6 +207,11 @@ class Model extends \Doctrine\ORM\EntityRepository
 		// Start a builder to add data to the metadata object
 		$builder = new ClassMetadataBuilder($info);
 		
+		// Add the primary key
+		$builder->addField('id', 'integer')->isPrimaryKey()
+										   ->generatedValue()
+										   ->build();
+		
 		// Add the model elements
 		foreach($model->getElements() as $element) {
 			$builder->addField($element->getName(), 'string');
