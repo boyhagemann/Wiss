@@ -112,6 +112,8 @@ class CrudController extends AbstractActionController
         $form       = $this->getForm();
         $request    = $this->getRequest();
 		
+		$form->bind($entity);
+		
         // Check if data is posted
 		if($request->isPost()) {
 			
