@@ -259,7 +259,8 @@ class Model extends \Doctrine\ORM\EntityRepository
         $body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
 
         // Add the elements 
-        foreach ($model->getElements() as $element) {
+//        foreach ($model->getElements() as $element) {
+        foreach (array() as $element) {
 
 			$name = $element->getName();
 			
