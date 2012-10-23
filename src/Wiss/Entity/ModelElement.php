@@ -27,6 +27,12 @@ class ModelElement
 	 * 
      * @ORM\Column
 	 */
+	protected $label;
+
+	/**
+	 * 
+     * @ORM\Column
+	 */
 	protected $formClass;
 	
 	/**
@@ -41,6 +47,11 @@ class ModelElement
 	 */
 	protected $model;
 	
+	/**
+	 *
+     * @ORM\Column(type="boolean")
+	 */
+	protected $actAsLabel;
 	
 	public function getId() 
 	{
@@ -57,6 +68,14 @@ class ModelElement
 		$this->name = $name;
 	}
 	
+	public function getLabel() {
+		return $this->label;
+	}
+
+	public function setLabel($label) {
+		$this->label = $label;
+	}
+
 	public function getFormClass() {
 		return $this->formClass;
 	}
@@ -83,6 +102,13 @@ class ModelElement
 		$this->model = $model;
 	}
 
+	public function getActAsLabel() {
+		return $this->actAsLabel;
+	}
+
+	public function setActAsLabel($actAsLabel) {
+		$this->actAsLabel = $actAsLabel;
+	}
 
 
 }

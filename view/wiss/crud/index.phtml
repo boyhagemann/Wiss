@@ -2,12 +2,13 @@
 
 <div class="form-actions">
 	<a href="<?php echo $this->url($routeName . '/create') ?>" class="btn btn-primary">Create new <?php echo $model->getTitle() ?></a>
+	<a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>" class="btn btn-primary">Change model properties</a>
 </div>
 
 <ul class="unstyled">
 	<?php foreach($entities as $entity) : ?>
 	<li>
-		<h3><?php echo $entity->getId() ?></h3>
+		<h3><?php echo $model->buildLabel($entity) ?></h3>
 		<dl>
 			<a href="<?php echo $this->url($routeName . '/edit', array('id' => $entity->getId())) ?>" class="btn btn-primary btn-small">Edit</a>
 			<a href="<?php echo $this->url($routeName . '/delete', array('id' => $entity->getId())) ?>" class="btn btn-small">Delete</a>

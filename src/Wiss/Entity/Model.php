@@ -125,5 +125,21 @@ class Model
 	public function setNode(Navigation $node) {
 		$this->node = $node;
 	}
-
+	
+	/**
+	 * 
+	 * @param StdClass $entity
+	 * @param string $separator
+	 * @return string
+	 */
+	public function buildLabel($entity, $separator = ' - ')
+	{
+		$parts = array();
+		foreach($this->getElements() as $element) {
+			if($element->getActAsLabel()) {
+				$parts[] = $element->getLabel();
+			}
+		}
+		return implode($separator, $parts);
+	}
 }
