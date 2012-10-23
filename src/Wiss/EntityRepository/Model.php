@@ -10,6 +10,7 @@ use Wiss\Form\ModelExport as ExportForm;
 use Doctrine\ORM\Tools\EntityGenerator;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
+use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * 
@@ -202,7 +203,8 @@ class Model extends \Doctrine\ORM\EntityRepository
         		
 
 		// Start a new metadata class
-		$info = new ClassMetadata($className);
+		$info = new ClassMetadata($className);		
+        $classes = array($info);
 
 		// Start a builder to add data to the metadata object
 		$builder = new ClassMetadataBuilder($info);
@@ -223,8 +225,13 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$generator->setRegenerateEntityIfExists(true);	// this will overwrite the existing classes
 		$generator->setGenerateStubMethods(true);
 		$generator->setGenerateAnnotations(true);
-		$generator->generate(array($info), 'module/Application/src');
+		$generator->generate($classes, 'module/Application/src');
 
+		
+		// Export to the database        
+        $tool = new SchemaTool($em);
+        $tool->createSchema($classes);
+		
         // Return the classname to be used later
         return $className;
     }
