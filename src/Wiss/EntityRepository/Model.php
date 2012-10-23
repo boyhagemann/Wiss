@@ -192,8 +192,9 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateEntity(ExportForm $form)
     {
         $model = $form->getModel();
-        $className = $form->get('entity_class')->getValue();
-        $namespace = substr($className, 0, strrpos($className, '\\'));
+        $class = $form->get('entity_class')->getValue();
+        $className = substr($class, strrpos($class, '\\') + 1);
+        $namespace = substr($class, 0, strrpos($class, '\\'));
         $filename = $form->get('entity_path')->getValue();
         
         // Create the folder if it does not exist
@@ -203,8 +204,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         		
 
 		// Start a new metadata class
-		$info = new ClassMetadata($className);		
-        $classes = array($info);
+		$info = new ClassMetadata($class);	
 
 		// Start a builder to add data to the metadata object
 		$builder = new ClassMetadataBuilder($info);
@@ -225,15 +225,15 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$generator->setRegenerateEntityIfExists(true);	// this will overwrite the existing classes
 		$generator->setGenerateStubMethods(true);
 		$generator->setGenerateAnnotations(true);
-		$generator->generate($classes, 'module/Application/src');
+		$generator->generate(array($info), 'module/Application/src');
 
 		
 		// Export to the database        
         $tool = new SchemaTool($this->getEntityManager());
-        $tool->createSchema($classes);
+        $tool->createSchema(array($className));
 		
         // Return the classname to be used later
-        return $className;
+        return $class;
     }
 		
     /**
