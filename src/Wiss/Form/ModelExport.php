@@ -174,11 +174,11 @@ class ModelExport extends Form
 		
 		// Preset the classes en paths, based on the model
 		$this->setData(array(
-			'controller_class' => $this->buildClassName('Wiss\Controller\\'),
+			'controller_class' => $this->buildClassName('Application\Controller\\'),
 			'controller_path' => $this->buildControllerPath(),
-			'form_class' => $this->buildClassName('Wiss\Form\\'),
+			'form_class' => $this->buildClassName('Application\Form\\'),
 			'form_path' => $this->buildFormPath(),
-			'entity_class' => $this->buildClassName('Wiss\Entity\\'),
+			'entity_class' => $this->buildClassName('Application\Entity\\'),
 			'entity_path' => $this->buildEntityPath(),
 		));
 		
@@ -203,7 +203,7 @@ class ModelExport extends Form
 	 */
 	public function buildControllerPath()
 	{
-        $folder = 'module/Application/src/Wiss/Controller';
+        $folder = 'module/Application/src/Application/Controller';
         $filename = sprintf('%s/%sController.php', $folder, $this->buildClassName());
 		return $filename;
 	}
@@ -214,7 +214,7 @@ class ModelExport extends Form
 	 */
 	public function buildFormPath()
 	{
-        $folder = 'module/Application/src/Wiss/Form';
+        $folder = 'module/Application/src/Application/Form';
         $filename = sprintf('%s/%s.php', $folder, $this->buildClassName());
 		return $filename;
 	}
@@ -225,7 +225,7 @@ class ModelExport extends Form
 	 */
 	public function buildEntityPath()
 	{
-        $folder = 'module/Application/src/Wiss/Entity';
+        $folder = 'module/Application/src/Application/Entity';
         $filename = sprintf('%s/%s.php', $folder, $this->buildClassName());
 		return $filename;
 	}
