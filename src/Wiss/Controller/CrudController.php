@@ -132,9 +132,8 @@ class CrudController extends AbstractActionController
 				$this->flashMessenger()->addMessage('Create new record succesfully');
 				
 				// Redirect
-				$this->redirect()->toRoute('wiss/crud', array(
-					'name' => $model->getSlug(),
-				));
+				$routeName = $this->getMainRoute()->getFullName();
+				$this->redirect()->toRoute($routeName);
 			}
 		}
 		
@@ -266,6 +265,15 @@ class CrudController extends AbstractActionController
     {
         $this->model = $model;
     }
+	
+	/**
+	 * 
+	 * @return Wiss\Entity\Route
+	 */
+	public function getMainRoute()
+	{
+		return $this->getModel()->getNode()->getRoute();
+	}
     
     /**
      * Get a list of entities
