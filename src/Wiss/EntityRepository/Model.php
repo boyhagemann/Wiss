@@ -208,7 +208,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$builder = new ClassMetadataBuilder($info);
 		
 		// Add the primary key
-		$builder->addField('id', 'integer')->isPrimaryKey()
+		$builder->createField('id', 'integer')->isPrimaryKey()
 										   ->generatedValue()
 										   ->build();
 		
