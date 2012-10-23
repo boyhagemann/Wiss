@@ -49,7 +49,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $indexTemplate = 'crud/index';
+    protected $indexTemplate = 'wiss/crud/index';
 	
     /**
      * The template used for the createAction. It show a form to
@@ -57,7 +57,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $createTemplate = 'crud/create';
+    protected $createTemplate = 'wiss/crud/create';
     
     
     /**
@@ -66,7 +66,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $editTemplate = 'crud/edit';
+    protected $editTemplate = 'wiss/crud/edit';
     
     /**
      * The template used for the deleteAction. It shows a form to 
@@ -74,7 +74,7 @@ class CrudController extends AbstractActionController
      *
      * @var string
      */
-    protected $deleteTemplate = 'crud/delete';
+    protected $deleteTemplate = 'wiss/crud/delete';
     
     /**
      * This action lists all the records for the model. It shows them in
