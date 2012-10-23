@@ -309,6 +309,7 @@ class CrudController extends AbstractActionController
      */
     public function createEntity()
     {       
+        $model = $this->getModel();
         $entityClass = $model->getEntityClass();
         return new $entityClass();
     }
