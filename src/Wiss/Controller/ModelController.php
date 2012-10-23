@@ -94,7 +94,7 @@ class ModelController extends AbstractActionController {
 			
 			// Create the defaults for the form
 			$data = array(
-				'entity_class' => 'Wiss\Entity\\' . $model->getTitle(),
+				'entity_class' => 'Application\Entity\\' . $model->getTitle(),
 			);
 		}
 
