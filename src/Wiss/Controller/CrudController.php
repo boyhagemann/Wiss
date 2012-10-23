@@ -87,12 +87,11 @@ class CrudController extends AbstractActionController
         $model = $this->getModel();
 		$entities = $this->getEntities();
 		
-        // Build the getter method to render the label for
-        // the list.
-		$labelGetter = 'get' . ucfirst($model->getTitleField());
-		
+		// Get the main url for
+		$routeName = $model->getNode()->getRoute()->getFullName();
+				
 		// Create the params for the view
-		$params = compact('model', 'entities', 'labelGetter');
+		$params = compact('model', 'entities', 'routeName');
 		
 		// Create view model
 		$viewModel = new ViewModel($params);
