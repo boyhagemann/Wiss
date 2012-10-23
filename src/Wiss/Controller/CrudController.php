@@ -334,6 +334,7 @@ class CrudController extends AbstractActionController
         }
         
         // Build the new form
+        $model = $this->getModel();
     	$class = $model->getFormClass();
         $form = new $class();
         
