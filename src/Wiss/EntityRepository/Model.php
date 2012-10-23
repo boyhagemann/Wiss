@@ -7,6 +7,10 @@ use Zend\Code\Generator\PropertyGenerator;
 use Gedmo\Sluggable\Util\Urlizer;
 use Wiss\Form\ModelExport as ExportForm;
 
+use Doctrine\ORM\Tools\EntityGenerator;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
+
 /**
  * 
  */
@@ -195,28 +199,26 @@ class Model extends \Doctrine\ORM\EntityRepository
         if(!file_exists(dirname($filename))) {
             @mkdir(dirname($filename), 0777, true);
         }
-        
-        // Build the file holding the php class
-        $fileData = array(
-            'filename' => $filename,
-            'namespace' => $namespace,
-            'uses' => array(
-                array('Doctrine\ORM\Mapping', 'ORM'),
-            ),
-            'class' => array(
-                'name' => $className,
-                'properties' => array(
-                    array(
-                        'name' => 'test',
-                        'visibility' => 'protected',
-                    )
-                )
-            ),
-        );
+        		
 
-        // Generate the file and save it to disk
-        $generator = FileGenerator::fromArray($fileData);
-        $generator->write();
+		// Start a new metadata class
+		$info = new ClassMetadata($className);
+
+		// Start a builder to add data to the metadata object
+		$builder = new ClassMetadataBuilder($info);
+		
+		// Add the model elements
+		foreach($model->getElements() as $element) {
+			$builder->addField($element->getName(), 'string');
+		}
+
+		// Build the entity with the generator
+		$generator = new EntityGenerator();
+		$generator->setUpdateEntityIfExists(true);	// only update if class already exists
+		$generator->setRegenerateEntityIfExists(true);	// this will overwrite the existing classes
+		$generator->setGenerateStubMethods(true);
+		$generator->setGenerateAnnotations(true);
+		$generator->generate(array($info), 'modules/Application/src');
 
         // Return the classname to be used later
         return $className;
