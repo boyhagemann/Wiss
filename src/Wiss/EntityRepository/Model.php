@@ -193,7 +193,6 @@ class Model extends \Doctrine\ORM\EntityRepository
     {
         $model = $form->getModel();
         $class = $form->get('entity_class')->getValue();
-        $className = substr($class, strrpos($class, '\\') + 1);
         $namespace = substr($class, 0, strrpos($class, '\\'));
         $filename = $form->get('entity_path')->getValue();
         
@@ -230,7 +229,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 		
 		// Export to the database        
         $tool = new SchemaTool($this->getEntityManager());
-        $tool->createSchema(array($className));
+        $tool->createSchema(array($class));
 		
         // Return the classname to be used later
         return $class;
