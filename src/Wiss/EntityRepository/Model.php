@@ -230,7 +230,12 @@ class Model extends \Doctrine\ORM\EntityRepository
 		// Export to the database       
 		$classes[] = $this->getEntityManager()->getClassMetadata($class);
         $tool = new SchemaTool($this->getEntityManager());
-        $tool->createSchema($classes);
+		try {
+			$tool->createSchema($classes);
+		}
+		catch(\Exception $e) {
+			
+		}
 		
         // Return the classname to be used later
         return $class;
