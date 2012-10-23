@@ -218,7 +218,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$generator->setRegenerateEntityIfExists(true);	// this will overwrite the existing classes
 		$generator->setGenerateStubMethods(true);
 		$generator->setGenerateAnnotations(true);
-		$generator->generate(array($info), 'modules/Application/src');
+		$generator->generate(array($info), 'module/Application/src');
 
         // Return the classname to be used later
         return $className;
