@@ -116,13 +116,21 @@ class ModelController extends AbstractActionController {
                 $em->persist($model);
                 $em->flush();
 
-                // Create new routes and navigation				
-                $repo->generateRoutes($model);
-                $repo->generateNavigation($model);
-
                 // Generate the entity
                 $form = $this->getExportForm($model);
                 $repo->generateEntity($form);
+                
+                // Generate controller                
+                $controllerClass = $repo->generateController($form);
+                $model->setControllerClass($controllerClass);
+                
+                // Generate form
+                $formClass = $repo->generateForm($form);
+                $model->setFormClass($formClass);                
+
+                // Create new routes and navigation				
+                $repo->generateRoutes($model);
+                $repo->generateNavigation($model);
                 
                 // Save the newly created model
                 $em->persist($model);
