@@ -72,21 +72,35 @@ class Navigation extends NestedTreeRepository
 		}
 		else {
 
-			$navigation = new \Wiss\Entity\Navigation;
-			$navigation->setLabel($data['label']);
-			$navigation->setParent($parent);
-			$navigation->setName($name);
-			if(isset($data['params'])) {
-				$navigation->setParams($data['params']);
-			}
-			
 			if(isset($data['route'])) {
 				$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
 					'fullName' => $data['route']
 				));
-				$navigation->setRoute($route);	
+                
+                if(!$route) {
+                    throw new \Exception(sprintf('route "%s" not found', $data['route']));
+                }
 			}
-			
+            
+            if($parent && $route) {
+                $navigation = $em->getRepository('Wiss\Entity\Navigation')->findOneBy(array(
+					'parent' => $parent->getId(),
+                    'route' => $route->getId(),
+				));
+            }
+            
+            if(!$navigation) {
+                $navigation = new \Wiss\Entity\Navigation;
+                $navigation->setRoute($route);
+                $navigation->setParent($parent);
+            }
+				
+			$navigation->setLabel($data['label']);
+			$navigation->setName($name);
+			if(isset($data['params'])) {
+				$navigation->setParams($data['params']);
+			}
+						
 			$em->persist($navigation);		
 
 			if(isset($data['pages'])) {
