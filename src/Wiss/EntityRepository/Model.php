@@ -44,59 +44,42 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateNavigation(\Wiss\Entity\Model $model) 
 	{
         $namespace = 'wiss-' . $model->getSlug();
+        $baseRoute = 'wiss/model/' . $namespace;
         
         // Build the config, starting from navigation
         $config['navigation'] = array(
             $namespace => array(
                 'label' => $model->getTitle(),
-                'route' => $namespace,
+                'route' => $baseRoute,
                 'params' => array(
                     'id' => $model->getId(),
                 ),
 				'pages' => array(
 					'records' => array(
 						'label' => 'Records',
-						'route' => $namespace,
-						'params' => array(
-							'id' => $model->getId(),
-						),
+						'route' => $baseRoute,
 						'pages' => array(
 							'create' => array(
 								'label' => 'Create',
-								'route' => $namespace . '/create',
-                                'params' => array(
-                                    'id' => $model->getId(),
-                                )
+								'route' => $baseRoute . '/create',
 							),
 							'edit' => array(
 								'label' => 'Edit',
-								'route' => $namespace . '/edit',
-                                'params' => array(
-                                    'id' => $model->getId(),
-                                )
+								'route' => $baseRoute . '/edit',
 							),
 						)
 					),
 					'properties' => array(
 						'label' => 'Properties',
 						'route' => 'wiss/model/properties',
-						'params' => array(
-							'id' => $model->getId(),
-						)
 					),
 					'elements' => array(
 						'label' => 'Elements',
 						'route' => 'wiss/model/elements',
-						'params' => array(
-							'id' => $model->getId(),
-						)
 					),
 					'export' => array(
 						'label' => 'Export',
 						'route' => 'wiss/model/export',
-						'params' => array(
-							'id' => $model->getId(),
-						)
 					),
 				)
             )
@@ -127,7 +110,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $namespace = 'wiss-' . $model->getSlug();
         
         // Build the config, starting from router.routes
-        $config['router']['routes'] = array(
+        $config['router']['routes']['wiss']['child_routes']['model']['child_routes'] = array(
             $namespace => array(
                 'type' => 'Literal',
                 'may_terminate' => true,
