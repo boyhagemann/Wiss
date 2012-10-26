@@ -113,6 +113,8 @@ class ModelController extends AbstractActionController {
 
                 // Get the model
                 $model = $form->getData();
+                $em->persist($model);
+                $em->flush();
 
                 // Create new routes and navigation				
                 $repo->generateRoutes($model);
