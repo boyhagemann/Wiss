@@ -120,7 +120,7 @@ return array(
 								'options' => array(
 									'route' => '/[:slug]/properties',
 									'constraints' => array(
-										'slug' => '[A-Z][a-zA-Z0-9_-]*',
+										'slug' => '[a-zA-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
 										'action' => 'properties',
@@ -132,7 +132,7 @@ return array(
 								'options' => array(
 									'route' => '/[:slug]/elements',
 									'constraints' => array(
-										'slug' => '[A-Z][a-zA-Z0-9_-]*',
+										'slug' => '[a-zA-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
 										'action' => 'elements',
@@ -171,7 +171,7 @@ return array(
 								'options' => array(
 									'route' => '/[:slug]/export',
 									'constraints' => array(
-										'slug' => '[A-Z][a-zA-Z0-9_-]*',
+										'slug' => '[a-zA-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
 										'action' => 'export',
