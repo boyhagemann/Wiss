@@ -270,7 +270,7 @@ return array(
 			),
 			'content' => array(
 				'label' => 'Content',
-				'route' => 'wiss/page',
+				'route' => 'wiss/model',
 				'pages' => array(
 					'page' => array(
 						'label' => 'Pages',
