@@ -43,18 +43,17 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateNavigation(\Wiss\Entity\Model $model) 
 	{
-		$baseRoute = $model->getNode()->getRoute();
         $namespace = 'wiss-' . $model->getSlug();
         
         // Build the config, starting from navigation
         $config['navigation'] = array(
             $namespace => array(
                 'label' => $model->getTitle(),
-                'route' => $baseRoute,
+                'route' => $namespace,
 				'pages' => array(
 					'records' => array(
 						'label' => 'Records',
-						'route' => $baseRoute,
+						'route' => $namespace,
 						'pages' => array(
 							'create' => array(
 								'label' => 'Create',

@@ -10,6 +10,7 @@
 
 namespace Wiss\Controller;
 
+use Wiss\Entity\Model;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Code\Scanner\FileScanner;
@@ -90,7 +91,7 @@ class ModelController extends AbstractActionController {
             );
         }
 		else {
-			$model = new \Wiss\Entity\Model;
+			$model = new Model;
 			
 			// Create the defaults for the form
 			$data = array(
@@ -117,6 +118,10 @@ class ModelController extends AbstractActionController {
                 $repo->generateRoutes($model);
                 $repo->generateNavigation($model);
 
+                // Generate the entity
+                $form = $this->getExportForm($model);
+                $repo->generateEntity($form);
+                
                 // Save the newly created model
                 $em->persist($model);
                 $em->flush();
@@ -308,9 +313,7 @@ class ModelController extends AbstractActionController {
         $id = $this->params('id');
 		$model = $repo->find($id);
 		
-        $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
-		$form->prepareElements();
-		$form->setModel($model);
+        $form = $this->getExportForm($model);
 		
         if ($this->getRequest()->isPost()) {
 			
@@ -362,6 +365,19 @@ class ModelController extends AbstractActionController {
         return compact('form', 'model');
     }
 	
+    /**
+     * 
+     * @param Wiss\Entity\Model $model
+     * @return Wiss\Form\ModelExport
+     */
+    public function getExportForm(Model $model)
+    {
+        $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
+		$form->prepareElements();
+		$form->setModel($model);
+        return $form;
+    }
+    
 	/**
      * Get the class from the url params
 	 * 
