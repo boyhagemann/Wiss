@@ -124,6 +124,7 @@ return array(
 									),
 									'defaults' => array(
 										'action' => 'properties',
+                                        'id' => null,
 									),
 								),
 							),
@@ -136,6 +137,7 @@ return array(
 									),
 									'defaults' => array(
 										'action' => 'elements',
+                                        'id' => null,
 									),
 								),
 								'may_terminate' => true,
@@ -175,6 +177,7 @@ return array(
 									),
 									'defaults' => array(
 										'action' => 'export',
+                                        'id' => null,
 									),
 								),
 							),
