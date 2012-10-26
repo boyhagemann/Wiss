@@ -41,6 +41,12 @@ class Block
      * @ORM\Column
 	 */
 	protected $action;
+    
+	/**
+	 * 
+     * @ORM\Column(type="boolean")
+	 */
+	protected $available = false;    
 
 	public function getId() {
 		return $this->id;
@@ -74,5 +80,12 @@ class Block
 		$this->action = $action;
 	}
 
+    public function isAvailable() {
+        return $this->available;
+    }
+
+    public function setAvailable($available) {
+        $this->available = $available;
+    }
 
 }

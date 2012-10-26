@@ -140,6 +140,15 @@ class IndexController extends AbstractActionController
 		$model->setFormClass('Wiss\Form\Page');
 		$em->persist($model);
 		
+        // Insert block
+        $block = new \Wiss\Entity\Block;
+        $block->setTitle('Available blocks');
+        $block->setAvailable(true);
+        $block->setController('Wiss\Controller\Block');
+        $block->setAction('index');
+        $em->persist($block);
+        
+        
 		$em->flush();
 		
 		// Import and export the route and navigation config		
