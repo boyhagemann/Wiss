@@ -244,7 +244,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 										   ->build();
 		
 		// Add the model elements
-		foreach($model->getElements() as $element) {
+		foreach((array)$model->getElements() as $element) {
 			$builder->addField($element->getName(), 'string');
 		}
 
