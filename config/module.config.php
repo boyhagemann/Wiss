@@ -267,10 +267,6 @@ return array(
 			'navigation' => array(
 				'label' => 'Navigation',
 				'route' => 'wiss/navigation',
-			),
-			'content' => array(
-				'label' => 'Content',
-				'route' => 'wiss/model',
 				'pages' => array(
 					'page' => array(
 						'label' => 'Pages',
@@ -287,6 +283,10 @@ return array(
 						)
 					)
 				)
+			),
+			'content' => array(
+				'label' => 'Content',
+				'route' => 'wiss/model',
 			),
 			'administration' => array(
 				'label' => 'Administration',
