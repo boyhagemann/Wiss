@@ -200,7 +200,7 @@ class ModelController extends AbstractActionController {
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
 		$model = $repo->findOneBy(array(
-            'slug' => $this->params('id')
+            'slug' => $this->params('slug')
         ));
 
         // Create the form
@@ -323,7 +323,7 @@ class ModelController extends AbstractActionController {
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
 		$model = $repo->findOneBy(array(
-            'slug' => $this->params('id')
+            'slug' => $this->params('slug')
         ));
 		
         $form = $this->getExportForm($model);
