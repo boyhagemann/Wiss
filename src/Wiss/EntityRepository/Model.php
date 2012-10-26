@@ -50,13 +50,13 @@ class Model extends \Doctrine\ORM\EntityRepository
             $namespace => array(
                 'label' => $model->getTitle(),
                 'route' => $namespace,
+                'params' => array(
+                    'id' => $model->getId(),
+                ),
 				'pages' => array(
 					'records' => array(
 						'label' => 'Records',
 						'route' => $namespace,
-						'params' => array(
-							'id' => $model->getId(),
-						),
 						'pages' => array(
 							'create' => array(
 								'label' => 'Create',
@@ -71,23 +71,14 @@ class Model extends \Doctrine\ORM\EntityRepository
 					'properties' => array(
 						'label' => 'Properties',
 						'route' => 'wiss/model/properties',
-						'params' => array(
-							'id' => $model->getId(),
-						)
 					),
 					'elements' => array(
 						'label' => 'Elements',
 						'route' => 'wiss/model/elements',
-						'params' => array(
-							'id' => $model->getId(),
-						)
 					),
 					'export' => array(
 						'label' => 'Export',
 						'route' => 'wiss/model/export',
-						'params' => array(
-							'id' => $model->getId(),
-						)
 					),
 				)
             )
