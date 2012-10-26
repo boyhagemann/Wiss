@@ -109,14 +109,18 @@ class ModelController extends AbstractActionController {
             $form->setData($this->getRequest()->getPost());
 
             if ($form->isValid()) {
-								
+
                 // Get the model
-				$model = $form->getData();
-                
+                $model = $form->getData();
+
+                // Create new routes and navigation				
+                $repo->generateRoutes($model);
+                $repo->generateNavigation($model);
+
                 // Save the newly created model
                 $em->persist($model);
                 $em->flush();
-                
+
                 // Show a flash message
                 $this->flashMessenger()->addMessage('The model is now created');
 
