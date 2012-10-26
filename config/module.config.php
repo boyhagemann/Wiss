@@ -118,26 +118,24 @@ return array(
 							'properties' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/properties/[:id]',
+									'route' => '/[:slug]/properties',
 									'constraints' => array(
-										'id' => '[0-9]*',
+										'slug' => '[A-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
 										'action' => 'properties',
-                                        'id' => null,
 									),
 								),
 							),
 							'elements' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/elements/[:id]',
+									'route' => '/[:slug]/elements',
 									'constraints' => array(
-										'id' => '[0-9]*',
+										'slug' => '[A-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
 										'action' => 'elements',
-                                        'id' => null,
 									),
 								),
 								'may_terminate' => true,
@@ -171,13 +169,12 @@ return array(
 							'export' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/export/[:id]',
+									'route' => '/[:slug]/export',
 									'constraints' => array(
-										'id' => '[0-9]*',
+										'slug' => '[A-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
 										'action' => 'export',
-                                        'id' => null,
 									),
 								),
 							),

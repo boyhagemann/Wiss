@@ -43,12 +43,11 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateNavigation(\Wiss\Entity\Model $model) 
 	{
-        $namespace = 'wiss-' . $model->getSlug();
-        $baseRoute = 'wiss/model/' . $namespace;
+        $baseRoute = 'wiss/model/' . $model->getSlug();
         
         // Build the config, starting from navigation
         $config['navigation'] = array(
-            $namespace => array(
+            $model->getSlug() => array(
                 'label' => $model->getTitle(),
                 'route' => $baseRoute,
 				'pages' => array(
@@ -56,7 +55,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 						'label' => 'Records',
 						'route' => $baseRoute,
                         'params' => array(
-                            'id' => $model->getId(),
+                            'slug' => $model->getSlug(),
                         ),
 						'pages' => array(
 							'create' => array(
@@ -73,21 +72,21 @@ class Model extends \Doctrine\ORM\EntityRepository
 						'label' => 'Properties',
 						'route' => 'wiss/model/properties',
                         'params' => array(
-                            'id' => $model->getId(),
+                            'slug' => $model->getSlug(),
                         ),
 					),
 					'elements' => array(
 						'label' => 'Elements',
 						'route' => 'wiss/model/elements',
                         'params' => array(
-                            'id' => $model->getId(),
+                            'slug' => $model->getSlug(),
                         ),
 					),
 					'export' => array(
 						'label' => 'Export',
 						'route' => 'wiss/model/export',
                         'params' => array(
-                            'id' => $model->getId(),
+                            'slug' => $model->getSlug(),
                         ),
 					),
 				)
@@ -116,19 +115,18 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateRoutes(\Wiss\Entity\Model $model) 
 	{
-        $namespace = 'wiss-' . $model->getSlug();
-        
         // Build the config, starting from router.routes
         $config['router']['routes']['wiss']['child_routes']['model']['child_routes'] = array(
-            $namespace => array(
+            $model->getSlug() => array(
                 'type' => 'Literal',
                 'may_terminate' => true,
                 'options' => array(
-                    'route' => '/' . $namespace,
+                    'route' => '/' . $model->getSlug(),
                     'defaults' => array(
                         '__NAMESPACE__' => '',
                         'controller' => $model->getControllerClass(),
                         'action' => 'index',
+                        'slug' => $model->getSlug(),
                     ),
                 ),
                 'child_routes' => array(

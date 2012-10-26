@@ -158,8 +158,9 @@ class ModelController extends AbstractActionController {
 		// Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');				
-        $id = $this->params('id');
-		$model = $repo->find($id);
+		$model = $repo->findOneBy(array(
+            'slug' => $this->params('slug'),
+        ));
 
         // Create the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
@@ -181,7 +182,7 @@ class ModelController extends AbstractActionController {
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/properties', array(
-                    'id' => $model->getId()
+                    'slug' => $model->getSlug()
                 ));
             }
         }
@@ -198,8 +199,9 @@ class ModelController extends AbstractActionController {
 		// Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
-        $id = $this->params('id');
-		$model = $repo->find($id);
+		$model = $repo->findOneBy(array(
+            'slug' => $this->params('id')
+        ));
 
         // Create the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Model\Elements');   
@@ -264,7 +266,7 @@ class ModelController extends AbstractActionController {
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/elements', array(
-                    'id' => $model->getId()
+                    'slug' => $model->getSlug()
                 ));
             }
         }
@@ -305,7 +307,7 @@ class ModelController extends AbstractActionController {
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/elements', array(
-                    'id' => $modelElement->getModel()->getId()
+                    'slug' => $modelElement->getModel()->getSlug()
                 ));
             }
         }
@@ -320,8 +322,9 @@ class ModelController extends AbstractActionController {
 	{		
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
-        $id = $this->params('id');
-		$model = $repo->find($id);
+		$model = $repo->findOneBy(array(
+            'slug' => $this->params('id')
+        ));
 		
         $form = $this->getExportForm($model);
 		
@@ -366,7 +369,7 @@ class ModelController extends AbstractActionController {
                 
 				// Redirect
                 $this->redirect()->toRoute('wiss/model/export', array(
-                    'id' => $model->getId()
+                    'slug' => $model->getSlug()
                 ));	
 			}
 			
