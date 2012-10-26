@@ -268,6 +268,10 @@ return array(
 				'label' => 'Navigation',
 				'route' => 'wiss/navigation',
 				'pages' => array(
+                    'structure' => array(
+                        'label' => 'Structure',
+                        'route' => 'wiss/navigation',
+                    ),
 					'page' => array(
 						'label' => 'Pages',
 						'route' => 'wiss/page',
