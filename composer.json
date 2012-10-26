@@ -21,6 +21,7 @@
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "dev-master",
+		"zendframework/zend-developer-tools": "dev-master",
 		"doctrine/doctrine-orm-module": "dev-master",
 		"gedmo/doctrine-extensions": "dev-master",
 		"boyhagemann/zfc-twitter-bootstrap": "dev-master",
