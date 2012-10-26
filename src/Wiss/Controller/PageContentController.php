@@ -17,6 +17,12 @@ class PageContentController extends AbstractActionController
 {
     /**
      *
+     * @var array 
+     */
+    protected $zoneViewModels = array();
+    
+    /**
+     *
      * @var EntityManager
      */
 	protected $entityManager;
@@ -27,77 +33,76 @@ class PageContentController extends AbstractActionController
      *
      */
 	public function routeAction()
-	{
+	{			
         $em = $this->getEntityManager();
-			
+        
         // Get the route this found in the original routeMatch
 		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
             'fullName' => $this->params('route')
         ));		
+        		        
+        // Get the page
+		$page = $route->getPage();
         
-        // Get the page, layout and routematch
-		$page			= $route->getPage();
-        $layout			= $page->getLayout();
-		$routeMatch		= $this->getEvent()->getRouteMatch();
-		$originalRoute	= $routeMatch->getParam('originalRoute');
-		
-        // Start a new view model
-		$view = new ViewModel();
-		$view->setTemplate('wiss/page-content/route');
-		$view->setOption('layout', $layout->getPath());
-					
-		// Collect the content per zone
-		$zones = array();
-		foreach($page->getContent() as $content) {
-            $zoneId = $content->getZone()->getId();
-			$zones[$zoneId][] = $content;
-		}
+        // Set the right layout
+		$this->layout($page->getLayout()->getPath());
+				
 				
         // Walk each zone and process the blocks
-		foreach($zones as $blocks) {
+		foreach($page->getContent() as $content) {
 			
-			// Build a zone view model
-			$viewZone = new ViewModel();
-			$viewZone->setTemplate('wiss/page-content/zone');
-			$viewZone->setCaptureTo($content->getZone()->getName());	
-			$view->addChild($viewZone);
-			
-			// Add content to this zone
-			foreach($blocks as $content) {
+            $zoneName = $content->getZone()->getName();
+            
+            // Get the block from this content part
+            $block = $content->getBlock();
 
-                // Get the block from this content part
-				$block = $content->getBlock();
+            // Alter the current controller's routeMatch		
+            $routeMatch	= $this->getEvent()->getRouteMatch();
+            $routeMatch->setParam('controller', $block->getController());
+            $routeMatch->setParam('action', $block->getAction());
 
-				// Alter the current controller's routeMatch		
-				$routeMatch->setParam('controller', $block->getController());
-				
+            // Inject all defaults
+            foreach($content->getDefaults() as $key => $value) {
+                $routeMatch->setParam($key, $value);
+            }
 
-				// Check if the action in the block is the same as the original route found.
-				// If this is true, just use the block action. 
-				// If not, then the route may have an optional [:action], use
-				// this to dispatch this action
-				if($block->getAction() == $originalRoute->getParam('action')) {
-					$routeMatch->setParam('action', $block->getAction());
-				}
-				else {	
-					$routeMatch->setParam('action', $originalRoute->getParam('action'));
-				}
-				
-				// Inject all defaults
-				foreach($content->getDefaults() as $key => $value) {
-					$routeMatch->setParam($key, $value);
-				}
-
-				// Dispatch the new routeMatch
-				$viewChild = $this->forward()->dispatch($block->getController());
-				$viewChild->setCaptureTo($content->getId());
-				$viewZone->addChild($viewChild);
-			}		
-				
-		}
+            // Dispatch the new routeMatch
+            $view = $this->forward()->dispatch($block->getController());
+            $view->setCaptureTo($content->getId());
+            
+            // Add the view to a zone view
+            $this->getZoneViewModel($zoneName)->addChild($view);
+        }
 		
-		return $view;
+        // If all blocks are added to the zones, add the zones
+        // to the layout
+        foreach($this->zoneViewModels as $zoneName => $viewModel) {           
+            $this->layout()->addChild($viewModel, $zoneName);
+        }
+        
+        // No need to render the current action, all blocks are now
+        // rendered directly to the layout.
+		return false;
 	}
+    
+    /**
+     * 
+     * @param type $name
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function getZoneViewModel($name)
+    {
+        if(key_exists($name, $this->zoneViewModels)) {
+            return $this->zoneViewModels[$name];
+        }
+        
+        $view = new ViewModel();
+        $view->setTemplate('wiss/page-content/zone');
+        $view->setVariable('zone', $name);
+        $this->zoneViewModels[$name] = $view;
+        
+        return $view;
+    }
 	
     /**
      *

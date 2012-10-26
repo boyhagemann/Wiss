@@ -30,23 +30,25 @@
     <div class="container">
 		
 	
-		<div class="breadcrumbs"><?php echo $this->navigation('cms')->breadcrumbs() ?></div>
+		<div class="breadcrumbs row"><?php echo $this->navigation('cms')->breadcrumbs() ?></div>
       
 		<?php if($this->flashMessenger()->hasMessages()) : ?>
-		<div class="messages">			
+		<div class="messages row">			
 			<?php foreach($this->flashMessenger()->getMessages() as $message) : ?>
 				<div class="alert"><?php echo $message ?></div>
 			<?php endforeach ?>
 		</div>
 		<?php endif ?>
 						
-      <?php echo $this->content; ?>
+        <div class="row">
+            <content class="span9">Content: <?php echo $this->content; ?></content>
+            <sidebar class="span3">Sidebar: <?php echo $this->sidebar; ?></sidebar>            
+        </div>
+      
 
       <hr>
 
-      <footer>
-		  
-      </footer>
+      <footer class="row"><?php echo $this->footer; ?></footer>
 
     </div> <!-- /container -->
 
