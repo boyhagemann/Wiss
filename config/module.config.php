@@ -359,6 +359,7 @@ return array(
 			'Wiss\Controller\Model' => 'Wiss\Controller\ModelController',
 			'Wiss\Controller\Navigation' => 'Wiss\Controller\NavigationController',
 			'Wiss\Controller\Crud' => 'Wiss\Controller\CrudController',
+			'Wiss\Controller\Block' => 'Wiss\Controller\BlockController',
 		),
 	),
 	'view_manager' => array(
