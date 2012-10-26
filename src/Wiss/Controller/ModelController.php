@@ -141,7 +141,7 @@ class ModelController extends AbstractActionController {
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/elements', array(
-                    'id' => $model->getId()
+                    'slug' => $model->getSlug()
                 ));
             }
         }
