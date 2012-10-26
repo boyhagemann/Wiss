@@ -1,11 +1,6 @@
 <h1><em><?php echo $model->getTitle() ?></em></h1>
 
-<ul class="nav nav-tabs">
-    <li class="active"><a href="<?php echo $this->url($model->getNode()->getRoute()->getFullName(), (array) $model->getNode()->getParams()) ?>">View records</a></li>	
-    <li><a href="<?php echo $this->url('wiss/model/properties', array('id' => $model->getId())) ?>">Properties</a></li>
-    <li><a href="<?php echo $this->url('wiss/model/elements', array('id' => $model->getId())) ?>">Elements</a></li>
-    <li><a href="<?php echo $this->url('wiss/model/export', array('id' => $model->getId())) ?>">Export</a></li>
-</ul>
+<?php echo $this->navigation('cms')->menu()->setUlClass('nav nav-tabs')->renderSubmenu() ?>
 
 <div class="form-actions">
 	<a href="<?php echo $this->url($routeName . '/create') ?>" class="btn btn-primary">Create new <?php echo $model->getTitle() ?></a>
