@@ -42,7 +42,7 @@ class Properties extends Form implements InputFilterProviderInterface
 		$submit = new Element('submit');
 		$submit->setAttributes(array(
 			'type'  => 'submit',
-			'value' => 'Install',
+			'value' => 'Save',
 			'class' => 'btn btn-primary btn-large',
 		));
 
