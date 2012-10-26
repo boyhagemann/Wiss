@@ -43,23 +43,51 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateNavigation(\Wiss\Entity\Model $model) 
 	{
+		$baseRoute = $model->getNode()->getRoute();
         $namespace = 'wiss-' . $model->getSlug();
         
         // Build the config, starting from navigation
         $config['navigation'] = array(
             $namespace => array(
                 'label' => $model->getTitle(),
-                'route' => $namespace,
-                'pages' => array(
-                    'create' => array(
-                        'label' => 'Create',
-                        'route' => $namespace . '/create',
-                    ),
-                    'edit' => array(
-                        'label' => 'Edit',
-                        'route' => $namespace . '/edit',
-                    ),
-                )
+                'route' => $baseRoute,
+				'pages' => array(
+					'records' => array(
+						'label' => 'Records',
+						'route' => $baseRoute,
+						'pages' => array(
+							'create' => array(
+								'label' => 'Create',
+								'route' => $namespace . '/create',
+							),
+							'edit' => array(
+								'label' => 'Edit',
+								'route' => $namespace . '/edit',
+							),
+						)
+					),
+					'properties' => array(
+						'label' => 'Properties',
+						'route' => 'wiss/model/properties',
+						'params' => array(
+							'id' => $model->getId(),
+						)
+					),
+					'elements' => array(
+						'label' => 'Elements',
+						'route' => 'wiss/model/elements',
+						'params' => array(
+							'id' => $model->getId(),
+						)
+					),
+					'export' => array(
+						'label' => 'Export',
+						'route' => 'wiss/model/export',
+						'params' => array(
+							'id' => $model->getId(),
+						)
+					),
+				)
             )
         );
 
