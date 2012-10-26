@@ -126,6 +126,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                 'options' => array(
                     'route' => '/' . $namespace,
                     'defaults' => array(
+                        '__NAMESPACE__' => '',
                         'controller' => $model->getControllerClass(),
                         'action' => 'index',
                     ),
