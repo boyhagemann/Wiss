@@ -54,6 +54,9 @@ class Model extends \Doctrine\ORM\EntityRepository
 					'records' => array(
 						'label' => 'Records',
 						'route' => $namespace,
+						'params' => array(
+							'id' => $model->getId(),
+						),
 						'pages' => array(
 							'create' => array(
 								'label' => 'Create',
