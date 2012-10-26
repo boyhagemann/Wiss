@@ -316,20 +316,6 @@ return array(
 							'installed' => array(
 								'label' => 'Installed',
 								'route' => 'wiss/model',
-								'pages' => array(
-									'properties' => array(
-										'label' => 'Properties',
-										'route' => 'wiss/model/properties'
-									),
-									'elements' => array(
-										'label' => 'Elements',
-										'route' => 'wiss/model/elements'
-									),
-									'export' => array(
-										'label' => 'Export',
-										'route' => 'wiss/model/export'
-									),
-								)
 							),
 							'uninstalled' => array(
 								'label' => 'Uninstalled',
