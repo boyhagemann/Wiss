@@ -31,7 +31,7 @@ class Elements extends Form implements ServiceLocatorAwareInterface
 			                        
         // Get the value options from the service manager config
         $config = $this->getServiceLocator()->get('config');
-        $valueOptions = $config['element-config-forms'];
+        $valueOptions = $config['model-elements'];
 			      
 		// Add the select field with the available elements
 		$select = new Element\Select('element-config-class');

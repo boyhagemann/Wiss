@@ -367,10 +367,10 @@ return array(
 			__DIR__ . '/../view',
 		),
 	),
-	'element-config-forms' => array(
-		'Wiss\Form\ElementConfig\Text' => 'Text',
-		'Wiss\Form\ElementConfig\Textarea' => 'Textarea',
-		'Wiss\Form\ElementConfig\DatePicker' => 'DatePicker',
+	'model-elements' => array(
+		'Wiss\Model\Element\Text' => 'Text',
+		'Wiss\Model\Element\Textarea' => 'Textarea',
+		'Wiss\Model\Element\DatePicker' => 'DatePicker',
 	),
 	'doctrine' => array(
 		'driver' => array(
