@@ -138,33 +138,6 @@ return array(
 										'action' => 'elements',
 									),
 								),
-								'may_terminate' => true,
-								'child_routes' => array(
-									'create' => array(
-										'type' => 'Segment',
-										'options' => array(
-											'route' => '/create/[:class]',
-											'constraints' => array(
-												'class' => '[A-Z][a-zA-Z0-9_-]*',
-											),
-											'defaults' => array(
-												'action' => 'create-element',
-											),
-										),
-									),
-									'configure' => array(
-										'type' => 'Segment',
-										'options' => array(
-											'route' => '/configure/[:id]',
-											'constraints' => array(
-												'element-id' => '[0-9]*',
-											),
-											'defaults' => array(
-												'action' => 'configure-element',
-											),
-										),
-									),
-								)
 							),
 							'export' => array(
 								'type' => 'Segment',
@@ -192,6 +165,55 @@ return array(
 							),
 						)
 					),
+                    'model-elements' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/model-element',
+							'defaults' => array(
+								'controller' => 'model-element',
+								'action' => 'index',
+							),
+						),
+						'may_terminate' => true,
+						'child_routes' => array(
+                            'create' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/create/[:model]',
+                                    'constraints' => array(
+                                        'model' => '[1-9][0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'create',
+                                    ),
+                                ),
+                            ),
+                            'properties' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/properties/[:id]',
+                                    'constraints' => array(
+                                        'id' => '[1-9][0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'properties',
+                                    ),
+                                ),
+                            ),
+                            'configure' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/configure/[:id]',
+                                    'constraints' => array(
+                                        'id' => '[0-9]*',
+                                    ),
+                                    'defaults' => array(
+                                        'action' => 'configure',
+                                    ),
+                                ),
+                            ),
+                        )
+                    ),
 					'module' => array(
 						'type' => 'Literal',
 						'options' => array(
@@ -357,6 +379,7 @@ return array(
 			'Wiss\Controller\Page' => 'Wiss\Controller\PageController',
 			'Wiss\Controller\PageContent' => 'Wiss\Controller\PageContentController',
 			'Wiss\Controller\Model' => 'Wiss\Controller\ModelController',
+			'Wiss\Controller\ModelElement' => 'Wiss\Controller\ModelElementController',
 			'Wiss\Controller\Navigation' => 'Wiss\Controller\NavigationController',
 			'Wiss\Controller\Crud' => 'Wiss\Controller\CrudController',
 			'Wiss\Controller\Block' => 'Wiss\Controller\BlockController',
@@ -367,7 +390,7 @@ return array(
 			__DIR__ . '/../view',
 		),
 	),
-	'model-elements' => array(
+	'model-element-builders' => array(
 		'Wiss\Model\Element\Text' => 'Text',
 		'Wiss\Model\Element\Textarea' => 'Textarea',
 		'Wiss\Model\Element\DatePicker' => 'DatePicker',
