@@ -170,7 +170,7 @@ return array(
 						'options' => array(
 							'route' => '/model-element',
 							'defaults' => array(
-								'controller' => 'model-element',
+								'controller' => 'modelElement',
 								'action' => 'index',
 							),
 						),
