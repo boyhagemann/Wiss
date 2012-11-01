@@ -202,30 +202,8 @@ class ModelController extends AbstractActionController {
 		$model = $repo->findOneBy(array(
             'slug' => $this->params('slug')
         ));
-
-        // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Elements');   
-		$form->prepareElements();
 		
-        if ($this->getRequest()->isPost()) {
-			
-            $form->setData($this->getRequest()->getPost());
-
-            if ($form->isValid()) {
-								
-				$class = $form->get('element-config-class')->getValue();
-				$encodedClass = str_replace('\\', '-', $class);
-				
-                // Redirect
-                $this->redirect()->toRoute('wiss/model/elements/create', array(
-                    'id' => $model->getId(),
-					'class' => $encodedClass,
-                ));
-            }
-        }
-		
-		
-        return compact('model', 'form');
+        return compact('model');
     }
 	
 	/**
