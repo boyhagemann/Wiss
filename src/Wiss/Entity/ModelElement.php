@@ -33,7 +33,7 @@ class ModelElement
 	 * 
      * @ORM\Column
 	 */
-	protected $formClass;
+	protected $builderClass;
 	
 	/**
 	 *
@@ -76,12 +76,12 @@ class ModelElement
 		$this->label = $label;
 	}
 
-	public function getFormClass() {
-		return $this->formClass;
+	public function getBuilderClass() {
+		return $this->builderClass;
 	}
 
-	public function setFormClass($formClass) {
-		$this->formClass = $formClass;
+	public function setBuilderClass($builderClass) {
+		$this->builderClass = $builderClass;
 	}
 	
 	public function getConfiguration() 
