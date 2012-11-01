@@ -22,7 +22,7 @@ return array(
 						'controller' => 'pageContent',
 						'action' => 'route',
 					),
-				),m
+				),
 			),
 			'wiss' => array(
 				'type' => 'Literal',
