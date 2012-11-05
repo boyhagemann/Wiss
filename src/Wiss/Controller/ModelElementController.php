@@ -29,7 +29,29 @@ class ModelElementController extends AbstractActionController {
     public function createAction() 
 	{
         $form = new \Wiss\Form\ModelElement;
+        $form->prepareElements();
+        $form->bind(new \Wiss\Entity\ModelElement);
 
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                
+                // Get the modelElement from the form
+                $modelElement = $form->getData();
+                
+                // Save the new modelElement
+                $em = $this->getEntityManager();
+                $em->persist($modelElement);
+                $em->flush();
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/model-element/config', array(
+                    'id' => $modelElement->getId()
+                ));
+            }
+        }
         return compact('form');
     }
 
@@ -40,6 +62,7 @@ class ModelElementController extends AbstractActionController {
     public function propertiesAction() 
 	{
         $form = new \Wiss\Form\ModelElement;
+        $form->prepareElements();
 
         return compact('form');
     }

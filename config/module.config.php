@@ -200,15 +200,15 @@ return array(
                                     ),
                                 ),
                             ),
-                            'configure' => array(
+                            'config' => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/configure/[:id]',
+                                    'route' => '/config/[:id]',
                                     'constraints' => array(
                                         'id' => '[0-9]*',
                                     ),
                                     'defaults' => array(
-                                        'action' => 'configure',
+                                        'action' => 'config',
                                     ),
                                 ),
                             ),

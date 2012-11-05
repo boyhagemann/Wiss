@@ -15,6 +15,7 @@ use Zend\Form\Form;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 use Wiss\Entity\Model;
 
 class ModelElement extends Form implements ServiceLocatorAwareInterface
@@ -27,12 +28,22 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
 	 */
     public function prepareElements()
     {                		
+        $this->setHydrator(new ClassMethodsHydrator());
 		$this->setAttribute('class', 'form-horizontal');
 			                        
         // Get the value options from the service manager config
         $config = $this->getServiceLocator()->get('config');
         $valueOptions = $config['model-element-builders'];
-			      
+			
+        // Label element
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'label',
+            'options' => array(
+                'label' => 'Label',
+            ),
+        ));
+        
 		// Add the select field with the available elements
 		$select = new Element\Select('builder');
 		$select->setValueOptions($valueOptions); 
