@@ -90,7 +90,7 @@ class ModelElementController extends AbstractActionController {
         
         // Set the config form defaults, based on the existing model 
         // element config
-        $form->setData($modelElement->getConfiguration());
+        $form->setData((array)$modelElement->getConfiguration());
         
         // Return the view variables in an array
         return compact('form', 'builder', 'modelElement');
