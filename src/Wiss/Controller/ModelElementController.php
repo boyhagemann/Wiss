@@ -57,6 +57,7 @@ class ModelElementController extends AbstractActionController {
                 ));
             }
         }
+        
         return compact('form');
     }
 
@@ -72,7 +73,25 @@ class ModelElementController extends AbstractActionController {
         // Get the basic properties form
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');
         $form->prepareElements();
+        $form->bind($modelElement);
 
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                                
+                // Save the new modelElement
+                $em->persist($form->getData());
+                $em->flush();
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/model-element/properties', array(
+                    'id' => $this->params('id')
+                ));
+            }
+        }
+        
         // Return the view variables in an array
         return compact('form', 'modelElement');
     }
