@@ -32,6 +32,11 @@ class ModelElementController extends AbstractActionController {
         $form->prepareElements();
         $form->bind(new \Wiss\Entity\ModelElement);
 
+                
+        // Get the model where the element is part of
+        $em = $this->getEntityManager();
+        $model = $em->find('Wiss\Entity\Model', $this->params('model'));
+        
         if ($this->getRequest()->isPost()) {
 			
             $form->setData($this->getRequest()->getPost());
@@ -40,9 +45,9 @@ class ModelElementController extends AbstractActionController {
                 
                 // Get the modelElement from the form
                 $modelElement = $form->getData();
+                $modelElement->setModel($model);
                 
                 // Save the new modelElement
-                $em = $this->getEntityManager();
                 $em->persist($modelElement);
                 $em->flush();
                 
