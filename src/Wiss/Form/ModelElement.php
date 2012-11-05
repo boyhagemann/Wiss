@@ -39,7 +39,7 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
         $this->add(array(
             'type' => 'Zend\Form\Element\Text',
             'name' => 'name',
-            'options' => array(
+            'attributes' => array(
                 'label' => 'Name',
             ),
         ));
@@ -48,15 +48,24 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
         $this->add(array(
             'type' => 'Zend\Form\Element\Text',
             'name' => 'label',
-            'options' => array(
+            'attributes' => array(
                 'label' => 'Label',
+            ),
+        ));
+			
+        // Label element
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'actAsLabel',
+            'attributes' => array(
+                'label' => 'Use this label in the list view?',
             ),
         ));
         
 		// Add the select field with the available elements
 		$select = new Element\Select('builderClass');
 		$select->setValueOptions($valueOptions); 
-		$select->setOptions(array(
+		$select->setAttributes(array(
 			'label' => 'Choose an element builder'
 		));
 		$this->add($select);
