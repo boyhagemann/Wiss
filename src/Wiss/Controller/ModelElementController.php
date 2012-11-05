@@ -68,7 +68,8 @@ class ModelElementController extends AbstractActionController {
     public function propertiesAction() 
 	{
         // Get the correct model element
-        $modelElement = $this->getEntityManager()->find('Wiss\Entity\ModelElement', $this->params('id'));
+        $em = $this->getEntityManager();
+        $modelElement = $em->find('Wiss\Entity\ModelElement', $this->params('id'));
         
         // Get the basic properties form
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');
