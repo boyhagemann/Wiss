@@ -1,8 +1,8 @@
 <h1>Element: <em><?php echo $modelElement->getName() ?></em></h1>
 
 <ul class="nav nav-tabs">
-    <li class="active"><a href="<?php echo $this->url('wiss/model-element/properties', array($modelElement->getId())) ?>">Properties</a></li>
-    <li><a href="<?php echo $this->url('wiss/model-element/config', array($modelElement->getId())) ?>">Configuration</a></li>
+    <li class="active"><a href="<?php echo $this->url('wiss/model-element/properties', array('id' => $modelElement->getId())) ?>">Properties</a></li>
+    <li><a href="<?php echo $this->url('wiss/model-element/config', array('id' => $modelElement->getId())) ?>">Configuration</a></li>
 </ul>
 
 <?php echo $this->formRenderer($form) ?>
