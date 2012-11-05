@@ -1,4 +1,4 @@
-<h1>Element: <em><?php echo $modelElement->getName() ?></em></h1>
+<h1><?php echo $model->getTitle() ?>: <em><?php echo $modelElement->getName() ?></em></h1>
 
 <ul class="nav nav-tabs">
     <li class="active"><a href="<?php echo $this->url('wiss/model-element/properties', array('id' => $modelElement->getId())) ?>">Properties</a></li>

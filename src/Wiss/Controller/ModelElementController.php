@@ -70,6 +70,7 @@ class ModelElementController extends AbstractActionController {
         // Get the correct model element
         $em = $this->getEntityManager();
         $modelElement = $em->find('Wiss\Entity\ModelElement', $this->params('id'));
+        $model = $modelElement->getModel();
         
         // Get the basic properties form
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');
@@ -94,7 +95,7 @@ class ModelElementController extends AbstractActionController {
         }
         
         // Return the view variables in an array
-        return compact('form', 'modelElement');
+        return compact('form', 'modelElement', 'model');
     }
     
     /**
@@ -105,6 +106,7 @@ class ModelElementController extends AbstractActionController {
 	{
         // Get the correct model element
         $modelElement = $this->getEntityManager()->find('Wiss\Entity\ModelElement', $this->params('id'));
+        $model = $modelElement->getModel();
         
         // Get the builder that is used to build the form element and the entity mapping
         $builder = $this->getServiceLocator()->get($modelElement->getBuilderClass());
@@ -118,7 +120,7 @@ class ModelElementController extends AbstractActionController {
         $form->setData((array)$modelElement->getConfiguration());
         
         // Return the view variables in an array
-        return compact('form', 'builder', 'modelElement');
+        return compact('form', 'builder', 'modelElement', 'model');
     }
 
     /**
