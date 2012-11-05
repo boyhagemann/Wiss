@@ -45,7 +45,7 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
         ));
         
 		// Add the select field with the available elements
-		$select = new Element\Select('builder');
+		$select = new Element\Select('builderClass');
 		$select->setValueOptions($valueOptions); 
 		$select->setOptions(array(
 			'label' => 'Choose an element builder'
@@ -65,7 +65,7 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
 
 		
 		$inputFilter = $this->getInputFilter();
-		$inputFilter->add(new Input('builder', array(
+		$inputFilter->add(new Input('builderClass', array(
 			'required' => true,
 		)));
 		$this->setInputFilter($inputFilter);
