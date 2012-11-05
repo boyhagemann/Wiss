@@ -186,9 +186,12 @@ class Page extends \Doctrine\ORM\EntityRepository
 		if($controller) {
 			$controller .= '\\';
 		}
-		$controller .= ucfirst($this->findDefault('controller', $route));
-		
-		return $controller;
+        
+		$controller .= $this->findDefault('controller', $route);
+		       
+        // Convert to camelCased controller class
+        $filter = new \Zend\Filter\Word\DashToCamelCase();
+		return $filter->filter($controller);
 	}
 	
 	/**
