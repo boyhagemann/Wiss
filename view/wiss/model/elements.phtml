@@ -8,7 +8,7 @@
 		<h3><?php echo $element->getName() ?></h3>
 		<dl class="btn-group">
 			<a href="<?php echo $this->url('wiss/model-element/properties', array('id' => $element->getId())) ?>" class="btn btn-small">Properties</a>
-			<a href="<?php echo $this->url('wiss/model-element/configuration', array('id' => $element->getId())) ?>" class="btn btn-small">Configuration</a>
+			<a href="<?php echo $this->url('wiss/model-element/config', array('id' => $element->getId())) ?>" class="btn btn-small">Configuration</a>
 		</dl>
 	</li>
 	<?php endforeach ?>
