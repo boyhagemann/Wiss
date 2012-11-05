@@ -1,0 +1,8 @@
+<h1>Element: <em><?php echo $element->getName() ?></em></h1>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="<?php echo $this->url('wiss/model-element/properties', array($element->getId())) ?>">Properties</a></li>
+    <li><a href="<?php echo $this->url('wiss/model-element/config', array($element->getId())) ?>">Configuration</a></li>
+</ul>
+
+<?php echo $this->formRenderer($form) ?>
