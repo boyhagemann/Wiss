@@ -20,7 +20,7 @@ class Text extends AbstractBuilder
             'type' => 'Zend\Form\Element\Text',
             'name' => 'size',
             'attributes' => array(),
-            'options' => array(
+            'attributes' => array(
                 'label' => 'Size',
             ),
         ));

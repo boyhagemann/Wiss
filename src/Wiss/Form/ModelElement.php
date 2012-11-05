@@ -62,6 +62,15 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
             ),
         ));
         
+        // Required element
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Checkbox',
+            'name' => 'required',
+            'attributes' => array(
+                'label' => 'Is required?',
+            ),
+        ));
+        
 		// Add the select field with the available elements
 		$select = new Element\Select('builderClass');
 		$select->setValueOptions($valueOptions); 
