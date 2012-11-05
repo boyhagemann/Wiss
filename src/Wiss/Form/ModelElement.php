@@ -35,6 +35,15 @@ class ModelElement extends Form implements ServiceLocatorAwareInterface
         $config = $this->getServiceLocator()->get('config');
         $valueOptions = $config['model-element-builders'];
 			
+        // Name element
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'name',
+            'options' => array(
+                'label' => 'Name',
+            ),
+        ));
+			
         // Label element
         $this->add(array(
             'type' => 'Zend\Form\Element\Text',
