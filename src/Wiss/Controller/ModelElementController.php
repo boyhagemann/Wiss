@@ -28,7 +28,7 @@ class ModelElementController extends AbstractActionController {
      */
     public function createAction() 
 	{
-        $form = new \Wiss\Form\ModelElement;
+        $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');
         $form->prepareElements();
         $form->bind(new \Wiss\Entity\ModelElement);
 
@@ -61,7 +61,7 @@ class ModelElementController extends AbstractActionController {
      */
     public function propertiesAction() 
 	{
-        $form = new \Wiss\Form\ModelElement;
+        $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');
         $form->prepareElements();
 
         return compact('form');
