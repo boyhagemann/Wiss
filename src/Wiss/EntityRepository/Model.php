@@ -179,15 +179,13 @@ class Model extends \Doctrine\ORM\EntityRepository
 
     /**
      *
-     * @param ExportForm $form
-     * @return string 
+     * @param \Wiss\Entity\Model $model
      */
-    public function generateController(ExportForm $form) 
+    public function generateController(\Wiss\Entity\Model $model) 
 	{		
-		$model = $form->getModel();
-        $className = $form->get('controller_class')->getValue();
-        $namespace = substr($className, 0, strrpos($className, '\\'));
-		$filename = $form->get('controller_path')->getValue();
+        $class = $model->getControllerClass();
+        $filename = $this->buildControllerPath($class);
+        $namespace = substr($class, 0, strrpos($class, '\\'));
 
         // Create the folder if it does not exist
         if(!file_exists(dirname($filename))) {
@@ -201,7 +199,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                 array('Wiss\Controller\CrudController', 'EntityController'),
             ),
             'class' => array(
-                'name' => $className . 'Controller',
+                'name' => $class . 'Controller',
                 'extendedclass' => 'EntityController',
                 'properties' => array(
                     array('modelName', $model->getSlug(), PropertyGenerator::FLAG_PROTECTED),
@@ -209,23 +207,20 @@ class Model extends \Doctrine\ORM\EntityRepository
             ),
         );
 
+        // Write the data to disk
         $generator = FileGenerator::fromArray($fileData);
         $generator->write();
-
-        return $className;
     }
     
     /**
      * 
-     * @param ExportForm $form
-     * @return string
+     * @param \Wiss\Entity\Model $model
      */
-    public function generateEntity(ExportForm $form)
+    public function generateEntity(\Wiss\Entity\Model $model)
     {
-        $model = $form->getModel();
-        $class = $form->get('entity_class')->getValue();
+        $class = $model->getEntityClass();
         $namespace = substr($class, 0, strrpos($class, '\\'));
-        $filename = $form->get('entity_path')->getValue();
+        $filename = $this->buildEntityPath($class);
         
         // Create the folder if it does not exist
         if(!file_exists(dirname($filename))) {
@@ -256,7 +251,6 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$generator->setGenerateStubMethods(true);
 		$generator->setGenerateAnnotations(true);
 		$generator->generate(array($info), 'module/Application/src');
-
 		
 		// Export to the database       
 		$classes[] = $this->getEntityManager()->getClassMetadata($class);
@@ -267,25 +261,20 @@ class Model extends \Doctrine\ORM\EntityRepository
 		catch(\Exception $e) {
 			
 		}
-		
-        // Return the classname to be used later
-        return $class;
     }
 		
     /**
      * 
-     * @param ExportForm $form
-     * @return string
+     * @param \Wiss\Entity\Model $model
      */
-    public function generateForm(ExportForm $form) 
+    public function generateForm(\Wiss\Entity\Model $model) 
 	{
-        $model = $form->getModel();
-        $className = $form->get('form_class')->getValue();
-        $namespace = substr($className, 0, strrpos($className, '\\'));
-        $filename = $form->get('form_path')->getValue();
+        $class = $model->getFormClass();
+        $namespace = substr($class, 0, strrpos($class, '\\'));
+        $filename = $this->buildFormPath($class);
 
         // Create the body for in the __construct method
-        $body = sprintf('parent::__construct(\'%s\');', $className) . PHP_EOL . PHP_EOL;
+        $body = sprintf('parent::__construct(\'%s\');', $class) . PHP_EOL . PHP_EOL;
         $body .= '$this->setHydrator(new ClassMethodsHydrator());' . PHP_EOL;
         $body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
 
@@ -342,7 +331,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                 array('Zend\StdLib\Hydrator\ClassMethods', 'ClassMethodsHydrator'),
             ),
             'class' => array(
-                'name' => $className,
+                'name' => $class,
                 'extendedclass' => 'Form',
                 'methods' => array(
                     array(
@@ -358,9 +347,6 @@ class Model extends \Doctrine\ORM\EntityRepository
         // Generate the file and save it to disk
         $generator = FileGenerator::fromArray($fileData);
         $generator->write();
-
-        // Return the classname to be used later
-        return $className;
     }
 	
 	/**
@@ -402,4 +388,39 @@ class Model extends \Doctrine\ORM\EntityRepository
 		));
 	}
 	
+    /**
+     * 
+     * @param string $class
+     * @return string
+     */
+    public function buildControllerPath($class)
+    {
+        $file = str_replace('\\', '/', $class);
+        $path = sprintf('module/Application/src/%sController.php', $file);
+		return $path;
+    }
+	
+    /**
+     * 
+     * @param string $class
+     * @return string
+     */
+    public function buildFormPath($class)
+    {
+        $file = str_replace('\\', '/', $class);
+        $path = sprintf('module/Application/src/%s.php', $file);
+		return $path;
+    }
+	
+    /**
+     * 
+     * @param string $class
+     * @return string
+     */
+    public function buildEntityPath($class)
+    {
+        $file = str_replace('\\', '/', $class);
+        $path = sprintf('module/Application/src/%s.php', $file);
+		return $path;
+    }
 }

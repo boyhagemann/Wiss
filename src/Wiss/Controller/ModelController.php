@@ -206,92 +206,32 @@ class ModelController extends AbstractActionController {
         return compact('model');
     }
 	
-	/**
-	 * 
-	 * @return array
-	 */
-	public function createElementAction()
-	{				
+    /**
+     * 
+     * @return array 
+     */
+    public function generateAction()
+    {    
 		// Get the model
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');		
-        $id = $this->params('id');
-		$model = $repo->find($id);		
-		
-        // Create the form
-		$class = $this->buildClassNameFromUrlParam();
-        $form = $this->getServiceLocator()->get($class);   
-		$form->prepareElements();
-		$form->bind(new \Wiss\Entity\ModelElement());
+		$model = $repo->findOneBy(array(
+            'slug' => $this->params('slug')
+        ));
+        
+        // Generate the model parts
+        $repo->generateEntity($model);
+        $repo->generateController($model);
+        $repo->generateForm($model);        
+        
+        // Show a flash message
+        $this->flashMessenger()->addMessage('The model is succesfully generated!');
 
-        if ($this->getRequest()->isPost()) {
-			
-            $form->setData($this->getRequest()->getPost());
-
-            if ($form->isValid()) {
-				
-				// Get the modelElement from the form
-				$modelElement = $form->getData();
-				$modelElement->setModel($model);
-				$modelElement->setFormClass(get_class($form));
-				
-				// Save the new modelElement
-                $em->persist($modelElement);
-				$em->flush();
-				
-                // Show a flash message
-                $this->flashMessenger()->addMessage('The model is now created');
-
-                // Redirect
-                $this->redirect()->toRoute('wiss/model/elements', array(
-                    'slug' => $model->getSlug()
-                ));
-            }
-        }
-		
-		return compact('model', 'form');
-	}
-	
-	/**
-	 * 
-	 * @return array
-	 */
-	public function configureElementAction()
-	{
-		// Get the modelElement
-		$em = $this->getEntityManager();
-		$modelElement = $em->find('Wiss\Entity\ModelElement', $this->params('id'));		
-		
-        // Create the form
-        $form = $this->getServiceLocator()->get($modelElement->getFormClass());   
-		$form->prepareElements();
-		$form->bind($modelElement);
-		
-        if ($this->getRequest()->isPost()) {
-			
-            $form->setData($this->getRequest()->getPost());
-
-            if ($form->isValid()) {
-				
-				// Get the modelElement from the form
-				$modelElement = $form->getData();
-				
-				// Save the new modelElement
-                $em->persist($modelElement);
-				$em->flush();
-				
-                // Show a flash message
-                $this->flashMessenger()->addMessage('The model is now updated');
-
-                // Redirect
-                $this->redirect()->toRoute('wiss/model/elements', array(
-                    'slug' => $modelElement->getModel()->getSlug()
-                ));
-            }
-        }
-		
-		return compact('modelElement', 'form');
-	}
+        // Redirect
+        $this->redirect()->toRoute('wiss/model/elements', array(
+            'slug' => $model->getSlug()
+        ));	
+    }
     
     /*
      * @return boolean 
