@@ -28,19 +28,25 @@ class ModelElementController extends AbstractActionController {
      */
     public function createAction() 
 	{
+        // Get the form to create the element properties
         $form = $this->getServiceLocator()->get('Wiss\Form\ModelElement');
         $form->prepareElements();
+        
+        // Attach a new ModelElement entity to the form, to set and
+        // get the values directly from the form and to the entity
         $form->bind(new \Wiss\Entity\ModelElement);
-
                 
         // Get the model where the element is part of
         $em = $this->getEntityManager();
         $model = $em->find('Wiss\Entity\Model', $this->params('model'));
         
+        // Check if data is posted
         if ($this->getRequest()->isPost()) {
 			
+            // Set the raw post data as form values
             $form->setData($this->getRequest()->getPost());
 
+            // Check if the posted data is valid
             if ($form->isValid()) {
                 
                 // Get the modelElement from the form
@@ -58,7 +64,8 @@ class ModelElementController extends AbstractActionController {
             }
         }
         
-        return compact('form');
+        // Return the view variables in an array
+        return compact('form', 'model');
     }
 
     /**
