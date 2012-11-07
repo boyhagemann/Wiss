@@ -56,18 +56,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 						'route' => $baseRoute,
                         'params' => array(
                             'slug' => $model->getSlug(),
-                            'id' => '',
                         ),
-						'pages' => array(
-							'create' => array(
-								'label' => 'Create',
-								'route' => $baseRoute . '/create',
-							),
-							'edit' => array(
-								'label' => 'Edit',
-								'route' => $baseRoute . '/edit',
-							),
-						)
 					),
 					'properties' => array(
 						'label' => 'Properties',
