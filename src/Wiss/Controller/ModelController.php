@@ -111,22 +111,18 @@ class ModelController extends AbstractActionController {
 
             if ($form->isValid()) {
 
+                // Make the model title camelCased
+                $filter = new \Zend\Filter\Word\SeparatorToCamelCase();
+                $filter->setSeparator(' ');
+                $camelCasedTitle = $filter->filter($model->getTitle());
+                                
                 // Get the model
                 $model = $form->getData();
+                $model->setEntityClass('Application\Entity\\' . $camelCasedTitle);
+                $model->setControllerClass('Application\Controller\\' . $camelCasedTitle);
+                $model->setFormClass('Application\Form\\' . $camelCasedTitle);                
                 $em->persist($model);
                 $em->flush();
-
-                // Generate the entity
-                $form = $this->getExportForm($model);
-                $repo->generateEntity($form);
-                
-                // Generate controller                
-                $controllerClass = $repo->generateController($form);
-                $model->setControllerClass($controllerClass);
-                
-                // Generate form
-                $formClass = $repo->generateForm($form);
-                $model->setFormClass($formClass);                
 
                 // Create new routes and navigation				
                 $repo->generateRoutes($model);

@@ -35,20 +35,6 @@ class Model extends Form implements ServiceLocatorAwareInterface
 			'type' => 'text',
 			'label' => 'Name of the model'
 		));
-		
-		// Title field
-		$titleField = new Element\Select('title_field');
-		$titleField->setAttributes(array(
-			'type' => 'select',
-			'label' => 'Which field is used as title?'
-		));
-		
-		// Class
-		$class = new Element('entity_class');
-		$class->setAttributes(array(
-			'type' => 'text',
-			'label' => 'Class',
-		));
 
 		// Submit
 		$submit = new Element('submit');
@@ -59,106 +45,13 @@ class Model extends Form implements ServiceLocatorAwareInterface
 		));
 
 		$this->add($title);
-		$this->add($titleField);
-		$this->add($class);
 		$this->add($submit);
 
 		$inputFilter = new InputFilter();
 		$inputFilter->add(new Input('title'));
-		$inputFilter->add(new Input('title_field'));
-		$inputFilter->add(new Input('entity_class'));
 		$this->setInputFilter($inputFilter);
-	
-	
-		
-		
-		
-		if(isset($data['entity_class'])) {
-			$this->setTitleFieldOptions($data['entity_class']);
-		}
-		
-		$elements = new Fieldset('elements');
-		
-		$inputFilter = $this->getInputFilter();
-		$inputFilter->add(new Input('elements', array(
-			'required' => true,
-		)));
-			
-		foreach($this->getFieldMapping($data['entity_class']) as $field) {
-						
-			$fieldset = new Fieldset($field['fieldName']);
-			$fieldset->setOptions(array(
-				'legend' => $field['fieldName'],
-			));
-                        
-			// Get the value options from the service manager config
-			$config = $this->getServiceLocator()->get('config');
-			$valueOptions = $config['element-config-forms'];
-                        
-			// Add the select field with the available elements
-			$select = new Element\Select('type');
-			$select->setLabel($field['fieldName']);
-			$select->setValueOptions(array('' => 'No element assigned yet...') + $valueOptions); 
-			$select->setAttributes(array(
-				'class' => 'form-class',
-			));
-			$fieldset->add($select);
-			
-			// Add the trigger button to show the modal window
-			$button = new Element\Button('trigger');
-			$button->setOptions(array(
-				'label' => 'Configure',
-			));
-			$button->setAttributes(array(
-				'class' => 'element-config-trigger btn',
-				'data-target' => "#myModal",
-				'data-remote' => $data['element-config-url'],
-			));
-			$fieldset->add($button);
-			
-			// Store the result of the modal window form in a hidden element
-			$configuration = new Element\Hidden('configuration');
-			$configuration->setAttributes(array(
-				'class' => 'element-config',
-			));
-			$fieldset->add($configuration);
-                        
-                        
-			// Add the hidden config element
-			$config = new Element\Hidden('button');
-			$fieldset->add($config);
-			
-			$elements->add($fieldset);		
-		}
-		
-		$this->add($elements);
 				
-	}
-	
-	/**
-	 *
-	 * @param string $class
-	 * @return array 
-	 */
-	public function getFieldMapping($class)
-	{
-            $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $meta = $em->getClassMetadata($class);
-            return $meta->fieldMappings;
-	}
-	
-	/**
-	 *
-	 * @param string $class 
-	 */
-	public function setTitleFieldOptions($class)
-	{
-		$options = array('' => 'Choose a field name...');
-		foreach($this->getFieldMapping($class) as $field) {
-			$options[$field['fieldName']] = $field['fieldName'];
-		}
-		$this->get('title_field')->setAttribute('options', $options);		
-	}
+    }
 
 	public function getServiceLocator() {
 		return $this->serviceLocator;

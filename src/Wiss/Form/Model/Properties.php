@@ -30,13 +30,6 @@ class Properties extends Form implements InputFilterProviderInterface
 			'type' => 'text',
 			'label' => 'Name of the model'
 		));
-				
-		// Class
-		$class = new Element('entity_class');
-		$class->setAttributes(array(
-			'type' => 'text',
-			'label' => 'Class',
-		));
 
 		// Submit
 		$submit = new Element('submit');
@@ -47,25 +40,14 @@ class Properties extends Form implements InputFilterProviderInterface
 		));
 
 		$this->add($title);
-		$this->add($class);
 		$this->add($submit);
 
 	}
-	
-	public function setData($data) 
-	{		
-		if(!isset($data['entity_class'])) {
-			$this->remove('entity_class');
-			$this->add(array(
-				'type' => 'Zend\Form\Element\Hidden',
-				'name' => 'entity_class'
-			));
-		}
-		
-		return parent::setData($data);		
-	}
 
-
+    /**
+     * 
+     * @return array
+     */
 	public function getInputFilterSpecification()
     {
         return array(
