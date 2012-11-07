@@ -92,11 +92,6 @@ class ModelController extends AbstractActionController {
         }
 		else {
 			$model = new Model;
-			
-			// Create the defaults for the form
-			$data = array(
-				'entity_class' => 'Application\Entity\\' . $model->getTitle(),
-			);
 		}
 
         // Create the form
@@ -170,11 +165,15 @@ class ModelController extends AbstractActionController {
 
             if ($form->isValid()) {
 								
-                // Create the model
-                $model = $repo->createFromArray($data);
+                // Save the model
+                $em->persist($form->getData());
 
+                // Build the config
+                $repo->generateRoutes($model);
+                $repo->generateNavigation($model);
+        
                 // Show a flash message
-                $this->flashMessenger()->addMessage('The model is now created');
+                $this->flashMessenger()->addMessage('The model properties are updated');
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model/properties', array(
@@ -204,7 +203,7 @@ class ModelController extends AbstractActionController {
 	
     /**
      * 
-     * @return array 
+     * @return boolean 
      */
     public function generateAction()
     {    
@@ -227,82 +226,8 @@ class ModelController extends AbstractActionController {
         $this->redirect()->toRoute('wiss/model/elements', array(
             'slug' => $model->getSlug()
         ));	
-    }
-    
-    /*
-     * @return boolean 
-     */
-    public function exportAction() 
-	{		
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository('Wiss\Entity\Model');		
-		$model = $repo->findOneBy(array(
-            'slug' => $this->params('slug')
-        ));
-		
-        $form = $this->getExportForm($model);
-		
-        if ($this->getRequest()->isPost()) {
-			
-            $form->setData($this->getRequest()->getPost());
-		
-            if ($form->isValid()) {	
-				
-				$data = $form->getData();
-								
-				if($data['generate_entity']) {
-                    $entityClass = $repo->generateEntity($form);
-                    $model->setEntityClass($entityClass);
-				}
-				
-				// Generate controller
-				if($data['generate_controller']) {
-					$controllerClass = $repo->generateController($form);
-					$model->setControllerClass($controllerClass);
-				}
-				
-				// Generate form
-				if($data['generate_form']) {
-                    $formClass = $repo->generateForm($form);
-					$model->setFormClass($formClass);
-				}
-				
-				// Build the config
-				if($data['generate_config']) {		
-					
-					$repo->generateRoutes($model);
-					$repo->generateNavigation($model);
-				}
-				
-				// Save the model changes
-				$em->persist($model);
-				$em->flush();
-		
-                // Show a flash message
-                $this->flashMessenger()->addMessage('The model is succesfully exported!');
-                
-				// Redirect
-                $this->redirect()->toRoute('wiss/model/export', array(
-                    'slug' => $model->getSlug()
-                ));	
-			}
-			
-		}
-
-        return compact('form', 'model');
-    }
-	
-    /**
-     * 
-     * @param Wiss\Entity\Model $model
-     * @return Wiss\Form\ModelExport
-     */
-    public function getExportForm(Model $model)
-    {
-        $form = $this->getServiceLocator()->get('Wiss\Form\ModelExport');  
-		$form->prepareElements();
-		$form->setModel($model);
-        return $form;
+        
+        return false;
     }
     
 	/**
