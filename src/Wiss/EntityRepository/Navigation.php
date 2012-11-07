@@ -67,7 +67,7 @@ class Navigation extends NestedTreeRepository
 			}
 			 
 			foreach($data as $childName =>  $childData) {
-				$this->createNavigationFromArray($childName, $childData, $this->getNavigation($name));
+				$this->createNavigationFromArray($childName, $childData, $this->findOneByName($name));
 			}
 		}
 		else {
@@ -150,7 +150,7 @@ class Navigation extends NestedTreeRepository
 	 */
 	public function getContentNavigation()
 	{
-		$navigation = $this->getNavigation('content', 1);
+		$navigation = $this->findOneByName('content', 1);
 		
 		if(!$navigation) {
 			
@@ -163,7 +163,7 @@ class Navigation extends NestedTreeRepository
 			// Insert navigation
 			$navigation = new \Wiss\Entity\Navigation;
 			$navigation->setLabel('Content');
-			$navigation->setParent($this->getNavigation('cms', 0));
+			$navigation->setParent($this->findOneByName('cms', 0));
 			$navigation->setRoute($route);
 			
 			$this->getEntityManager()->persist($navigation);
@@ -179,7 +179,7 @@ class Navigation extends NestedTreeRepository
 	 * @param $level OPTIONAL
 	 * @return Wiss\Entity\Navigation 
 	 */
-	public function getNavigation($name, $level = null)
+	public function findOneByName($name, $level = null)
 	{
 		$params = array(
 			'name' => $name
