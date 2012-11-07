@@ -241,6 +241,13 @@ class Model extends \Doctrine\ORM\EntityRepository
 		
 		// Add the model elements
 		foreach((array)$model->getElements() as $element) {
+            
+            // Only continue if the element exists
+            if(!$element instanceof \Wiss\Entity\ModelElement) {
+                continue;
+            }
+            
+            // Add the element to the builder
 			$builder->addField($element->getName(), 'string');
 		}
 
