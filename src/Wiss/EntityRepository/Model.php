@@ -83,13 +83,6 @@ class Model extends \Doctrine\ORM\EntityRepository
                             'slug' => $model->getSlug(),
                         ),
 					),
-					'export' => array(
-						'label' => 'Export',
-						'route' => 'wiss/model/export',
-                        'params' => array(
-                            'slug' => $model->getSlug(),
-                        ),
-					),
 				)
             )
         );
@@ -240,7 +233,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 										   ->build();
 		
 		// Add the model elements
-		foreach((array)$model->getElements() as $element) {
+		foreach($model->getElements() as $element) {
             
             // Only continue if the element exists
             if(!$element instanceof \Wiss\Entity\ModelElement) {
