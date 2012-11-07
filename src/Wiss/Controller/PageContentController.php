@@ -74,6 +74,13 @@ class PageContentController extends AbstractActionController
             // to point to the right controller.
             $view = $this->forward()->dispatch($block->getController());
             
+            // Only add the content to the view if a ViewModel is returned
+            // If false is returned, it means that no view has to be 
+            // rendered.
+            if(!$view instanceof ViewModel) {
+                continue;
+            }
+            
             // The dispatched block can return a viewmodel. We want to 
             // capture this model to a unique key in our zone view model. 
             $view->setCaptureTo($content->getId());

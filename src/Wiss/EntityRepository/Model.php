@@ -295,26 +295,7 @@ class Model extends \Doctrine\ORM\EntityRepository
             
 			$name = $element->getName();
 			
-			// Decode the element config
-			$vars = urldecode($element->getConfiguration());
-			parse_str($vars, $output);
-			
-			// Check if the element has a type or config, otherwis
-			// there is nothing to do
-            if (!$element['type'] || !isset($output['element-config'])) {
-                continue;
-            }
-			
-			$config = $output['element-config'];
-
-            // Create the element method
-            $body .= '// ' . $name . PHP_EOL;
-            $body .= '$this->add(array(' . PHP_EOL;
-            $body .= sprintf('  \'name\' => \'%s\',', $name) . PHP_EOL;
-            $body .= sprintf('  \'type\' => \'%s\',', $element['type']) . PHP_EOL;
-            $body .= '	\'attributes\' => array(' . PHP_EOL;
-            $body .= sprintf('    \'label\' => \'%s\',', $config['label']) . PHP_EOL;
-            $body .= ')));' . PHP_EOL . PHP_EOL;
+            /** @todo Implement form element building */
         }
 
         // Create the submit method
