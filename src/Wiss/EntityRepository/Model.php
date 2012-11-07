@@ -286,9 +286,13 @@ class Model extends \Doctrine\ORM\EntityRepository
         $body .= '$this->setAttribute(\'class\', \'form-horizontal\');' . PHP_EOL . PHP_EOL;
 
         // Add the elements 
-//        foreach ($model->getElements() as $element) {
-        foreach (array() as $element) {
-
+        foreach ($model->getElements() as $element) {
+            
+            // Only continue if the element exists
+            if(!$element instanceof \Wiss\Entity\ModelElement) {
+                continue;
+            }
+            
 			$name = $element->getName();
 			
 			// Decode the element config
