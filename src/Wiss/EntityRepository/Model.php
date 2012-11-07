@@ -256,6 +256,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$classes[] = $this->getEntityManager()->getClassMetadata($class);
         $tool = new SchemaTool($this->getEntityManager());
 		try {
+			$tool->dropSchema($classes); // @todo Will remove all previous records, make it optional !!!
 			$tool->createSchema($classes);
 		}
 		catch(\Exception $e) {
