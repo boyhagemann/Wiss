@@ -62,7 +62,7 @@ class ModelSelect extends Element\Select implements ServiceLocatorAwareInterface
 		return $this->serviceLocator;
 	}
 
-	public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorAwareInterface $serviceLocator) {
+	public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
 		$this->serviceLocator = $serviceLocator;
 	}
 }
