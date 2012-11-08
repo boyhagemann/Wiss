@@ -52,7 +52,6 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
 		));
 
 		$this->add($title);
-		$this->add($module);
 		$this->add($submit);
 
 	}
