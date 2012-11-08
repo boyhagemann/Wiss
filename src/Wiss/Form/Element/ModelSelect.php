@@ -66,7 +66,7 @@ class ModelSelect extends Element\Select implements ElementInterface, ServiceLoc
                 
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
-            'slug' => $modelName,
+            'slug' => $this->modelName,
         ));
         $entities = $em->getRepository($model->getEntityClass())->findAll();
                 
