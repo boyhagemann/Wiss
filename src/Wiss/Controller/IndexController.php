@@ -91,6 +91,17 @@ class IndexController extends AbstractActionController
         }
         $tool->createSchema($classes);
 			
+        // Insert module
+        $module = new \Wiss\Entity\Module;
+        $module->setName('Application');
+        $module->setTitle('Application');
+        $em->persist($module);
+			
+        // Insert module
+        $module2 = new \Wiss\Entity\Module;
+        $module2->setName('Wiss');
+        $module2->setTitle('Wiss');
+        $em->persist($module2);
 		
 		// Insert layout
 		$layout = new \Wiss\Entity\Layout;
