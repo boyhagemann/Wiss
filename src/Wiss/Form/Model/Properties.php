@@ -41,6 +41,9 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
         $this->add(array(
             'name' => 'module',
             'type' => 'Wiss\Form\Element\ModelSelect',
+            'attributes' => array(
+                'label' => 'Belongs to module',
+            ),
             'options' => array(
                 'modelName' => 'module',
                 'modelLabel' => 'name',
