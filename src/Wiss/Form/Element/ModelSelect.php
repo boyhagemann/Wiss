@@ -17,9 +17,38 @@ class ModelSelect extends Element\Select implements ServiceLocatorAwareInterface
     protected $serviceLocator;
     
     protected $modelName;
-    protected $modelKey;
-    protected $modelLabel;
+    protected $modelKey = 'id';
+    protected $modelLabel = 'title';
 
+    
+    /**
+     * Set options for an element. Accepted options are:
+     * - label: label to associate with the element
+     * - label_attributes: attributes to use when the label is rendered
+     *
+     * @param  array|\Traversable $options
+     * @return Element|ElementInterface
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setOptions($options)
+    {
+        foreach($options as $key => $option) {
+            
+            switch(strtolower($key)) {
+                case 'modelname': 
+                    $this->setModelName($option); 
+                    break;
+                case 'modelkey': 
+                    $this->setModelKey($option); 
+                    break;
+                case 'modellabel': 
+                    $this->setModelLabel($option); 
+                    break;
+            }
+        }
+        return parent::setOptions($options);
+    }
+    
     public function getModelName() {
         return $this->modelName;
     }
