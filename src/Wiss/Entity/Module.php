@@ -22,6 +22,12 @@ class Module
      * @ORM\Column
 	 */
 	protected $name;
+
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $title;
 	
 	public function getId() {
 		return $this->id;
@@ -37,5 +43,13 @@ class Module
 	public function setName($name) {
 		$this->name = $name;
 	}
+    
+    public function getTitle() {
+        return $this->title;
+    }
+
+    public function setTitle($title) {
+        $this->title = $title;
+    }
 
 }

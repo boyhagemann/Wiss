@@ -13,9 +13,12 @@ use Zend\Form\Element;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class Properties extends Form implements InputFilterProviderInterface
+class Properties extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {		
+    protected $serviceLocator;
+    
 	/**
 	 * 
 	 */
@@ -30,6 +33,15 @@ class Properties extends Form implements InputFilterProviderInterface
 			'type' => 'text',
 			'label' => 'Name of the model'
 		));
+        
+        // Module        
+        $this->add(array(
+            'name' => 'module',
+            'type' => 'Wiss\Form\Element\ModelSelect',
+            'options' => array(
+                'model' => 'module',
+            )
+        ));
 
 		// Submit
 		$submit = new Element('submit');
@@ -40,6 +52,7 @@ class Properties extends Form implements InputFilterProviderInterface
 		));
 
 		$this->add($title);
+		$this->add($module);
 		$this->add($submit);
 
 	}
@@ -54,5 +67,13 @@ class Properties extends Form implements InputFilterProviderInterface
             
         );
     }
+    
+	public function getServiceLocator() {
+		return $this->serviceLocator;
+	}
+
+	public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
+		$this->serviceLocator = $serviceLocator;
+	}
 	
 }
