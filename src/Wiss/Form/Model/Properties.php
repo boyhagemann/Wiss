@@ -49,6 +49,19 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
                 'modelLabel' => 'name',
             )
         ));
+        
+        // Root        
+        $this->add(array(
+            'name' => 'node',
+            'type' => 'Wiss\Form\Element\ModelSelect',
+            'attributes' => array(
+                'label' => 'Put in navigation',
+            ),
+            'options' => array(
+                'modelName' => 'navigation',
+                'modelLabel' => 'label',
+            )
+        ));
 
 		// Submit
 		$submit = new Element('submit');

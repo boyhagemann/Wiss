@@ -110,6 +110,14 @@ class IndexController extends AbstractActionController
         $model->setEntityClass('Wiss\Entity\Module');
         $model->setFormClass('Wiss\Form\Module');
         $em->persist($model);        
+        
+        // Insert model
+        $model = new \Wiss\Entity\Model;
+        $model->setTitle('Navigation');
+        $model->setControllerClass('Wiss\Controller\Navigation');
+        $model->setEntityClass('Wiss\Entity\Navigation');
+        $model->setFormClass('Wiss\Form\Navigation');
+        $em->persist($model);        
 		
 		// Insert layout
 		$layout = new \Wiss\Entity\Layout;
