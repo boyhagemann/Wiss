@@ -43,6 +43,7 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
             'type' => 'Wiss\Form\Element\ModelSelect',
             'options' => array(
                 'modelName' => 'module',
+                'modelLabel' => 'name',
             )
         ));
 
