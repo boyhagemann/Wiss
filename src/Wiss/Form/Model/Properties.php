@@ -23,7 +23,10 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
 	 * 
 	 */
     public function prepareElements()
-    {                		
+    {           
+        $formFactory = $this->getServiceLocator()->get('Wiss\Form\Factory');
+        $this->setFormFactory($formFactory); 
+        
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
 		$this->setAttribute('class', 'form-horizontal');
 		

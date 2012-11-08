@@ -9,10 +9,11 @@
 
 namespace Wiss\Form\Element;
 
+use Zend\Form\ElementInterface;
 use Zend\Form\Element;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class ModelSelect extends Element\Select implements ServiceLocatorAwareInterface
+class ModelSelect extends Element\Select implements ElementInterface, ServiceLocatorAwareInterface
 {	
     protected $serviceLocator;
     
