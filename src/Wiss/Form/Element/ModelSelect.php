@@ -56,20 +56,29 @@ class ModelSelect extends Element\Select implements ElementInterface, ServiceLoc
 
     public function setModelName($modelName) {
         $this->modelName = $modelName;
-        
+    }        
+
+    public function getValueOptions() 
+    {
+        if($this->valueOptions) {
+            return $this->valueOptions;
+        }
+                
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $model = $em->getRepository('Wiss\Entity\Model')->findOneBy(array(
             'slug' => $modelName,
         ));
         $entities = $em->getRepository($model->getEntityClass())->findAll();
-        
-        \Zend\Debug\Debug::dump($entities); exit;
-        
+                
         $valueOptions = array();
-//        foreach($entities as $entity) {
-//            $valueOptions
-//        }
+        foreach($entities as $entity) {
+            $getterKey = 'get' . ucfirst($this->modelKey);
+            $getterLabel = 'get' . ucfirst($this->modelLabel);
+            $valueOptions[$entity->$getterKey()] = $entity->$getterLabel();
+        }
         $this->setValueOptions($valueOptions);
+        
+        return $this->valueOptions;
     }
     
     public function getModelKey() {
