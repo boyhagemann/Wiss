@@ -57,7 +57,24 @@ class Module extends \Doctrine\ORM\EntityRepository
         // Get the basic information
         $folder = 'module/' . $module->getName() . '/config';
         $filename = $folder . '/module.config.php';
-        $config = array();
+        $driverName = 'driver_module_' . $module->getId();
+        
+        $config = array(
+            'doctrine' => array(
+                'driver' => array(
+                    $driverName => array(
+                        'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                        'cache' => 'array',
+                        'paths' => array($module->getName() . '/Entity')
+                    ),
+                    'orm_default' => array(
+                        'drivers' => array(
+                            $module->getName() => $driverName
+                        )
+                    )
+                ),
+            ),
+        );
         
         // Write the config to disk
         $writer = new \Zend\Config\Writer\PhpArray();

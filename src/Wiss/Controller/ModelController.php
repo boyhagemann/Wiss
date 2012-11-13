@@ -113,9 +113,10 @@ class ModelController extends AbstractActionController {
                                 
                 // Get the model
                 $model = $form->getData();
-                $model->setEntityClass('Application\Entity\\' . $camelCasedTitle);
-                $model->setControllerClass('Application\Controller\\' . $camelCasedTitle);
-                $model->setFormClass('Application\Form\\' . $camelCasedTitle);                
+                $module = $model->getModule()->getName();
+                $model->setEntityClass($module . '\Entity\\' . $camelCasedTitle);
+                $model->setControllerClass($module . '\Controller\\' . $camelCasedTitle);
+                $model->setFormClass($module . '\Form\\' . $camelCasedTitle);                
                 $em->persist($model);
                 $em->flush();
 
@@ -126,12 +127,12 @@ class ModelController extends AbstractActionController {
                 // Save the newly created model
                 $em->persist($model);
                 $em->flush();
-
+                
                 // Show a flash message
                 $this->flashMessenger()->addMessage('The model is now created');
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/model/elements', array(
+                $this->redirect()->toRoute('wiss/model/generate', array(
                     'slug' => $model->getSlug()
                 ));
             }

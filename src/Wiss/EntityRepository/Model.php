@@ -166,7 +166,8 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateController(\Wiss\Entity\Model $model) 
 	{		
         $class = $model->getControllerClass();
-        $filename = $this->buildControllerPath($class);
+        $module = $model->getModule()->getName();
+        $filename = $this->buildControllerPath($module, $class);
         $namespace = substr($class, 0, strrpos($class, '\\'));
 
         // Create the folder if it does not exist
@@ -201,8 +202,9 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateEntity(\Wiss\Entity\Model $model)
     {
         $class = $model->getEntityClass();
+        $module = $model->getModule()->getName();
         $namespace = substr($class, 0, strrpos($class, '\\'));
-        $filename = $this->buildEntityPath($class);
+        $filename = $this->buildEntityPath($module, $class);
         
         // Create the folder if it does not exist
         if(!file_exists(dirname($filename))) {
@@ -232,6 +234,9 @@ class Model extends \Doctrine\ORM\EntityRepository
             // Add the element to the builder
 			$builder->addField($element->getName(), 'string');
 		}
+        
+        // Set the right folder for the entity
+        $folder = sprintf('module/%s/src', $model->getModule()->getName());
 
 		// Build the entity with the generator
 		$generator = new EntityGenerator();
@@ -239,10 +244,10 @@ class Model extends \Doctrine\ORM\EntityRepository
 		$generator->setRegenerateEntityIfExists(true);	// this will overwrite the existing classes
 		$generator->setGenerateStubMethods(true);
 		$generator->setGenerateAnnotations(true);
-		$generator->generate(array($info), 'module/Application/src');
+		$generator->generate(array($info), $folder);
 		
 		// Export to the database       
-		$classes[] = $this->getEntityManager()->getClassMetadata($class);
+		$classes[] = $info;
         $tool = new SchemaTool($this->getEntityManager());
 		try {
 			$tool->dropSchema($classes); // @todo Will remove all previous records, make it optional !!!
@@ -260,8 +265,9 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generateForm(\Wiss\Entity\Model $model) 
 	{
         $class = $model->getFormClass();
+        $module = $model->getModule()->getName();
         $namespace = substr($class, 0, strrpos($class, '\\'));
-        $filename = $this->buildFormPath($class);
+        $filename = $this->buildFormPath($module, $class);
 
         // Create the body for in the __construct method
         $body = sprintf('parent::__construct(\'%s\');', $class) . PHP_EOL . PHP_EOL;
@@ -365,37 +371,40 @@ class Model extends \Doctrine\ORM\EntityRepository
 	
     /**
      * 
+     * @param string $module
      * @param string $class
      * @return string
      */
-    public function buildControllerPath($class)
+    public function buildControllerPath($module, $class)
     {
         $file = str_replace('\\', '/', $class);
-        $path = sprintf('module/Application/src/%sController.php', $file);
+        $path = sprintf('module/%s/src/%sController.php', $module, $file);
 		return $path;
     }
 	
     /**
      * 
+     * @param string $module
      * @param string $class
      * @return string
      */
-    public function buildFormPath($class)
+    public function buildFormPath($module, $class)
     {
         $file = str_replace('\\', '/', $class);
-        $path = sprintf('module/Application/src/%s.php', $file);
+        $path = sprintf('module/%s/src/%s.php', $module, $file);
 		return $path;
     }
 	
     /**
      * 
+     * @param string $module
      * @param string $class
      * @return string
      */
-    public function buildEntityPath($class)
+    public function buildEntityPath($module, $class)
     {
         $file = str_replace('\\', '/', $class);
-        $path = sprintf('module/Application/src/%s.php', $file);
+        $path = sprintf('module/%s/src/%s.php', $module, $file);
 		return $path;
     }
 }
