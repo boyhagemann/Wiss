@@ -66,6 +66,6 @@ class Module extends \Doctrine\ORM\EntityRepository
         
         // Write the config to disk
         $writer = new \Zend\Config\Writer\PhpArray();
-        $writer->toFile($file, $config);
+        $writer->toFile($filename, $config);
     }
 }
