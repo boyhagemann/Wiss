@@ -39,7 +39,7 @@ class ModuleController extends AbstractActionController
         $form = $this->getServiceLocator()->get('Wiss\Form\Module');
         
         // Get the module repository
-        $repo = $this->getEntityManger()->getRepository('Wiss\Entity\Module');
+        $repo = $this->getEntityManager()->getRepository('Wiss\Entity\Module');
         
         // Bind a new entity
         $form->bind(new \Wiss\Entity\Module());
