@@ -39,7 +39,8 @@ class ModuleController extends AbstractActionController
         $form = $this->getServiceLocator()->get('Wiss\Form\Module');
         
         // Get the module repository
-        $repo = $this->getEntityManager()->getRepository('Wiss\Entity\Module');
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Module');
         
         // Bind a new entity
         $form->bind(new \Wiss\Entity\Module());
@@ -47,9 +48,13 @@ class ModuleController extends AbstractActionController
         // Check if data is posted
         if($this->getRequest()->isPost()) {
             
+            // Save the data
+            $em->persist($form->getData());
+            $em->flush();
+            
             // Generate the file and folders
             $repo->generate($form->getData());
-            
+                        
             // Show a flash message
             
             // Redirect
