@@ -98,8 +98,8 @@ class Module extends \Doctrine\ORM\EntityRepository
                     'ViewHelperProviderInterface',
                 ),
                 'methods' => array(
-                    array('init', new ParameterGenerator('manager', 'ModuleManagerInterface')),
-                    array('onBootstrap', new ParameterGenerator('e', 'EventInterface')),
+                    array('init', array( new ParameterGenerator('manager', 'ModuleManagerInterface'))),
+                    array('onBootstrap', array( new ParameterGenerator('e', 'EventInterface'))),
                     array('getConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return include __DIR__ . \'/config/module.config.php\';'),
                     array('getServiceConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
                     array('getControllerConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
