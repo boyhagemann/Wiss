@@ -45,7 +45,7 @@ class ModuleController extends AbstractActionController
         $form->bind(new \Wiss\Entity\Module());
         
         // Check if data is posted
-        if($this->getRequest()->isPosted()) {
+        if($this->getRequest()->isPost()) {
             
             // Generate the file and folders
             $repo->generate($form->getData());
