@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Module")
+ * @HasLifecycleCallbacks
  */
 class Module
 {
@@ -52,4 +53,14 @@ class Module
         $this->title = $title;
     }
 
+    /**
+     * @PrePersist
+     */
+    public function canonicalizeName()
+    {
+        $filter = new \Zend\Filter\Word\SeparatorToCamelCase();
+        $filter->setSeparator(' ');
+        
+        $this->name = $filter->filter($this->title);
+    }
 }

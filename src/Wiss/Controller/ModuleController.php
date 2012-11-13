@@ -56,11 +56,12 @@ class ModuleController extends AbstractActionController
             if($form->isValid()) {
                 
                 // Save the data
-                $em->persist($form->getData());
+                $module = $form->getData();
+                $em->persist($module);
                 $em->flush();
 
                 // Generate the file and folders
-                $repo->generate($form->getData());
+                $repo->generate($module);
 
                 // Show a flash message
 

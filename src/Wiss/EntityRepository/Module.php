@@ -24,12 +24,9 @@ class Module extends \Doctrine\ORM\EntityRepository
      */
     public function generate(\Wiss\Entity\Module $module) 
 	{
-        $filter = new \Zend\Filter\Word\SeparatorToCamelCase();
-        $filter->setSeparator(' ');
-        $moduleName = $filter->filter($module->getTitle());
+        $moduleName = $this->canonicalizeName($module->getTitle());
         
         $folder = 'module/' . $moduleName;
         @mkdir($folder);
     }
-	
 }
