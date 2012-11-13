@@ -75,16 +75,30 @@ class Module extends \Doctrine\ORM\EntityRepository
             'filename' => $filename,
             'namespace' => $module->getName(),
             'uses' => array(
+                array('Zend\ModuleManager\ModuleManagerInterface'),
+                array('Zend\ModuleManager\Feature\ConfigProviderInterface'),
+                array('Zend\ModuleManager\Feature\ServiceProviderInterface'),
                 array('Zend\ModuleManager\Feature\ControllerProviderInterface'),
+                array('Zend\ModuleManager\Feature\ControllerPluginProviderInterface'),
+                array('Zend\ModuleManager\Feature\ViewHelperProviderInterface'),
             ),
             'class' => array(
                 'name' => 'Module',
                 'implementedinterfaces' => array(
+                    'InitProviderInterface',
+                    'ConfigProviderInterface',
+                    'ServiceProviderInterface',
                     'ControllerProviderInterface',
+                    'ControllerPluginProviderInterface',
+                    'ViewHelperProviderInterface',
                 ),
                 'methods' => array(
+                    array('init', array('ModuleManagerInterface' => 'manager')),
                     array('getConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return include __DIR__ . \'/config/module.config.php\';'),
-                    array('getControllerConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();')
+                    array('getServiceConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
+                    array('getControllerConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
+                    array('getControllerPluginConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
+                    array('getViewHelperConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
                 )
             ),
         );
