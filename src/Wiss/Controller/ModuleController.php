@@ -37,6 +37,7 @@ class ModuleController extends AbstractActionController
     {
         // Get the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Module');
+        $form->prepareElements();
         
         // Get the module repository
         $em = $this->getEntityManager();
