@@ -14,6 +14,7 @@ use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 
 class Properties extends Form implements InputFilterProviderInterface, ServiceLocatorAwareInterface
 {		
@@ -24,10 +25,14 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
 	 */
     public function prepareElements()
     {           
-        $formFactory = $this->getServiceLocator()->get('Wiss\Form\Factory');
+        $sl = $this->getServiceLocator();
+        $formFactory = $sl->get('Wiss\Form\Factory');
         $this->setFormFactory($formFactory); 
         
-		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
+        // Get the hydrator for doctrine entities
+        $em = $sl->get('doctrine.entity_manager.orm_default');                
+		$this->setHydrator(new EntityHydrator($em));
+        
 		$this->setAttribute('class', 'form-horizontal');
 		
 		// Title
@@ -51,17 +56,17 @@ class Properties extends Form implements InputFilterProviderInterface, ServiceLo
         ));
         
         // Root        
-        $this->add(array(
-            'name' => 'node',
-            'type' => 'Wiss\Form\Element\ModelSelect',
-            'attributes' => array(
-                'label' => 'Put in navigation',
-            ),
-            'options' => array(
-                'modelName' => 'navigation',
-                'modelLabel' => 'label',
-            )
-        ));
+//        $this->add(array(
+//            'name' => 'node',
+//            'type' => 'Wiss\Form\Element\ModelSelect',
+//            'attributes' => array(
+//                'label' => 'Put in navigation',
+//            ),
+//            'options' => array(
+//                'modelName' => 'navigation',
+//                'modelLabel' => 'label',
+//            )
+//        ));
 
 		// Submit
 		$submit = new Element('submit');
