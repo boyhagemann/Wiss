@@ -23,10 +23,8 @@ class Module extends \Doctrine\ORM\EntityRepository
      * @param \Wiss\Entity\Module $module
      */
     public function generate(\Wiss\Entity\Module $module) 
-	{
-        $moduleName = $this->canonicalizeName($module->getTitle());
-        
-        $folder = 'module/' . $moduleName;
+	{        
+        $folder = 'module/' . $module->getName();
         @mkdir($folder);
     }
 }
