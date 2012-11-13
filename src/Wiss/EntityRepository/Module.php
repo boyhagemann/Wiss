@@ -3,6 +3,7 @@
 namespace Wiss\EntityRepository;
 
 use Zend\Code\Generator\FileGenerator;
+use Zend\Code\Generator\MethodGenerator;
 
 /**
  * 
@@ -74,7 +75,10 @@ class Module extends \Doctrine\ORM\EntityRepository
             'filename' => $filename,
             'namespace' => $module->getName(),
             'class' => array(
-                'name' => $module->getName(),
+                'name' => 'Module',
+                'methods' => array(
+                    array('getConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return include __DIR__ . \'/config/module.config.php\';')
+                )
             ),
         );
          
