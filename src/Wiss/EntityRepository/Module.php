@@ -74,10 +74,17 @@ class Module extends \Doctrine\ORM\EntityRepository
         $fileData = array(
             'filename' => $filename,
             'namespace' => $module->getName(),
+            'uses' => array(
+                'Zend\ModuleManager\Feature\ControllerProviderInterface',
+            ),
             'class' => array(
                 'name' => 'Module',
+                'implements' => array(
+                    'ControllerProviderInterface',
+                ),
                 'methods' => array(
-                    array('getConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return include __DIR__ . \'/config/module.config.php\';')
+                    array('getConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return include __DIR__ . \'/config/module.config.php\';'),
+                    array('getControllerConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();')
                 )
             ),
         );
