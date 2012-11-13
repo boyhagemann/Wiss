@@ -5,7 +5,7 @@ namespace Wiss\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity 
+ * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Module")
  */
 class Module
 {

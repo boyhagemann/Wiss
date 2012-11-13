@@ -29,6 +29,37 @@ class ModuleController extends AbstractActionController
     }
 	
     /**
+     * Create a new module
+     *
+     * @return array
+     */
+    public function createAction()
+    {
+        // Get the form
+        $form = $this->getServiceLocator()->get('Wiss\Form\Module');
+        
+        // Get the module repository
+        $repo = $this->getEntityManger()->getRepository('Wiss\Entity\Module');
+        
+        // Bind a new entity
+        $form->bind(new \Wiss\Entity\Module());
+        
+        // Check if data is posted
+        if($this->getRequest()->isPosted()) {
+            
+            // Generate the file and folders
+            $repo->generate($form->getData());
+            
+            // Show a flash message
+            
+            // Redirect
+            $this->redirect()->toRoute('wiss/module');
+        }
+        
+		return compact('form');
+    }
+	
+    /**
      * Lists the uninstalled modules
      *
      * @return array

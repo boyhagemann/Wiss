@@ -248,6 +248,15 @@ return array(
 									),
 								),
 							),
+							'create' => array(
+								'type' => 'Literal',
+								'options' => array(
+									'route' => '/create',
+									'defaults' => array(
+										'action' => 'create'
+									),
+								),
+							),
 							'install' => array(
 								'type' => 'Segment',
 								'options' => array(
