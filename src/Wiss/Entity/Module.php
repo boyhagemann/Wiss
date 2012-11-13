@@ -54,13 +54,17 @@ class Module
     }
 
     /**
+     * Build the name of the model based on the title
+     * 
      * @ORM\PrePersist
      */
     public function canonicalizeName()
     {
+        // Make the name camelCased
         $filter = new \Zend\Filter\Word\SeparatorToCamelCase();
         $filter->setSeparator(' ');
         
+        // Set the name
         $this->name = $filter->filter($this->title);
     }
 }
