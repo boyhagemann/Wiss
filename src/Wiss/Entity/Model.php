@@ -3,6 +3,7 @@
 namespace Wiss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -57,10 +58,23 @@ class Model
 	
 	/**
 	 *
+	 * @ORM\ManyToOne(targetEntity="Module")
+	 */
+	protected $module;	
+	
+	/**
+	 *
 	 * @ORM\ManyToOne(targetEntity="Navigation")
 	 */
 	protected $node;
 	
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->elements = new ArrayCollection();
+    }
 
 	public function getId() {
 		return $this->id;
@@ -117,6 +131,14 @@ class Model
 	public function setElements($elements) {
 		$this->elements = $elements;
 	}
+    
+    public function getModule() {
+        return $this->module;
+    }
+
+    public function setModule(Module $module) {
+        $this->module = $module;
+    }
 
 	public function getNode() {
 		return $this->node;
