@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Module")
- * @HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks
  */
 class Module
 {
