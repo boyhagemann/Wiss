@@ -49,17 +49,24 @@ class ModuleController extends AbstractActionController
         // Check if data is posted
         if($this->getRequest()->isPost()) {
             
-            // Save the data
-            $em->persist($form->getData());
-            $em->flush();
+            // Set the data from the request to the form
+            $form->setData($this->getRequest()->getPost());
             
-            // Generate the file and folders
-            $repo->generate($form->getData());
-                        
-            // Show a flash message
-            
-            // Redirect
-            $this->redirect()->toRoute('wiss/module');
+            // Check if the posted data is valid
+            if($form->isValid()) {
+                
+                // Save the data
+                $em->persist($form->getData());
+                $em->flush();
+
+                // Generate the file and folders
+                $repo->generate($form->getData());
+
+                // Show a flash message
+
+                // Redirect
+                $this->redirect()->toRoute('wiss/module');
+            }
         }
         
 		return compact('form');
