@@ -54,7 +54,7 @@ class Module
     }
 
     /**
-     * @PrePersist
+     * @ORM\PrePersist
      */
     public function canonicalizeName()
     {
