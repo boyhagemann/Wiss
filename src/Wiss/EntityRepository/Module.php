@@ -75,11 +75,11 @@ class Module extends \Doctrine\ORM\EntityRepository
             'filename' => $filename,
             'namespace' => $module->getName(),
             'uses' => array(
-                'Zend\ModuleManager\Feature\ControllerProviderInterface',
+                array('Zend\ModuleManager\Feature\ControllerProviderInterface'),
             ),
             'class' => array(
                 'name' => 'Module',
-                'implements' => array(
+                'implementedinterfaces' => array(
                     'ControllerProviderInterface',
                 ),
                 'methods' => array(
