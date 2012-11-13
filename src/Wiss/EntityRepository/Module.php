@@ -3,14 +3,6 @@
 namespace Wiss\EntityRepository;
 
 use Zend\Code\Generator\FileGenerator;
-use Zend\Code\Generator\PropertyGenerator;
-use Gedmo\Sluggable\Util\Urlizer;
-use Wiss\Form\ModelExport as ExportForm;
-
-use Doctrine\ORM\Tools\EntityGenerator;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
-use Doctrine\ORM\Tools\SchemaTool;
 
 /**
  * 
@@ -26,6 +18,7 @@ class Module extends \Doctrine\ORM\EntityRepository
 	{   
         $this->generateFolderStructure($module);
         $this->generateConfig($module);
+        $this->generateZfModule($module);
     }
     
     /**
@@ -67,5 +60,26 @@ class Module extends \Doctrine\ORM\EntityRepository
         // Write the config to disk
         $writer = new \Zend\Config\Writer\PhpArray();
         $writer->toFile($filename, $config);
+    }
+    
+    /**
+     *
+     * @param \Wiss\Entity\Module $module
+     */
+    public function generateZfModule(\Wiss\Entity\Module $module)
+    {
+        // Get the basic information
+        $filename = 'module/' . $module->getName() . '/Module.php';        
+        $fileData = array(
+            'filename' => $filename,
+            'namespace' => $module->getName(),
+            'class' => array(
+                'name' => $module->getName(),
+            ),
+        );
+         
+        // Write the data to disk
+        $generator = FileGenerator::fromArray($fileData);
+        $generator->write();
     }
 }
