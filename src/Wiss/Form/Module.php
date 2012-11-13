@@ -18,9 +18,8 @@ class Module extends Form implements InputFilterProviderInterface
 {		
 	/**
 	 * 
-	 * @param array $data
 	 */
-    public function prepareElements(Array $data)
+    public function prepareElements()
     {                		
 		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
 		$this->setAttribute('class', 'form-horizontal');
