@@ -4,6 +4,7 @@ namespace Wiss\EntityRepository;
 
 use Zend\Code\Generator\FileGenerator;
 use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\ParameterGenerator;
 
 /**
  * 
@@ -76,6 +77,9 @@ class Module extends \Doctrine\ORM\EntityRepository
             'namespace' => $module->getName(),
             'uses' => array(
                 array('Zend\ModuleManager\ModuleManagerInterface'),
+                array('Zend\EventManager\EventInterface'),
+                array('Zend\ModuleManager\Feature\InitProviderInterface'),
+                array('Zend\ModuleManager\Feature\BootstrapListenerInterface'),
                 array('Zend\ModuleManager\Feature\ConfigProviderInterface'),
                 array('Zend\ModuleManager\Feature\ServiceProviderInterface'),
                 array('Zend\ModuleManager\Feature\ControllerProviderInterface'),
@@ -86,6 +90,7 @@ class Module extends \Doctrine\ORM\EntityRepository
                 'name' => 'Module',
                 'implementedinterfaces' => array(
                     'InitProviderInterface',
+                    'BootstrapListenerInterface',
                     'ConfigProviderInterface',
                     'ServiceProviderInterface',
                     'ControllerProviderInterface',
@@ -93,7 +98,8 @@ class Module extends \Doctrine\ORM\EntityRepository
                     'ViewHelperProviderInterface',
                 ),
                 'methods' => array(
-                    array('init', array('ModuleManagerInterface' => 'manager')),
+                    array('init', new ParameterGenerator('manager', 'ModuleManagerInterface')),
+                    array('onBootstrap', new ParameterGenerator('e', 'EventInterface')),
                     array('getConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return include __DIR__ . \'/config/module.config.php\';'),
                     array('getServiceConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
                     array('getControllerConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
