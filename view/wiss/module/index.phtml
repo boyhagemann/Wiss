@@ -8,8 +8,8 @@
 		<h2><?php echo $module->getTitle() ?></h2>
         <?php if (!$module->isLocked()) : ?>
         <div class="btn-group">
-            <a href="<?php echo $this->url('wiss/module/properties', array('module' => $module->getName())) ?>" class="btn btn-small">Properties</a>            
-            <a href="<?php echo $this->url('wiss/module/models', array('module' => $module->getName())) ?>" class="btn btn-small">Models</a>            
+            <a href="<?php echo $this->url('wiss/module/' . $module->getSlug() . '/properties') ?>" class="btn btn-small">Properties</a>            
+            <a href="<?php echo $this->url('wiss/module/' . $module->getSlug() . '/models') ?>" class="btn btn-small">Models</a>            
             <a href="" class="btn btn-small">Deactivate</a>            
         </div>
         <?php endif ?>

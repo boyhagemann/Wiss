@@ -12,16 +12,19 @@ class Navigation extends NestedTreeRepository
 	/**
 	 * 
 	 * @param array $config
+	 * @param string $name
+	 * @param integer $level
 	 */
-	public function import(Array $config)
+	public function import(Array $config, $name = 'content', $level = 1)
 	{
-		
+        $em = $this->getEntityManager();
+        
 		if(!isset($config['navigation'])) {
 			return;
 		}		
 		
-		$navigation = $config['navigation'];		
-		$parent = $this->getContentNavigation();
+		$navigation = $config['navigation'];	
+        $parent = $this->getNavigationByNameAndLevel($name, $level);
 		
 		// Build the pages from the routes
 		foreach($navigation as $name => $navigationData) {
@@ -29,7 +32,7 @@ class Navigation extends NestedTreeRepository
 		}
 			
 		// Save entities
-		$this->getEntityManager()->flush();
+		$em->flush();
 	}
 	
 	/**
@@ -146,29 +149,31 @@ class Navigation extends NestedTreeRepository
 	
 	/**
 	 *
+     * @param string $name
+     * @param integer $level
 	 * @return \Wiss\Entity\Navigation 
 	 */
-	public function getContentNavigation()
+	public function getNavigationByNameAndLevel($name, $level = 1)
 	{
-		$navigation = $this->findOneByName('content', 1);
+		$navigation = $this->findOneByName($name, $level);
 		
-		if(!$navigation) {
-			
-			// We have to use a route for the navigation, so just grab
-			// a neutral route
-			$route = $this->getEntityManager()->getRepository('Wiss\Entity\Route')->findOneBy(array(
-				'fullName' => 'wiss/model'
-			));
-			
-			// Insert navigation
-			$navigation = new \Wiss\Entity\Navigation;
-			$navigation->setLabel('Content');
-			$navigation->setParent($this->findOneByName('cms', 0));
-			$navigation->setRoute($route);
-			
-			$this->getEntityManager()->persist($navigation);
-			$this->getEntityManager()->flush();		
-		}
+//		if(!$navigation) {
+//			
+//			// We have to use a route for the navigation, so just grab
+//			// a neutral route
+//			$route = $this->getEntityManager()->getRepository('Wiss\Entity\Route')->findOneBy(array(
+//				'fullName' => 'wiss/model'
+//			));
+//			
+//			// Insert navigation
+//			$navigation = new \Wiss\Entity\Navigation;
+//			$navigation->setLabel('Content');
+//			$navigation->setParent($this->findOneByName('cms', 0));
+//			$navigation->setRoute($route);
+//			
+//			$this->getEntityManager()->persist($navigation);
+//			$this->getEntityManager()->flush();		
+//		}
 		
 		return $navigation;
 	}

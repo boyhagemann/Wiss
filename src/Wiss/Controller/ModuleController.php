@@ -66,9 +66,7 @@ class ModuleController extends AbstractActionController
                 // Show a flash message
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/module/models', array(
-                    'module' => $module->getName(),
-                ));
+                $this->redirect()->toRoute('wiss/module');
             }
         }
         

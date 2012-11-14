@@ -21,6 +21,8 @@ class Module extends \Doctrine\ORM\EntityRepository
         $this->generateFolderStructure($module);
         $this->generateConfig($module);
         $this->generateZfModule($module);
+        $this->generateRoutes($module);
+        $this->generateNavigation($module);
     }
     
     /**
@@ -139,4 +141,94 @@ class Module extends \Doctrine\ORM\EntityRepository
         $generator = FileGenerator::fromArray($fileData);
         $generator->write();
     }
+		
+    /**
+     *
+     * @param \Wiss\Entity\Module $module
+     */
+    public function generateRoutes(\Wiss\Entity\Module $module) 
+	{
+        // Build the config, starting from router.routes
+        $config['router']['routes']['wiss']['child_routes']['module']['child_routes'] = array(
+            $module->getSlug() => array(
+                'type' => 'Literal',
+                'may_terminate' => true,
+                'options' => array(
+                    'layout' => 'cms',
+                    'route' => '/' . $module->getSlug(),
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Wiss\Controller',
+                        'controller' => 'module',
+                        'action' => 'properties',
+                        'module' => $module->getSlug(),
+                    ),
+                ),
+                'child_routes' => array(
+                    'properties' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'layout' => 'cms',
+                            'route' => '/properties',
+                            'defaults' => array(
+                                'action' => 'properties'
+                            ),
+                        ),
+                    ),
+                    'models' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'layout' => 'cms',
+                            'route' => '/models',
+                            'defaults' => array(
+                                'action' => 'models'
+                            ),
+                        ),
+                    ),
+                )
+            )
+        );
+
+        // Import the config thru the Page entity repository
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Route');
+        $repo->import($config);		
+		$repo->export();	
+    }
+    
+    /**
+     *
+     * @param \Wiss\Entity\Module $module
+     */
+    public function generateNavigation(\Wiss\Entity\Module $module) 
+	{
+        $baseRoute = 'wiss/module/' . $module->getSlug();
+        
+        // Build the config, starting from navigation
+        $config['navigation'] = array(
+            $module->getSlug() => array(
+                'label' => $module->getTitle(),
+                'route' => $baseRoute,
+                'params' => array(
+                    'module' => $module->getSlug(),
+                ),
+				'pages' => array(
+					'properties' => array(
+						'label' => 'Properties',
+						'route' => $baseRoute . '/properties',
+					),
+					'models' => array(
+						'label' => 'Models',
+						'route' => $baseRoute . '/models',
+					),
+				)
+            )
+        );
+
+        // Import the config thru the Navigation entity repository
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Navigation');
+        $repo->import($config, 'module', 2);
+		$repo->export();
+    }
+    
 }

@@ -50,7 +50,9 @@ ul.blocks li.block div.form-actions {
 }
 
 
-
+ul.list {
+    margin-bottom: 30px;
+}
 ul.list li {
 	margin: 10px 0;
 	padding: 10px;

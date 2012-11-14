@@ -247,30 +247,6 @@ return array(
 									),
 								),
 							),
-							'properties' => array(
-								'type' => 'Segment',
-								'options' => array(
-									'route' => '/[:module]/properties',
-									'constraints' => array(
-										'module' => '[a-zA-Z][a-zA-Z0-9_-]*',
-									),
-									'defaults' => array(
-										'action' => 'properties'
-									),
-								),
-							),
-							'models' => array(
-								'type' => 'Segment',
-								'options' => array(
-									'route' => '/[:module]/models',
-									'constraints' => array(
-										'module' => '[a-zA-Z][a-zA-Z0-9_-]*',
-									),
-									'defaults' => array(
-										'action' => 'models'
-									),
-								),
-							),
 							'install' => array(
 								'type' => 'Segment',
 								'options' => array(

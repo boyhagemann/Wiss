@@ -3,6 +3,7 @@
 namespace Wiss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Module")
@@ -30,6 +31,12 @@ class Module
      * @ORM\Column
 	 */
 	protected $title;
+
+	/**
+     * @ORM\Column
+     * @Gedmo\Slug(fields={"title"}, unique=true)
+	 */
+	protected $slug;
     
 	/**
 	 * 
@@ -64,6 +71,14 @@ class Module
 
     public function setTitle($title) {
         $this->title = $title;
+    }
+
+    public function getSlug() {
+        return $this->slug;
+    }
+
+    public function setSlug($slug) {
+        $this->slug = $slug;
     }
     
     public function getModels() {
