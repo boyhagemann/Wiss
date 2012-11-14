@@ -106,8 +106,9 @@ return array(
 							'create' => array(
 								'type' => 'Segment',
 								'options' => array(
-									'route' => '/create/[:class]',
+									'route' => '/create/[:module[/:class]]',
 									'constraints' => array(
+										'module' => '[A-Z][a-zA-Z0-9_-]*',
 										'class' => '[A-Z][a-zA-Z0-9_-]*',
 									),
 									'defaults' => array(
@@ -237,23 +238,36 @@ return array(
 						),
 						'may_terminate' => true,
 						'child_routes' => array(
-							'default' => array(
-								'type' => 'Segment',
-								'options' => array(
-									'route' => '/[:action]',
-									'constraints' => array(
-										'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-									),
-									'defaults' => array(
-									),
-								),
-							),
 							'create' => array(
 								'type' => 'Literal',
 								'options' => array(
 									'route' => '/create',
 									'defaults' => array(
 										'action' => 'create'
+									),
+								),
+							),
+							'properties' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/[:module]/properties',
+									'constraints' => array(
+										'module' => '[a-zA-Z][a-zA-Z0-9_-]*',
+									),
+									'defaults' => array(
+										'action' => 'properties'
+									),
+								),
+							),
+							'models' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/[:module]/models',
+									'constraints' => array(
+										'module' => '[a-zA-Z][a-zA-Z0-9_-]*',
+									),
+									'defaults' => array(
+										'action' => 'models'
 									),
 								),
 							),
@@ -342,19 +356,6 @@ return array(
 					'module' => array(
 						'label' => 'Modules',
 						'route' => 'wiss/module',
-						'pages' => array(
-							'installed' => array(
-								'label' => 'Installed',
-								'route' => 'wiss/module',
-							),
-							'uninstalled' => array(
-								'label' => 'Uninstalled',
-								'route' => 'wiss/module/default',
-								'params' => array(
-									'action' => 'uninstalled'
-								)
-							),
-						)
 					),
 					'models' => array(
 						'label' => 'Models',

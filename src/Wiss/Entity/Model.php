@@ -58,7 +58,7 @@ class Model
 	
 	/**
 	 *
-	 * @ORM\ManyToOne(targetEntity="Module")
+	 * @ORM\ManyToOne(targetEntity="Module", inversedBy="models")
 	 */
 	protected $module;	
 	

@@ -201,9 +201,12 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateEntity(\Wiss\Entity\Model $model)
     {
+        $filter = new \Zend\Filter\Word\DashToUnderscore();
+        
         $class = $model->getEntityClass();
         $module = $model->getModule()->getName();
         $namespace = substr($class, 0, strrpos($class, '\\'));
+        $tableName = $filter->filter($model->getSlug());
         $filename = $this->buildEntityPath($module, $class);
         
         // Create the folder if it does not exist
@@ -214,6 +217,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 
 		// Start a new metadata class
 		$info = new ClassMetadata($class);	
+        $info->setTableName($tableName);
 
 		// Start a builder to add data to the metadata object
 		$builder = new ClassMetadataBuilder($info);
@@ -254,7 +258,7 @@ class Model extends \Doctrine\ORM\EntityRepository
 			$tool->createSchema($classes);
 		}
 		catch(\Exception $e) {
-			
+			print $e; exit;
 		}
     }
 		

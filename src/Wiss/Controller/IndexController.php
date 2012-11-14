@@ -28,7 +28,20 @@ class IndexController extends AbstractActionController
 			$form->setData($this->getRequest()->getPost());
 			
 			if($form->isValid()) {
-							
+					
+				// Update the config with the application uninstalled
+				$this->writeToApplicationConfig(array(
+					'application' => array(
+						'installed' => false,
+						'use_zones' => false,
+					)
+				));
+                
+                // Remove old generated configs
+                @unlink('config/autoload/connection.global.php');
+                @unlink('config/autoload/navigation.global.php');
+                @unlink('config/autoload/routes.global.php');
+                
 				$config = array(
 					'doctrine' => array(
 						'connection' => array(
@@ -109,6 +122,7 @@ class IndexController extends AbstractActionController
         $model->setControllerClass('Wiss\Controller\Module');
         $model->setEntityClass('Wiss\Entity\Module');
         $model->setFormClass('Wiss\Form\Module');
+        $model->setModule($module2);
         $em->persist($model);        
         
         // Insert model
@@ -117,6 +131,7 @@ class IndexController extends AbstractActionController
         $model->setControllerClass('Wiss\Controller\Navigation');
         $model->setEntityClass('Wiss\Entity\Navigation');
         $model->setFormClass('Wiss\Form\Navigation');
+        $model->setModule($module2);
         $em->persist($model);        
 		
 		// Insert layout

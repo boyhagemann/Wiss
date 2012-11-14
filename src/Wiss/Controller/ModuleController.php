@@ -66,11 +66,74 @@ class ModuleController extends AbstractActionController
                 // Show a flash message
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/module');
+                $this->redirect()->toRoute('wiss/module/models', array(
+                    'module' => $module->getName(),
+                ));
             }
         }
         
 		return compact('form');
+    }
+	
+    /**
+     * Edit the properties of a module
+     *
+     * @return array
+     */
+    public function propertiesAction()
+    {
+        // Get the form
+        $form = $this->getServiceLocator()->get('Wiss\Form\Module');
+        $form->prepareElements();
+        
+        // Get the module repository
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Module');
+        $module = $repo->findOneBy(array('name' => $this->params('module')));
+        
+        // Bind the existing entity
+        $form->bind($module);
+        
+        // Check if data is posted
+        if($this->getRequest()->isPost()) {
+            
+            // Set the data from the request to the form
+            $form->setData($this->getRequest()->getPost());
+            
+            // Check if the posted data is valid
+            if($form->isValid()) {
+                
+                // Save the data
+                $module = $form->getData();
+                $em->persist($module);
+                $em->flush();
+
+                // Show a flash message
+
+                // Redirect
+                $this->redirect()->toRoute('wiss/module/properties', array(
+                    'module' => $module->getName(),
+                ));
+            }
+        }
+        
+		return compact('module', 'form');
+    }
+	
+    /**
+     * Create a new module
+     *
+     * @return array
+     */
+    public function modelsAction()
+    {        
+        // Get the module repository
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Module');
+        $module = $repo->findOneBy(array('name' => $this->params('module')));
+        $models = $module->getModels();        
+        
+		return compact('module', 'models');
     }
 	
     /**
@@ -150,7 +213,7 @@ class ModuleController extends AbstractActionController
 		
 		return false;
 	}
-		
+    		
 	/**
 	 *
 	 * @return array 

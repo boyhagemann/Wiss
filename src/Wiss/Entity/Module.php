@@ -29,6 +29,12 @@ class Module
      * @ORM\Column
 	 */
 	protected $title;
+    
+	/**
+	 *
+	 * @ORM\OneToMany(targetEntity="Model", mappedBy="module")
+	 */
+	protected $models;	
 	
 	public function getId() {
 		return $this->id;
@@ -52,7 +58,15 @@ class Module
     public function setTitle($title) {
         $this->title = $title;
     }
+    
+    public function getModels() {
+        return $this->models;
+    }
 
+    public function setModels($models) {
+        $this->models = $models;
+    }
+    
     /**
      * Build the name of the model based on the title
      * 

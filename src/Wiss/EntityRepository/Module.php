@@ -102,6 +102,7 @@ class Module extends \Doctrine\ORM\EntityRepository
                 array('Zend\ModuleManager\Feature\ControllerProviderInterface'),
                 array('Zend\ModuleManager\Feature\ControllerPluginProviderInterface'),
                 array('Zend\ModuleManager\Feature\ViewHelperProviderInterface'),
+                array('Zend\ModuleManager\Feature\AutoloaderProviderInterface'),
             ),
             'class' => array(
                 'name' => 'Module',
@@ -113,6 +114,7 @@ class Module extends \Doctrine\ORM\EntityRepository
                     'ControllerProviderInterface',
                     'ControllerPluginProviderInterface',
                     'ViewHelperProviderInterface',
+                    'AutoloaderProviderInterface',
                 ),
                 'methods' => array(
                     array('init', array( new ParameterGenerator('manager', 'ModuleManagerInterface'))),
@@ -122,6 +124,13 @@ class Module extends \Doctrine\ORM\EntityRepository
                     array('getControllerConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
                     array('getControllerPluginConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
                     array('getViewHelperConfig', array(), MethodGenerator::FLAG_PUBLIC, 'return array();'),
+                    array('getAutoloaderConfig', array(), MethodGenerator::FLAG_PUBLIC, "return array(
+    'Zend\Loader\StandardAutoloader' => array(
+        'namespaces' => array(
+            __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+        ),
+    ),
+);"),
                 )
             ),
         );

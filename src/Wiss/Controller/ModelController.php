@@ -60,7 +60,7 @@ class ModelController extends AbstractActionController {
      * @return array 
      */
     public function createAction() 
-	{
+	{        
         $data = array();
 		$em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Model');
@@ -93,6 +93,11 @@ class ModelController extends AbstractActionController {
 		else {
 			$model = new Model;
 		}
+        
+        if($this->params('module')) {
+            $module = $em->getRepository('Wiss\Entity\Module')->findOneBy(array('name' => $this->params('module')));
+            $model->setModule($module);
+        }
 
         // Create the form
         $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
