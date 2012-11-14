@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Page")
+ * @ORM\Table(name="wiss_page")
  */
 class Page
 {

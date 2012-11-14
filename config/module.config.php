@@ -357,29 +357,6 @@ return array(
 						'label' => 'Modules',
 						'route' => 'wiss/module',
 					),
-					'models' => array(
-						'label' => 'Models',
-						'route' => 'wiss/model',
-						'pages' => array(
-							'installed' => array(
-								'label' => 'Installed',
-								'route' => 'wiss/model',
-							),
-							'uninstalled' => array(
-								'label' => 'Uninstalled',
-								'route' => 'wiss/model/default',
-								'params' => array(
-									'action' => 'uninstalled'
-								),
-								'pages' => array(
-									'create' => array(
-										'label' => 'Create',
-										'route' => 'wiss/model/create'
-									),
-								)
-							),
-						)
-					),
 				)
 			),
 			'install' => array(

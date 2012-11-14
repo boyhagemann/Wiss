@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Module")
+ * @ORM\Table(name="wiss_module")
  * @ORM\HasLifecycleCallbacks
  */
 class Module
@@ -29,6 +30,12 @@ class Module
      * @ORM\Column
 	 */
 	protected $title;
+    
+	/**
+	 * 
+     * @ORM\Column(type="boolean")
+	 */
+	protected $locked = false;    
     
 	/**
 	 *
@@ -67,6 +74,14 @@ class Module
         $this->models = $models;
     }
     
+    public function isLocked() {
+        return $this->locked;
+    }
+
+    public function setLocked($locked) {
+        $this->locked = $locked;
+    }
+
     /**
      * Build the name of the model based on the title
      * 

@@ -16,6 +16,8 @@ class Page extends \Doctrine\ORM\EntityRepository
 	 */
 	public function import(Array $config)
 	{
+		
+            \Zend\Debug\Debug::dump($config); exit;
 		if(!isset($config['router']['routes'])) {
 			return;
 		}
@@ -141,6 +143,12 @@ class Page extends \Doctrine\ORM\EntityRepository
 				$route->setConstraints($routeData['options']['constraints']);
 			}
 			
+			if(isset($routeData['options']['layout'])) {
+                $layout = $em->getRepository('Wiss\Entity\Layout')->findOneBy(array(
+                    'name' => $routeData['options']['layout'],
+                ));
+			}
+            
 			$em->persist($route);
 			
 			// Start a new page
@@ -148,7 +156,10 @@ class Page extends \Doctrine\ORM\EntityRepository
 			$page->setTitle($name);
 			$page->setName($name);
 			$page->setLayout($em->find('Wiss\Entity\Layout', 1));
-			$page->setRoute($route);			
+			$page->setRoute($route);		
+            if($layout) {
+                $page->setLayout($layout);
+            }
 			$em->persist($page);
 			
 			$block = new \Wiss\Entity\Block;

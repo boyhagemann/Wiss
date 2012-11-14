@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Model")
+ * @ORM\Table(name="wiss_model")
  */
 class Model
 {
@@ -58,13 +59,13 @@ class Model
 	
 	/**
 	 *
-	 * @ORM\ManyToOne(targetEntity="Module", inversedBy="models")
+	 * @ORM\ManyToOne(targetEntity="Module", inversedBy="models", fetch="EAGER")
 	 */
 	protected $module;	
 	
 	/**
 	 *
-	 * @ORM\ManyToOne(targetEntity="Navigation")
+	 * @ORM\ManyToOne(targetEntity="Navigation", fetch="EAGER")
 	 */
 	protected $node;
 	

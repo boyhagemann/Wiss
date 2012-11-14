@@ -104,6 +104,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                 'type' => 'Literal',
                 'may_terminate' => true,
                 'options' => array(
+                    'layout' => 'cms',
                     'route' => '/' . $model->getSlug(),
                     'defaults' => array(
                         '__NAMESPACE__' => '',
@@ -116,6 +117,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                     'create' => array(
                         'type' => 'Segment',
                         'options' => array(
+                            'layout' => 'cms',
                             'route' => '/create',
                             'defaults' => array(
                                 'action' => 'create',
@@ -125,6 +127,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                     'edit' => array(
                         'type' => 'Segment',
                         'options' => array(
+                            'layout' => 'cms',
                             'route' => '/edit/:id',
                             'defaults' => array(
                                 'action' => 'edit',
@@ -137,6 +140,7 @@ class Model extends \Doctrine\ORM\EntityRepository
                     'delete' => array(
                         'type' => 'Segment',
                         'options' => array(
+                            'layout' => 'cms',
                             'route' => '/delete/:id',
                             'defaults' => array(
                                 'action' => 'delete',
@@ -201,22 +205,24 @@ class Model extends \Doctrine\ORM\EntityRepository
      */
     public function generateEntity(\Wiss\Entity\Model $model)
     {
-        $filter = new \Zend\Filter\Word\DashToUnderscore();
+        $filter = new \Zend\Filter\Word\CamelCaseToUnderscore();
+        $filter2 = new \Zend\Filter\Word\DashToUnderscore();
         
         $class = $model->getEntityClass();
         $module = $model->getModule()->getName();
-        $namespace = substr($class, 0, strrpos($class, '\\'));
-        $tableName = $filter->filter($model->getSlug());
         $filename = $this->buildEntityPath($module, $class);
-        
+                        
         // Create the folder if it does not exist
         if(!file_exists(dirname($filename))) {
             @mkdir(dirname($filename), 0777, true);
         }
         		
-
 		// Start a new metadata class
 		$info = new ClassMetadata($class);	
+                
+        // Build the right table name
+        $tableName = strtolower($filter->filter($model->getModule()->getName()));
+        $tableName .= '_' . $filter2->filter($model->getSlug());
         $info->setTableName($tableName);
 
 		// Start a builder to add data to the metadata object

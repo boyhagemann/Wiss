@@ -5,7 +5,8 @@ namespace Wiss\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity 
+ * @ORM\Entity
+ * @ORM\Table(name="wiss_content")
  */
 class Content
 {

@@ -96,7 +96,7 @@ class ModelController extends AbstractActionController {
         
         if($this->params('module')) {
             $module = $em->getRepository('Wiss\Entity\Module')->findOneBy(array('name' => $this->params('module')));
-            $model->setModule($module);
+            $data += array('module' => $module->getId());
         }
 
         // Create the form

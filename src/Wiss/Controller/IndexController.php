@@ -108,12 +108,14 @@ class IndexController extends AbstractActionController
         $module = new \Wiss\Entity\Module;
         $module->setName('Application');
         $module->setTitle('Application');
+        $module->setLocked(true);
         $em->persist($module);
 			
         // Insert module
         $module2 = new \Wiss\Entity\Module;
         $module2->setName('Wiss');
         $module2->setTitle('Wiss');
+        $module2->setLocked(true);
         $em->persist($module2);
         
         // Insert model

@@ -9,6 +9,7 @@ use Zend\Form\Annotation;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="wiss_layout")
  * @Overview(titleField="title")
  */
 class Layout

@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Navigation")
+ * @ORM\Table(name="wiss_navigation")
  * @Gedmo\Tree(type="nested")
  */
 class Navigation

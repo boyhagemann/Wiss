@@ -7,6 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Route")
+ * @ORM\Table(name="wiss_route")
  * @Gedmo\Tree(type="nested")
  */
 class Route
