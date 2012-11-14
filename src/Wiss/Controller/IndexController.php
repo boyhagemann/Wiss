@@ -161,10 +161,20 @@ class IndexController extends AbstractActionController
 		$zone2->setName('sidebar');
 		$zone2->setLayout($layout);
 		$em->persist($zone2);
-		
+        
 		$layout->setMainZone($zone);
 		$em->persist($layout);
-				
+						
+		// Insert zone
+		$zone3 = new \Wiss\Entity\Zone;
+		$zone3->setTitle('Main content');
+		$zone3->setName('content');
+		$zone3->setLayout($layout2);
+		$em->persist($zone3);
+        
+		$layout2->setMainZone($zone3);
+		$em->persist($layout2);
+        
 		
 		// Insert navigation
 		$navigation = new \Wiss\Entity\Navigation;
@@ -182,6 +192,7 @@ class IndexController extends AbstractActionController
 		$model->setEntityClass('Wiss\Entity\Page');
 		$model->setControllerClass('Wiss\Controller\PageController');
 		$model->setFormClass('Wiss\Form\Page');
+        $model->setModule($module2);
 		$em->persist($model);
 		
         // Insert block

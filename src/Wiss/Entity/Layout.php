@@ -3,20 +3,17 @@
 namespace Wiss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Wiss\Form\Mapping as Form;
-use Wiss\Annotation\Overview;
-use Zend\Form\Annotation;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="wiss_layout")
- * @Overview(titleField="title")
  */
 class Layout
 {
 	/**
 	 * 
-     * @Annotation\Exclude()
 	 * @ORM\ID
 	 * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
@@ -24,14 +21,18 @@ class Layout
 	protected $id;
 
 	/**
-     * @Form\Text({"label":"Title"})
      * @ORM\Column
 	 */
 	protected $title;
 
 	/**
+     * @ORM\Column
+     * @Gedmo\Slug(fields={"title"})
+	 */
+	protected $slug;
+
+	/**
 	 * 
-     * @Form\Text({"label":"Path"})
      * @ORM\Column
 	 */
 	protected $path;	
@@ -43,7 +44,6 @@ class Layout
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Zone")
-     * @Form\Textarea({"label":"Main zone"})
 	 */
 	protected $mainZone;
 
@@ -61,8 +61,16 @@ class Layout
 
 	public function setTitle($title) {
 		$this->title = $title;
-	}
-	
+	}	
+
+    public function getSlug() {
+        return $this->slug;
+    }
+
+    public function setSlug($slug) {
+        $this->slug = $slug;
+    }
+    
 	public function getPath() {
 		return $this->path;
 	}
@@ -86,7 +94,5 @@ class Layout
 	public function setMainZone(Zone $mainZone) {
 		$this->mainZone = $mainZone;
 	}
-
-
 
 }

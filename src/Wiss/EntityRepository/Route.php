@@ -145,7 +145,16 @@ class Route extends NestedTreeRepository
 			$page->setTitle($name);
 			$page->setName($name);
 			$page->setLayout($em->find('Wiss\Entity\Layout', 1));
-			$page->setRoute($route);			
+			$page->setRoute($route);	
+            
+            // Check if there is a layout
+            $layout = null;
+			if(isset($routeData['options']['layout'])) {
+                $layout = $em->getRepository('Wiss\Entity\Layout')->findOneBy(array(
+                    'slug' => $routeData['options']['layout'],
+                ));
+                $page->setLayout($layout);
+			}
 			$em->persist($page);
 			
 			$block = new \Wiss\Entity\Block;
