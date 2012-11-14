@@ -2,10 +2,6 @@
 
 <?php echo $this->navigation('cms')->menu()->setUlClass('nav nav-tabs')->renderSubmenu() ?>
 
-<div class="form-actions">
-	<a href="<?php echo $this->url($routeName . '/create') ?>" class="btn btn-primary">Create new <?php echo $model->getTitle() ?></a>
-</div>
-
 <ul class="unstyled">
 	<?php foreach($entities as $entity) : ?>
 	<li>
@@ -16,4 +12,10 @@
 		</dl>
 	</li>
 	<?php endforeach ?>
+
 </ul>
+
+<div class="btn-group">
+	<a href="<?php echo $this->url($routeName . '/create') ?>" class="btn btn-primary">Create new <?php echo $model->getTitle() ?></a>
+	<a href="<?php echo $this->url('wiss/module/' . $module->getSlug() . '/models') ?>" class="btn">To <?php echo $module->getTitle() ?> module</a>
+</div>

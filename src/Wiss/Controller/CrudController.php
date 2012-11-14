@@ -85,13 +85,14 @@ class CrudController extends AbstractActionController
 	{
     	// Get the main model that holds the entity information
         $model = $this->getModel();
+        $module = $model->getModule();
 		$entities = $this->getEntities();
 		
 		// Get the main url for
 		$routeName = $model->getNode()->getRoute()->getFullName();
 				
 		// Create the params for the view
-		$params = compact('model', 'entities', 'routeName');
+		$params = compact('model', 'module', 'entities', 'routeName');
 		
 		// Create view model
 		$viewModel = new ViewModel($params);
