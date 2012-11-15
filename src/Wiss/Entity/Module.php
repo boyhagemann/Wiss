@@ -49,6 +49,12 @@ class Module
 	 * @ORM\OneToMany(targetEntity="Model", mappedBy="module")
 	 */
 	protected $models;	
+    
+	/**
+	 *
+	 * @ORM\OneToMany(targetEntity="Page", mappedBy="module")
+	 */
+	protected $pages;	
 	
 	public function getId() {
 		return $this->id;
@@ -89,6 +95,14 @@ class Module
         $this->models = $models;
     }
     
+    public function getPages() {
+        return $this->pages;
+    }
+
+    public function setPages($pages) {
+        $this->pages = $pages;
+    }
+
     public function isLocked() {
         return $this->locked;
     }

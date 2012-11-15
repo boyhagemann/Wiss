@@ -108,7 +108,6 @@ class IndexController extends AbstractActionController
         $module = new \Wiss\Entity\Module;
         $module->setName('Application');
         $module->setTitle('Application');
-        $module->setLocked(true);
         $em->persist($module);
 			
         // Insert module
@@ -220,6 +219,10 @@ class IndexController extends AbstractActionController
 		$em->getRepository('Wiss\Entity\Route')->export();
 		$em->getRepository('Wiss\Entity\Navigation')->export();		
 
+                
+        // Generate the file and folders for the application module
+        $em->getRepository('Wiss\Entity\Module')->generate($module);
+        
 		// Update the config with the models installed
 		$this->writeToApplicationConfig(array(
 			'application' => array(
@@ -227,6 +230,9 @@ class IndexController extends AbstractActionController
 				'use_zones' => true,
 			)
 		));
+        
+        // Show a flash message
+        $this->flashMessenger()->addMessage('The cms is installed sucessfully');
 				
 		// Redirect 
 		$this->redirect()->toRoute('wiss/module');

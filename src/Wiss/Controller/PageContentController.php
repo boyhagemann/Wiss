@@ -47,11 +47,13 @@ class PageContentController extends AbstractActionController
         // Set the right layout
 		$this->layout($page->getLayout()->getPath());
 			
-        // Set the flash messages
+        // Set the flash messages first, before dispatching any othe
+        // controller actions. Otherwise the flashMessages are already shown
+        // in the layout. This is because the layout is rendered after all
+        // the actions are dispatched.
         $this->layout()->setVariable('flashMessages', $this->flashMessenger()->getMessages());
         
-        
-        
+                
         // Walk each zone and process the blocks
 		foreach($page->getContent() as $content) {
 			

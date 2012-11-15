@@ -57,7 +57,11 @@ class Page
      * @ORM\ManyToOne(targetEntity="Layout")
      */
     protected $layout;
-		
+	
+    /**
+     * @ORM\ManyToOne(targetEntity="Module")
+     */
+    protected $module;		
 	
     /**
      * @ORM\OneToMany(targetEntity="Content", mappedBy="page")
@@ -111,7 +115,15 @@ class Page
 	public function setLayout(Layout $layout) {
 		$this->layout = $layout;
 	}	
-	
+
+    public function getModule() {
+        return $this->module;
+    }
+
+    public function setModule(Module $module) {
+        $this->module = $module;
+    }
+
 	public function getContent() {
 		return $this->content;
 	}
