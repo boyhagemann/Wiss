@@ -32,9 +32,9 @@
 	
 		<div class="breadcrumbs row"><?php echo $this->navigation('cms')->breadcrumbs() ?></div>
       
-		<?php if($this->flashMessenger()->hasMessages()) : ?>
+		<?php if($flashMessages) : ?>
 		<div class="messages row">			
-			<?php foreach($this->flashMessenger()->getMessages() as $message) : ?>
+			<?php foreach($flashMessages as $message) : ?>
 				<div class="alert"><?php echo $message ?></div>
 			<?php endforeach ?>
 		</div>

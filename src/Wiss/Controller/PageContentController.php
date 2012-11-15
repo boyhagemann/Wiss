@@ -46,8 +46,12 @@ class PageContentController extends AbstractActionController
         
         // Set the right layout
 		$this->layout($page->getLayout()->getPath());
-				
-				
+			
+        // Set the flash messages
+        $this->layout()->setVariable('flashMessages', $this->flashMessenger()->getMessages());
+        
+        
+        
         // Walk each zone and process the blocks
 		foreach($page->getContent() as $content) {
 			
@@ -78,6 +82,13 @@ class PageContentController extends AbstractActionController
             // If false is returned, it means that no view has to be 
             // rendered.
             if(!$view instanceof ViewModel) {
+                continue;
+            }
+            
+            // Check if this viewModel is the last one to render in the chain.
+            // A viewModel can have the 'setTerminate' to true. No other
+            // view has to be rendered
+            if($view->terminate()) {
                 continue;
             }
             

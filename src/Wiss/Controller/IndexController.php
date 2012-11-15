@@ -172,6 +172,13 @@ class IndexController extends AbstractActionController
 		$zone3->setLayout($layout2);
 		$em->persist($zone3);
         
+		// Insert zone
+		$zone4 = new \Wiss\Entity\Zone;
+		$zone4->setTitle('Sidebar content');
+		$zone4->setName('sidebar');
+		$zone4->setLayout($layout2);
+		$em->persist($zone4);
+        
 		$layout2->setMainZone($zone3);
 		$em->persist($layout2);
         

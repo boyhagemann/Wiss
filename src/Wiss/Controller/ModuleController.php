@@ -64,6 +64,7 @@ class ModuleController extends AbstractActionController
                 $repo->generate($module);
 
                 // Show a flash message
+                $this->flashMessenger()->addMessage('The module is created succesfully');
 
                 // Redirect
                 $this->redirect()->toRoute('wiss/module');
