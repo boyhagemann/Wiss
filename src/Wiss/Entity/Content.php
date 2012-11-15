@@ -3,6 +3,7 @@
 namespace Wiss\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -48,6 +49,14 @@ class Content
 	 */
 	protected $defaults = array();
 		
+    /**
+     * 
+     */
+    public function __construct()
+    {
+        $this->defaults = new ArrayCollection();
+    }
+    
 	public function getId() {
 		return $this->id;
 	}
