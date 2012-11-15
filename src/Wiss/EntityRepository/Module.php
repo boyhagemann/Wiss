@@ -60,6 +60,11 @@ class Module extends \Doctrine\ORM\EntityRepository
         $folder = 'module/' . $module->getName() . '/config';
         $filename = $folder . '/module.config.php';
         $driverName = 'driver_module_' . $module->getId();
+                        
+        // Don't generate if there already is a working config
+        if(file_exists($filename)) {
+            return;
+        }
         
         $config = array(
             'doctrine' => array(
@@ -90,7 +95,13 @@ class Module extends \Doctrine\ORM\EntityRepository
     public function generateZfModule(\Wiss\Entity\Module $module)
     {
         // Get the basic information
-        $filename = 'module/' . $module->getName() . '/Module.php';        
+        $filename = 'module/' . $module->getName() . '/Module.php';     
+        
+        // Don't generate if there already is a working Module.php
+        if(file_exists($filename)) {
+            return;
+        }
+        
         $fileData = array(
             'filename' => $filename,
             'namespace' => $module->getName(),
