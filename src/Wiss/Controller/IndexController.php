@@ -106,15 +106,15 @@ class IndexController extends AbstractActionController
 			
         // Insert module
         $module = new \Wiss\Entity\Module;
-        $module->setName('Application');
-        $module->setTitle('Application');
+        $module->setName('Wiss');
+        $module->setTitle('Wiss');
+        $module->setLocked(true);
         $em->persist($module);
 			
         // Insert module
         $module2 = new \Wiss\Entity\Module;
-        $module2->setName('Wiss');
-        $module2->setTitle('Wiss');
-        $module2->setLocked(true);
+        $module2->setName('Application');
+        $module2->setTitle('Application');
         $em->persist($module2);
         
         // Insert model
@@ -123,7 +123,7 @@ class IndexController extends AbstractActionController
         $model->setControllerClass('Wiss\Controller\Module');
         $model->setEntityClass('Wiss\Entity\Module');
         $model->setFormClass('Wiss\Form\Module');
-        $model->setModule($module2);
+        $model->setModule($module);
         $em->persist($model);        
         
         // Insert model
@@ -132,7 +132,7 @@ class IndexController extends AbstractActionController
         $model->setControllerClass('Wiss\Controller\Navigation');
         $model->setEntityClass('Wiss\Entity\Navigation');
         $model->setFormClass('Wiss\Form\Navigation');
-        $model->setModule($module2);
+        $model->setModule($module);
         $em->persist($model);        
 		
 		// Insert layout
@@ -198,13 +198,13 @@ class IndexController extends AbstractActionController
 		$model->setEntityClass('Wiss\Entity\Page');
 		$model->setControllerClass('Wiss\Controller\PageController');
 		$model->setFormClass('Wiss\Form\Page');
-        $model->setModule($module2);
+        $model->setModule($module);
 		$em->persist($model);
 		
         // Insert block
         $block = new \Wiss\Entity\Block;
         $block->setTitle('Available blocks');
-        $block->setAvailable(true);
+        $block->setAvailable(false);
         $block->setController('Wiss\Controller\Block');
         $block->setAction('index');
         $em->persist($block);
@@ -221,7 +221,20 @@ class IndexController extends AbstractActionController
 
                 
         // Generate the file and folders for the application module
-        $em->getRepository('Wiss\Entity\Module')->generate($module);
+        $em->getRepository('Wiss\Entity\Module')->generate($module2);
+        
+        
+        // Add the available blocks to the content page
+        $page = $em->getRepository('Wiss\Entity\Page')->findOneBy(array('name' => 'content'));
+        $pageContent = new \Wiss\Entity\Content;
+        $pageContent->setTitle($block->getTitle());
+        $pageContent->setBlock($block);
+        $pageContent->setPage($page);
+        $pageContent->setZone($zone4);
+        $em->persist($pageContent);
+        
+        
+        $em->flush();
         
 		// Update the config with the models installed
 		$this->writeToApplicationConfig(array(

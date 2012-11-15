@@ -8,23 +8,11 @@
 <?php foreach($zones as $zone) : ?>
 
 <h2><?php echo $zone->getTitle() ?></h2>
-<ul class="blocks unstyled">
+<ul class="list blocks unstyled">
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
 	<li class="block rounded-small">
-		<h3><?php echo $content->getTitle() ?></h3>
-		<dl class="dl-horizontal">
-			<dt>Block</dt>
-			<dd><?php echo $content->getBlock()->getTitle() ?></dd>
-			<dt>Controller</dt>
-			<dd><?php echo $content->getBlock()->getController() ?></dd>
-			<dt>Action</dt>
-			<dd><?php echo $content->getBlock()->getAction() ?></dd>
-			<?php foreach ($content->getDefaults() as $name => $param) : ?>
-			<dt><?php echo $name ?></dt>
-			<dd><?php echo $param ?></dd>
-			<?php endforeach ?>
-		</dl>
-		<div class="form-actions">
+		<h2><?php echo $content->getTitle() ?></h2>
+		<div class="btn-group">
 			<a href="" class="btn btn-small btn-primary">Properties</a>
 			<a href="" class="btn btn-small">Remove</a>
 		</div>
