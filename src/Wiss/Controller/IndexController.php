@@ -117,7 +117,7 @@ class IndexController extends AbstractActionController
         $module2->setTitle('Application');
         $em->persist($module2);
         
-        // Insert model
+        // Insert model module
         $model = new \Wiss\Entity\Model;
         $model->setTitle('Module');
         $model->setControllerClass('Wiss\Controller\Module');
@@ -126,14 +126,14 @@ class IndexController extends AbstractActionController
         $model->setModule($module);
         $em->persist($model);        
         
-        // Insert model
+        // Insert model navigation
         $model = new \Wiss\Entity\Model;
         $model->setTitle('Navigation');
         $model->setControllerClass('Wiss\Controller\Navigation');
         $model->setEntityClass('Wiss\Entity\Navigation');
         $model->setFormClass('Wiss\Form\Navigation');
         $model->setModule($module);
-        $em->persist($model);        
+        $em->persist($model);         
 		
 		// Insert layout
 		$layout = new \Wiss\Entity\Layout;
@@ -200,14 +200,6 @@ class IndexController extends AbstractActionController
 		$model->setFormClass('Wiss\Form\Page');
         $model->setModule($module);
 		$em->persist($model);
-		
-        // Insert block
-        $block = new \Wiss\Entity\Block;
-        $block->setTitle('Available blocks');
-        $block->setAvailable(false);
-        $block->setController('Wiss\Controller\Block');
-        $block->setAction('index');
-        $em->persist($block);
         
         
 		$em->flush();
@@ -222,7 +214,16 @@ class IndexController extends AbstractActionController
                 
         // Generate the file and folders for the application module
         $em->getRepository('Wiss\Entity\Module')->generate($module2);
+             
         
+        
+        // Insert block
+        $block = new \Wiss\Entity\Block;
+        $block->setTitle('Available blocks');
+        $block->setAvailable(false);
+        $block->setController('Wiss\Controller\Block');
+        $block->setAction('index');
+        $em->persist($block);
         
         // Add the available blocks to the content page
         $page = $em->getRepository('Wiss\Entity\Page')->findOneBy(array('name' => 'content'));

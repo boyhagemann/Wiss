@@ -116,6 +116,53 @@ class PageContentController extends AbstractActionController
     
     /**
      * 
+     * @return array
+     */
+    public function configurationAction()
+    {
+        // Get the page content block
+        $em = $this->getEntityManager();
+        $content = $em->getRepository('Wiss\Entity\Content')->find($this->params('id'));
+        
+        // Get the form for the configuration
+        $formClass = $content->getBlock()->getFormClass();
+        $form = $this->getServiceLocator()->get($formClass);
+        $form->prepareElements();
+        
+        // Set the defaults based on the current configuration of the content block
+        $form->setData($content->getDefaults());
+        
+        // Check if data is posted
+        if($this->getRequest()->isPost()) {
+            $form->setData($this->getRequest()->getPost());
+            
+            if($form->isValid()) {
+                
+                // Set the defaults from the form in the page content block
+                $content->setDefaults($form->getData());
+                $em->persist($content);
+                $em->flush();
+                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('The block configuration is saved succesfully');
+                
+                //Redirect
+                $this->redirect()->toRoute('wiss/page/content', array(
+                    'id' => $content->getPage()->getId()
+                ));
+            }
+        }
+        
+        return compact('content', 'form');
+    }
+    
+    public function deleteAction()
+    {
+        
+    }
+    
+    /**
+     * 
      * @param string $name
      * @return \Zend\View\Model\ViewModel
      */

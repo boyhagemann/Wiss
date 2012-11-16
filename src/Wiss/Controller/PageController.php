@@ -49,7 +49,6 @@ class PageController extends AbstractActionController
 		$page = $repo->find($this->params('id'));
 		
 		$zones = $page->getLayout()->getZones();
-		
 		$used = array();
 		foreach($zones as $zone) {
 			$used[$zone->getId()] = array();

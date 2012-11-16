@@ -73,6 +73,42 @@ return array(
 							),
 						)
 					),
+					'page-content' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/page-content',
+							'defaults' => array(
+								'controller' => 'pageContent',
+							),
+						),
+						'may_terminate' => false,
+						'child_routes' => array(
+							'configuration' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/configuration/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'configuration',
+									),
+								),
+							),
+							'delete' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/delete/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'delete',
+									),
+								),
+							),
+						)
+					),
 					'navigation' => array(
 						'type' => 'Literal',
 						'options' => array(

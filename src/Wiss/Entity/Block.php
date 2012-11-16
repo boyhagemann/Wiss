@@ -37,6 +37,12 @@ class Block
      * @ORM\Column
 	 */
 	protected $action;
+
+	/**
+	 * 
+     * @ORM\Column(nullable=true)
+	 */
+	protected $formClass;
     
 	/**
 	 * 
@@ -75,6 +81,14 @@ class Block
 	public function setAction($action) {
 		$this->action = $action;
 	}
+    
+    public function getFormClass() {
+        return $this->formClass;
+    }
+
+    public function setFormClass($formClass) {
+        $this->formClass = $formClass;
+    }
 
     public function isAvailable() {
         return $this->available;

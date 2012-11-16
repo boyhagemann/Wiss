@@ -36,62 +36,20 @@ class Model extends \Doctrine\ORM\EntityRepository
 
         return $model;
     }
-	
+    
     /**
-     *
+     * 
      * @param \Wiss\Entity\Model $model
      */
-    public function generateNavigation(\Wiss\Entity\Model $model) 
-	{
-        $baseRoute = 'wiss/model/' . $model->getSlug();
-        
-        // Build the config, starting from navigation
-        $config['navigation'] = array(
-            $model->getSlug() => array(
-                'label' => $model->getTitle(),
-                'route' => $baseRoute,
-				'pages' => array(
-					'records' => array(
-						'label' => 'Records',
-						'route' => $baseRoute,
-                        'params' => array(
-                            'slug' => $model->getSlug(),
-                        ),
-					),
-					'properties' => array(
-						'label' => 'Properties',
-						'route' => 'wiss/model/properties',
-                        'params' => array(
-                            'slug' => $model->getSlug(),
-                        ),
-					),
-					'elements' => array(
-						'label' => 'Elements',
-						'route' => 'wiss/model/elements',
-                        'params' => array(
-                            'slug' => $model->getSlug(),
-                        ),
-					),
-				)
-            )
-        );
-
-        // Import the config thru the Navigation entity repository
-        $em = $this->getEntityManager();
-        $repo = $em->getRepository('Wiss\Entity\Navigation');
-        $repo->import($config);
-		$repo->export();
-		
-		// Bind the navigation node to the model
-		if(!$model->getNode()) {
-			$node = $repo->findOneBy(array('name' => $model->getSlug()));
-			$model->setNode($node);
-			$em->persist($model);
-			$em->flush();
-		}
+    public function generate(\Wiss\Entity\Model $model)
+    {
+        $this->generateController($model);
+        $this->generateEntity($model);
+        $this->generateForm($model);
+        $this->generateRoutes($model);
+        $this->generateNavigation($model);
     }
-	
-	
+    
     /**
      *
      * @param \Wiss\Entity\Model $model 
@@ -159,6 +117,60 @@ class Model extends \Doctrine\ORM\EntityRepository
         $repo = $em->getRepository('Wiss\Entity\Route');
         $repo->import($config);		
 		$repo->export();	
+    }
+	
+    /**
+     *
+     * @param \Wiss\Entity\Model $model
+     */
+    public function generateNavigation(\Wiss\Entity\Model $model) 
+	{
+        $baseRoute = 'wiss/model/' . $model->getSlug();
+        
+        // Build the config, starting from navigation
+        $config['navigation'] = array(
+            $model->getSlug() => array(
+                'label' => $model->getTitle(),
+                'route' => $baseRoute,
+				'pages' => array(
+					'records' => array(
+						'label' => 'Records',
+						'route' => $baseRoute,
+                        'params' => array(
+                            'slug' => $model->getSlug(),
+                        ),
+					),
+					'properties' => array(
+						'label' => 'Properties',
+						'route' => 'wiss/model/properties',
+                        'params' => array(
+                            'slug' => $model->getSlug(),
+                        ),
+					),
+					'elements' => array(
+						'label' => 'Elements',
+						'route' => 'wiss/model/elements',
+                        'params' => array(
+                            'slug' => $model->getSlug(),
+                        ),
+					),
+				)
+            )
+        );
+
+        // Import the config thru the Navigation entity repository
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Navigation');
+        $repo->import($config);
+		$repo->export();
+		
+		// Bind the navigation node to the model
+		if(!$model->getNode()) {
+			$node = $repo->findOneBy(array('name' => $model->getSlug()));
+			$model->setNode($node);
+			$em->persist($model);
+			$em->flush();
+		}
     }
 	
 	
