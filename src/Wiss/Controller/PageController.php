@@ -11,6 +11,8 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
+use Wiss\Entity\Page;
 
 class PageController extends AbstractActionController
 {
@@ -27,6 +29,62 @@ class PageController extends AbstractActionController
 		return compact('pages');
     }
 		
+	/**
+	 *
+	 * @return array 
+	 */
+	public function createAction()
+	{					        
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Route');
+        $form = $this->getForm();
+        
+        if($this->getRequest()->isPost()) {
+            
+            $form->setData($this->getRequest()->getPost());
+            
+            if($form->isValid()) {
+             
+                // Collect the needed info
+                $data = $form->getData();
+                $filter = new \Zend\Filter\Word\SeparatorToDash(' ');
+                $name = strtolower($filter->filter($data['title']));
+                
+                // Create a route and page
+                $route = $repo->createRoute($name, array('options' => $data));
+                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Page created');
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/page/content', array(
+                    'id' => $route->getPage()->getId()
+                ));
+            }
+        }
+        
+		return compact('form');
+	}
+    
+    public function getForm()
+    {
+        $sl = $this->getServiceLocator();
+        $em = $this->getEntityManager();
+        
+        $form = $sl->get('Wiss\Form\Page'); 
+		$form->setAttribute('class', 'form-horizontal');
+        
+        // Add a hydrator for doctrine entities
+        $hydrator = new EntityHydrator($this->getEntityManager());
+		$form->setHydrator($hydrator);   
+                
+        $form->prepareElements();
+        $form->get('layout_id')->getProxy()->setObjectManager($em);
+        
+        
+        return $form;
+    }
+    
 	/**
 	 *
 	 * @return array 

@@ -19,11 +19,12 @@ class Route extends NestedTreeRepository
 			return;
 		}
 		
+        $em = $this->getEntityManager();
 		$routes = $config['router']['routes'];
 		
 		// Build the pages from the routes
 		foreach($routes as $name => $routeData) {
-			$this->createPageFromRoute($name, $routeData);
+            $route = $this->createRoute($name, $routeData);
 		}
 				
 		// Save entities
@@ -47,6 +48,75 @@ class Route extends NestedTreeRepository
 		$writer = new \Zend\Config\Writer\PhpArray();
 		$writer->toFile('config/autoload/routes.global.php', $config);
 	}
+    
+    /**
+     * 
+     * @param string $name
+     * @param array $routeData
+     * @param \Wiss\Entity\Route $parentRoute
+     * @return \Wiss\Entity\Route
+     */
+    public function createRoute($name, Array $routeData, \Wiss\Entity\Route $parentRoute = null)
+    {
+        $route = $this->findOneByNameAndParentRoute($name, $parentRoute);
+        
+        if(!$route) {
+            
+            $em = $this->getEntityManager();
+            $options = $routeData['options'];
+
+            // Start a new route
+            $route = new \Wiss\Entity\Route;
+            $route->setRoute($options['route']);
+
+            $fullName = '';
+            if($parentRoute) {
+                $fullName .= $parentRoute->getFullName() . '/';
+            }
+            $fullName .= $name;	
+            $route->setName($name);
+            $route->setFullName($fullName);
+            $route->setParent($parentRoute);
+
+            if(isset($options['defaults'])) {
+                $route->setDefaults($options['defaults']);
+            }
+
+            if(isset($options['constraints'])) {
+                $route->setConstraints($options['constraints']);
+            }
+
+            $em->persist($route);
+
+            // Create a page on top of the route
+            $em->getRepository('Wiss\Entity\Page')->createFromRoute($route, $options);
+        }	
+            
+		// Does this route have any children? Than these routes must be
+        // created recursively.
+		if(key_exists('child_routes', $routeData)) {
+			foreach($routeData['child_routes'] as $name => $childRoute) {
+				$this->createRoute($name, $childRoute, $route);
+			}
+		}	
+        
+        return $route;
+    }
+    
+    /**
+     * 
+     * @param string $name
+     * @param \Wiss\Entity\Route $parentRoute
+     * @return \Wiss\Entity\Route|null
+     */
+    public function findOneByNameAndParentRoute($name, \Wiss\Entity\Route $parentRoute = null)
+    {
+        $params['name'] = $name;
+        if($parentRoute) {
+            $params['parent'] = $parentRoute->getId();
+        }
+        return $this->findOneBy($params);
+    }
 		
 	/**
 	 *
@@ -95,124 +165,5 @@ class Route extends NestedTreeRepository
 		}
 		
 		return $controllers;
-	}
-	
-	/**
-	 *
-	 * @param string $name
-	 * @param array $routeData
-	 * @param Wiss\Entity\Route $parentRoute 
-	 */
-	public function createPageFromRoute($name, $routeData, $parentRoute = null)
-	{		
-		$em = $this->getEntityManager();
-		
-		// Build the params to check if the page exists
-		$params = array('name' => $name);
-		if($parentRoute) {
-			$params['parent'] = $parentRoute->getId();
-		}
-		
-		// Check if the page exists
-		$route = $this->findOneBy($params);		
-		if(!$route) {
-			
-			// Start a new route
-			$route = new \Wiss\Entity\Route;
-			$route->setRoute($routeData['options']['route']);
-			$route->setName($name);
-			
-			$routeName = '';
-			if($parentRoute) {
-				$routeName .= $parentRoute->getFullName() . '/';
-			}
-			$routeName .= $name;	
-			$route->setFullName($routeName);
-			$route->setParent($parentRoute);
-			
-			if(isset($routeData['options']['defaults'])) {
-				$route->setDefaults($routeData['options']['defaults']);
-			}
-			
-			if(isset($routeData['options']['constraints'])) {
-				$route->setConstraints($routeData['options']['constraints']);
-			}
-			
-			$em->persist($route);
-			
-			// Start a new page
-			$page = new \Wiss\Entity\Page;
-			$page->setTitle($name);
-			$page->setName($name);
-			$page->setLayout($em->find('Wiss\Entity\Layout', 1));
-			$page->setRoute($route);	
-            
-            // Check if there is a layout
-            $layout = null;
-			if(isset($routeData['options']['layout'])) {
-                $layout = $em->getRepository('Wiss\Entity\Layout')->findOneBy(array(
-                    'slug' => $routeData['options']['layout'],
-                ));
-                $page->setLayout($layout);
-			}
-			$em->persist($page);
-			
-			$block = new \Wiss\Entity\Block;
-			$block->setTitle($page->getTitle());
-			$block->setAction($this->findDefault('action', $route));
-			$block->setController($this->findController($route));
-			$em->persist($block);
-
-			$content = new \Wiss\Entity\Content;
-			$content->setTitle('Default page content');
-			$content->setPage($page);
-			$content->setBlock($block);
-			$content->setZone($page->getLayout()->getMainZone());
-			$em->persist($content);	
-			
-		}		
-				
-		if(key_exists('child_routes', $routeData)) {
-			foreach($routeData['child_routes'] as $name => $childRoute) {
-				$this->createPageFromRoute($name, $childRoute, $route);
-			}
-		}		
-						
-	}
-		
-	/**
-	 *
-	 * @param \Page\Entity\Page $page
-	 * @return string 
-	 */
-	public function findController($route)
-	{
-		$controller = $this->findDefault('__NAMESPACE__', $route);
-		if($controller) {
-			$controller .= '\\';
-		}
-		$controller .= ucfirst($this->findDefault('controller', $route));
-		
-		return $controller;
-	}
-	
-	/**
-	 *
-	 * @param string $key
-	 * @param \Page\Entity\Route $route
-	 * @return string 
-	 */
-	public function findDefault($key, $route)
-	{
-		$defaults = (array) $route->getDefaults();
-		if(key_exists($key, $defaults)) {
-			return $defaults[$key];
-		}
-		
-		if(!$route->getParent()) {
-			return '';
-		}
-		
-		return $this->findDefault($key, $route->getParent());
 	}
 }

@@ -47,6 +47,15 @@ return array(
 						),
 						'may_terminate' => true,
 						'child_routes' => array(
+							'create' => array(
+								'type' => 'Literal',
+								'options' => array(
+									'route' => '/create',
+									'defaults' => array(
+										'action' => 'create',
+									),
+								),
+							),
 							'properties' => array(
 								'type' => 'Segment',
 								'options' => array(
