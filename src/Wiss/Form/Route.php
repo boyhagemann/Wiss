@@ -14,7 +14,7 @@ use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Form\Form;
 
-class Route extends Fieldset implements InputFilterProviderInterface
+class Route extends Form implements InputFilterProviderInterface
 {		
 	/**
 	 * 
@@ -22,7 +22,9 @@ class Route extends Fieldset implements InputFilterProviderInterface
     public function __construct()
     {                		
         parent::__construct('route');
-		
+        			
+		$this->setAttribute('class', 'form-horizontal');
+        
         // Route
         $this->add(array(
             'name' => 'route',
@@ -49,7 +51,7 @@ class Route extends Fieldset implements InputFilterProviderInterface
     
     public function getId()
     {
-        return 'test';
+        return 'route';
     }
     
 }

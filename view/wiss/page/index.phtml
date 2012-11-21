@@ -12,6 +12,7 @@
 		<h3><?php echo $page->getLayout()->getTitle() ?> layout</h3>
 		<div class="btn-group">
 			<a href="<?php echo $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
+			<a href="<?php echo $this->url('wiss/page/route', array('id' => $page->getId())) ?>" class="btn btn-small">Route</a>
 			<a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>
 		</div>		
 	</li>

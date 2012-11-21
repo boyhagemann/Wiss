@@ -68,6 +68,18 @@ return array(
 									),
 								),
 							),
+							'route' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/route/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'route',
+									),
+								),
+							),
 							'content' => array(
 								'type' => 'Segment',
 								'options' => array(
@@ -357,6 +369,10 @@ return array(
 							'properties' => array(
 								'label' => 'Properties',
 								'route' => 'wiss/page/properties'
+							),
+							'route' => array(
+								'label' => 'Route',
+								'route' => 'wiss/page/route'
 							),
 							'content' => array(
 								'label' => 'Content',

@@ -47,6 +47,7 @@ class PageController extends AbstractActionController
              
                 // Collect the needed info
                 $data = $form->getData();
+                
                 $filter = new \Zend\Filter\Word\SeparatorToDash(' ');
                 $name = strtolower($filter->filter($data['title']));
                 
@@ -66,6 +67,10 @@ class PageController extends AbstractActionController
 		return compact('form');
 	}
     
+    /**
+     * 
+     * @return \Wiss\Form\Page
+     */
     public function getForm()
     {
         $sl = $this->getServiceLocator();
@@ -78,10 +83,8 @@ class PageController extends AbstractActionController
         $hydrator = new EntityHydrator($this->getEntityManager());
 		$form->setHydrator($hydrator);   
                 
-        $form->prepareElements();
-        $form->get('layout_id')->getProxy()->setObjectManager($em);
-        
-        
+        $form->get('layout')->getProxy()->setObjectManager($em);
+                
         return $form;
     }
     
@@ -91,10 +94,72 @@ class PageController extends AbstractActionController
 	 */
 	public function propertiesAction()
 	{
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
+        $em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Page');
 		$page = $repo->find($this->params('id'));
-					
-		return compact('page');
+								  
+        $form = $this->getForm();
+        $form->remove('route');
+        $form->bind($page);
+                        
+        if($this->getRequest()->isPost()) {
+            
+            $form->setData($this->getRequest()->getPost());
+            
+            if($form->isValid()) {
+                             
+                $em->persist($form->getData());
+                $em->flush();
+                                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Page properties updated');
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/page/properties', array(
+                    'id' => $page->getId()
+                ));
+            }
+        }
+        
+		return compact('form', 'page');
+	}
+    
+	/**
+	 *
+	 * @return array 
+	 */
+	public function routeAction()
+	{
+        $sl = $this->getServiceLocator();
+        $em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Page');
+		$page = $repo->find($this->params('id'));
+								  
+        $form = $sl->get('Wiss\Form\Route');
+        $hydrator = new EntityHydrator($this->getEntityManager());
+		$form->setHydrator($hydrator);  
+        $form->bind($page->getRoute());
+                       
+        if($this->getRequest()->isPost()) {
+            
+            $form->setData($this->getRequest()->getPost());
+            
+            if($form->isValid()) {
+                             
+                $em->persist($form->getData());
+                $em->flush();
+                                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Page route updated');
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/page/route', array(
+                    'id' => $page->getId()
+                ));
+            }
+        }
+        
+		return compact('form', 'page');
 	}
 		
 	/**

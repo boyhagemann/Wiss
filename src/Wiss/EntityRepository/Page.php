@@ -21,17 +21,16 @@ class Page extends \Doctrine\ORM\EntityRepository
 		$em = $this->getEntityManager();					
 
         // Get the right layout        
-        if(isset($options['layout'])) {
-            $layout = $em->getRepository('Wiss\Entity\Layout')->findOneBy(array(
-                'slug' => $options['layout'],
-            ));
+        if(!isset($options['layout'])) {
+            $layoutParams['id'] = 1;
         }
-        elseif(isset($options['layout_id'])) {
-            $layout = $em->getRepository('Wiss\Entity\Layout')->find($options['layout_id']);
+        elseif(is_numeric($options['layout'])) {
+            $layoutParams['id'] = $options['layout'];
         }
         else {
-            $layout = $em->find('Wiss\Entity\Layout', 1);
+            $layoutParams['slug'] = $options['layout'];
         }
+        $layout = $em->getRepository('Wiss\Entity\Layout')->findOneBy($layoutParams);
         
         // Build a nice title
         $filter = new \Zend\Filter\Word\DashToSeparator(' ');

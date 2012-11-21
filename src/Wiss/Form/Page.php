@@ -19,8 +19,10 @@ class Page extends Form implements InputFilterProviderInterface
 	/**
 	 * 
 	 */
-    public function prepareElements()
-    {                		   
+    public function __construct()
+    {                		
+        parent::__construct('route');
+        
         // Title
         $this->add(array(
             'name' => 'title',
@@ -41,7 +43,7 @@ class Page extends Form implements InputFilterProviderInterface
 		
         // Layout
         $this->add(array(
-            'name' => 'layout_id',
+            'name' => 'layout',
             'type' => 'DoctrineORMModule\Form\Element\EntitySelect',
             'attributes' => array(
                 'label' => 'Layout',
@@ -73,6 +75,9 @@ class Page extends Form implements InputFilterProviderInterface
                 'required' => true
             ),
             'route' => array(
+                'required' => true
+            ),
+            'layout' => array(
                 'required' => true
             ),
         );
