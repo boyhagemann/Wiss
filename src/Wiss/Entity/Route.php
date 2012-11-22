@@ -53,6 +53,12 @@ class Route
      * @ORM\Column
 	 */
 	protected $route;
+
+	/**
+	 * 
+     * @ORM\Column
+	 */
+	protected $type = 'Segment';
 	
     /**
      * @ORM\OneToOne(targetEntity="Page", mappedBy="route")
@@ -155,7 +161,15 @@ class Route
 	public function setRoute($route) {
 		$this->route = $route;
 	}
+    
+    public function getType() {
+        return $this->type;
+    }
 
+    public function setType($type) {
+        $this->type = $type;
+    }
+    
 	public function getPage() {
 		return $this->page;
 	}

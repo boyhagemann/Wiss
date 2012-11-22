@@ -19,10 +19,8 @@ class Route extends Form implements InputFilterProviderInterface
 	/**
 	 * 
 	 */
-    public function __construct()
-    {                		
-        parent::__construct('route');
-        			
+    public function prepareElements()
+    {
 		$this->setAttribute('class', 'form-horizontal');
         
         // Route
@@ -33,6 +31,16 @@ class Route extends Form implements InputFilterProviderInterface
                 'label' => 'Route',
             )
         ));
+        
+        // Submit
+        $this->add(array(
+            'name' => 'submit',
+            'type' => 'Zend\Form\Element\Submit',
+            'attributes' => array(
+                'value' => 'Save',
+                'class' => 'btn btn-primary btn-large',
+            ),
+        ));	
 						
     }
     

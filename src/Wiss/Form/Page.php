@@ -19,10 +19,8 @@ class Page extends Form implements InputFilterProviderInterface
 	/**
 	 * 
 	 */
-    public function __construct()
-    {                		
-        parent::__construct('route');
-        
+    public function prepareElements()
+    {
         // Title
         $this->add(array(
             'name' => 'title',
@@ -54,6 +52,7 @@ class Page extends Form implements InputFilterProviderInterface
             )
         ));
 			
+        // Submit
         $this->add(array(
             'name' => 'submit',
             'type' => 'Zend\Form\Element\Submit',

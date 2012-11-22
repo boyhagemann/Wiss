@@ -11,6 +11,9 @@
 		<h2><a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>"><?php echo $page->getTitle() ?></a></h2>
 		<h3><?php echo $page->getLayout()->getTitle() ?> layout</h3>
 		<div class="btn-group">
+            <?php if($page->getRoute()->getType() == 'Literal') : ?>
+			<a href="<?php echo $this->url($page->getRoute()->getFullName(), $page->getRoute()->getDefaults()) ?>" class="btn btn-small">View</a>
+            <?php endif ?>
 			<a href="<?php echo $this->url('wiss/page/properties', array('id' => $page->getId())) ?>" class="btn btn-small">Properties</a>
 			<a href="<?php echo $this->url('wiss/page/route', array('id' => $page->getId())) ?>" class="btn btn-small">Route</a>
 			<a href="<?php echo $this->url('wiss/page/content', array('id' => $page->getId())) ?>" class="btn btn-small">Content</a>

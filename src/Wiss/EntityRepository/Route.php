@@ -64,11 +64,15 @@ class Route extends NestedTreeRepository
             
             $em = $this->getEntityManager();
             $options = $routeData['options'];
-
+            
             // Start a new route
             $route = new \Wiss\Entity\Route;
             $route->setRoute($options['route']);
 
+            if(isset($routeData['type'])) {
+                $route->setType($routeData['type']);
+            }
+            
             $fullName = '';
             if($parentRoute) {
                 $fullName .= $parentRoute->getFullName() . '/';
@@ -126,25 +130,34 @@ class Route extends NestedTreeRepository
 	public function buildRouteConfigArray($routes)
 	{
 		$config = array();
+                        
 		foreach($routes as $data) {
-			
+			            
 			$route = $this->find($data['id']);
 			$name = $route->getName();
-			$config[$name] = array(
-				'type' => 'Segment',
+            $routeData = array(
+				'type' => $data['type'],
 				'may_terminate' => true,
 				'options' => array(					
 					'route'    => $route->getRoute(),
-					'defaults' => (array)$route->getDefaults(),
-					'constraints' => $route->getConstraints(),
 				)
 			);
-			;			
+                        
+            if($route->getDefaults()) {
+                $routeData['defaults'] = $route->getDefaults();
+            }
+            
+            if($route->getConstraints()) {
+                $routeData['options'] = $route->getConstraints();
+            }
+            
+			$config[$name] = $routeData;
+			
 			if($data['__children']) {
 				$config[$name]['child_routes'] = $this->buildRouteConfigArray($data['__children']);
 			}
 		}
-		
+        
 		return $config;
 	}
 	

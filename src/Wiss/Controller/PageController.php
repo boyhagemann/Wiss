@@ -48,11 +48,15 @@ class PageController extends AbstractActionController
                 // Collect the needed info
                 $data = $form->getData();
                 
+                
                 $filter = new \Zend\Filter\Word\SeparatorToDash(' ');
                 $name = strtolower($filter->filter($data['title']));
                 
                 // Create a route and page
                 $route = $repo->createRoute($name, array('options' => $data));
+                
+                // Update the route config
+                $repo->export();
                 
                 // Show a flash message
                 $this->flashMessenger()->addMessage('Page created');
@@ -62,8 +66,12 @@ class PageController extends AbstractActionController
                     'id' => $route->getPage()->getId()
                 ));
             }
+            else {
+                
+                \Zend\Debug\Debug::dump($form->getData()); exit;
+            }
         }
-        
+                
 		return compact('form');
 	}
     
@@ -75,14 +83,12 @@ class PageController extends AbstractActionController
     {
         $sl = $this->getServiceLocator();
         $em = $this->getEntityManager();
+        $hydrator = new EntityHydrator($this->getEntityManager());
         
         $form = $sl->get('Wiss\Form\Page'); 
 		$form->setAttribute('class', 'form-horizontal');
-        
-        // Add a hydrator for doctrine entities
-        $hydrator = new EntityHydrator($this->getEntityManager());
 		$form->setHydrator($hydrator);   
-                
+        $form->prepareElements();                
         $form->get('layout')->getProxy()->setObjectManager($em);
                 
         return $form;
@@ -130,15 +136,18 @@ class PageController extends AbstractActionController
 	 */
 	public function routeAction()
 	{
+        // Get the page
         $sl = $this->getServiceLocator();
         $em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Page');
 		$page = $repo->find($this->params('id'));
-								  
+								 
+        // Get the route form
         $form = $sl->get('Wiss\Form\Route');
         $hydrator = new EntityHydrator($this->getEntityManager());
 		$form->setHydrator($hydrator);  
-        $form->bind($page->getRoute());
+        $form->prepareElements(); 
+        $form->bind($page->getRoute()); 
                        
         if($this->getRequest()->isPost()) {
             
@@ -146,8 +155,12 @@ class PageController extends AbstractActionController
             
             if($form->isValid()) {
                              
+                // Save the route
                 $em->persist($form->getData());
                 $em->flush();
+                
+                // Update the route config
+                $em->getRepository('Wiss\Entity\Route')->export();
                                 
                 // Show a flash message
                 $this->flashMessenger()->addMessage('Page route updated');
