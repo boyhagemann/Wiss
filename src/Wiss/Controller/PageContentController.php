@@ -74,6 +74,11 @@ class PageContentController extends AbstractActionController
             foreach($content->getDefaults() as $key => $value) {
                 $routeMatch->setParam($key, $value);
             }
+            
+            // Alos add the route defaults
+            foreach($route->getDefaults() as $key => $value) {
+                $routeMatch->setParam($key, $value);
+            }
 
             // Dispatch the new routeMatch. The routeMatch has the
             // right action set, so the only thing that remains is

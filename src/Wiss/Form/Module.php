@@ -20,28 +20,27 @@ class Module extends Form implements InputFilterProviderInterface
 	 * 
 	 */
     public function prepareElements()
-    {                		
-		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
-		$this->setAttribute('class', 'form-horizontal');
+    {       
+        // Title
+        $this->add(array(
+            'name' => 'title',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+                'label' => 'Title',
+            )
+        ));
 		
-		// Title
-		$title = new Element('title');
-		$title->setAttributes(array(
-			'type' => 'text',
-			'label' => 'Name of the module'
-		));
-
-		// Submit
-		$submit = new Element('submit');
-		$submit->setAttributes(array(
-			'type'  => 'submit',
-			'value' => 'Save',
-			'class' => 'btn btn-primary btn-large',
-		));
-
-		$this->add($title);
-		$this->add($submit);
-				
+        
+        // Submit
+        $this->add(array(
+            'name' => 'submit',
+            'type' => 'Zend\Form\Element\Submit',
+            'attributes' => array(
+                'value' => 'Save',
+                'class' => 'btn btn-primary btn-large',
+            ),
+        ));		
+	
     }
     
     /**

@@ -181,7 +181,8 @@ class Module extends \Doctrine\ORM\EntityRepository
                             'layout' => 'cms',
                             'route' => '/properties',
                             'defaults' => array(
-                                'action' => 'properties'
+                                'action' => 'properties',                                
+                                'module' => $module->getSlug(),
                             ),
                         ),
                     ),
@@ -191,7 +192,8 @@ class Module extends \Doctrine\ORM\EntityRepository
                             'layout' => 'cms',
                             'route' => '/models',
                             'defaults' => array(
-                                'action' => 'models'
+                                'action' => 'models',                    
+                                'module' => $module->getSlug(),
                             ),
                         ),
                     ),

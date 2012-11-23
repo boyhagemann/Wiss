@@ -12,6 +12,7 @@ namespace Wiss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
+use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 
 class ModuleController extends AbstractActionController
 {
@@ -36,8 +37,7 @@ class ModuleController extends AbstractActionController
     public function createAction()
     {
         // Get the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Module');
-        $form->prepareElements();
+        $form = $this->getForm();
         
         // Get the module repository
         $em = $this->getEntityManager();
@@ -63,6 +63,9 @@ class ModuleController extends AbstractActionController
                 // Generate the file and folders
                 $repo->generate($module);
 
+                // Update the route config
+                $em->getRepository('Wiss\Entity\Route')->export();
+                                
                 // Show a flash message
                 $this->flashMessenger()->addMessage('The module is created succesfully');
 
@@ -80,10 +83,9 @@ class ModuleController extends AbstractActionController
      * @return array
      */
     public function propertiesAction()
-    {
+    {        
         // Get the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Module');
-        $form->prepareElements();
+        $form = $this->getForm();
         
         // Get the module repository
         $em = $this->getEntityManager();
@@ -106,17 +108,34 @@ class ModuleController extends AbstractActionController
                 $module = $form->getData();
                 $em->persist($module);
                 $em->flush();
-
+                
                 // Show a flash message
+                $this->flashMessenger()->addMessage('Module properties updated');
 
                 // Redirect
-                $this->redirect()->toRoute('wiss/module/properties', array(
-                    'module' => $module->getName(),
-                ));
+                $this->redirect()->toRoute(sprintf('wiss/module/%s/properties', $module->getSlug()));
             }
         }
         
 		return compact('module', 'form');
+    }
+    
+    /**
+     * 
+     * @return Wiss\Form\Module
+     */
+    public function getForm()
+    {
+        $sl = $this->getServiceLocator();
+        $hydrator = new EntityHydrator($this->getEntityManager());
+        
+        $form = $sl->get('Wiss\Form\Module');
+		$form->setHydrator($hydrator);   
+        $form->prepareElements();
+        
+		$form->setAttribute('class', 'form-horizontal');
+        
+        return $form;
     }
 	
     /**
