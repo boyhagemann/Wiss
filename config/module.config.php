@@ -13,17 +13,6 @@ namespace Wiss;
 return array(
 	'router' => array(
 		'routes' => array(
-			'page-wildcard' => array(
-				'type' => 'Wildcard',
-				'options' => array(
-					'route' => '*',
-					'defaults' => array(
-						'__NAMESPACE__' => 'Wiss\Controller',
-						'controller' => 'pageContent',
-						'action' => 'route',
-					),
-				),
-			),
 			'wiss' => array(
 				'type' => 'Literal',
 				'options' => array(
