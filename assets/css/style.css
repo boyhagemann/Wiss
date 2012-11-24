@@ -63,6 +63,10 @@ ul.list li .btn-group {
     position: absolute;
     right: 5px;
     top: 5px;
+    visibility: hidden;
+}
+ul.list li:hover .btn-group {
+    visibility: visible;
 }
 ul.list li.locked h2 {
     color: #bbb;
@@ -94,16 +98,9 @@ ul.tree li.node {
     background: none;
     margin-top: 0;
     margin-bottom: 0;
-    cursor: move;
 }
 ul.tree li.node:hover {
 	background: #f7f7f7; 
-}
-ul.tree li.node > .btn-group {
-    visibility: hidden;
-}
-ul.tree li.node:hover > .btn-group {
-    visibility: visible;
 }
 ul.tree .offset1 { margin-left: 20px; }
 ul.tree .offset2 { margin-left: 40px; }
@@ -117,3 +114,8 @@ ul.tree .offset9 { margin-left: 180px; }
 ul.tree .offset10 { margin-left: 200px; }
 ul.tree .offset11 { margin-left: 220px; }
 ul.tree .offset12 { margin-left: 240px; }
+
+
+ul li.draggable {    
+    cursor: move;
+}

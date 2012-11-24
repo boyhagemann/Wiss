@@ -11,7 +11,7 @@
 <h2><?php echo $zone->getTitle() ?></h2>
 <ul class="list blocks unstyled">
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
-	<li class="block rounded-small">
+	<li class="block draggable">
 		<h2><?php echo $content->getTitle() ?></h2>
 		<div class="btn-group">
             <?php if($content->getBlock()->getFormClass()) : ?>
@@ -21,7 +21,7 @@
 		</div>
 	</li>
 	<?php endforeach ?>
-	<li class="block rounded-small empty">
+	<li class="block empty">
 		Drag blocks in here...
 	</li>
 </ul>

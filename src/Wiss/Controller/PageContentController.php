@@ -40,7 +40,7 @@ class PageContentController extends AbstractActionController
 		$route = $em->getRepository('Wiss\Entity\Route')->findOneBy(array(
             'fullName' => $this->params('route')
         ));		
-        		        
+        
         // Get the page that belongs to the found route
 		$page = $route->getPage();
         
@@ -105,6 +105,7 @@ class PageContentController extends AbstractActionController
             
             // Add the view to a zone view
             $this->getZoneViewModel($zoneName)->addChild($view);
+            break;
         }
 		
         // If all blocks are added to the zones, add the zones

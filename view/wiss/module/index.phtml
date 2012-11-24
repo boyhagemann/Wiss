@@ -4,7 +4,7 @@
 
 <ul class="unstyled list">
 	<?php foreach($modules as $module) : ?>
-	<li<?php if ($module->isLocked()) : echo ' class="locked"'; endif ?>>
+	<li<?php if ($module->isLocked()) : echo ' class="locked"'; else : echo ' class="draggable"'; endif ?>>
 		<h2><?php echo $module->getTitle() ?></h2>
         <?php if (!$module->isLocked()) : ?>
         <div class="btn-group">
