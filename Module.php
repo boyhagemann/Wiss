@@ -25,7 +25,7 @@ class Module
         $app    = $e->getApplication();
         $sm     = $app->getServiceManager();
 		$evm    = $app->getEventManager();	
-		$config = $app->getConfig();	
+		$config = $app->getConfig();
         
         // Hook in to the route event, where is determined
         // which controller/action has to be used

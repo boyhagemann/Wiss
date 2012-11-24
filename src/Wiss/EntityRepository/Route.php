@@ -167,7 +167,7 @@ class Route extends NestedTreeRepository
             }
             
             if($route->getConstraints()) {
-                $routeData['options'] = $route->getConstraints();
+                $routeData['options'] += $route->getConstraints();
             }
             
 			$config[$name] = $routeData;
