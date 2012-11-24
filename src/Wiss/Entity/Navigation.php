@@ -137,5 +137,11 @@ class Navigation
 	public function setChildren($children) {
 		$this->children = $children;
 	}
+    
+    public function getLevel() {
+        return $this->lvl;
+    }
+
+
 
 }

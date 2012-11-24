@@ -1,6 +1,26 @@
 
 <h1>Navigation</h1>
 
-<div class="treeview">
-<?php echo $tree ?>
-</div>
+<ul class="unstyled list tree">
+    <?php foreach($tree as $node) : ?>
+    <?php if ($node->getLevel() === 0) : ?>
+    <li class="root<?php echo $node->getLevel() ?>">
+        <h2><?php echo $node->getLabel() ?></h2>
+    </li>
+    <?php else : ?>
+    <li class="node offset<?php echo $node->getLevel() ?>">
+        <h2><?php echo $node->getLabel() ?> </h2>
+        <?php endif ?>
+        <?php if($node->getRoute()) : ?>
+        <div class="btn-group">
+            <?php if($node->getRoute()->getType() == 'Literal') : ?>
+            <a href="<?php echo $this->url($node->getRoute()->getFullName(), $node->getRoute()->getDefaults()) ?>" class="btn btn-small">View</a>
+            <?php endif ?>
+            <a href="<?php echo $this->url('wiss/page/properties', array('id' => $node->getRoute()->getPage()->getId())) ?>" class="btn btn-small">Properties</a>
+            <a href="<?php echo $this->url('wiss/page/route', array('id' => $node->getRoute()->getPage()->getId())) ?>" class="btn btn-small">Route</a>
+            <a href="<?php echo $this->url('wiss/page/content', array('id' => $node->getRoute()->getPage()->getId())) ?>" class="btn btn-small">Content</a>
+        </div>	
+    </li>
+    <?php endif ?>
+    <?php endforeach ?>    
+</ul>

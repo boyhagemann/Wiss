@@ -21,6 +21,7 @@ return array(
 						'__NAMESPACE__' => 'Wiss\Controller',
 						'controller' => 'index',
 						'action' => 'index',
+                        'layout' => 'wiss',
 					),
 				),
 				'may_terminate' => true,
@@ -347,13 +348,9 @@ return array(
 				'label' => 'Navigation',
 				'route' => 'wiss/navigation',
 				'pages' => array(
-                    'structure' => array(
-                        'label' => 'Structure',
-                        'route' => 'wiss/navigation',
-                    ),
 					'page' => array(
 						'label' => 'Pages',
-						'route' => 'wiss/page',
+						'route' => 'wiss/navigation',
 						'pages' => array(
 							'properties' => array(
 								'label' => 'Properties',

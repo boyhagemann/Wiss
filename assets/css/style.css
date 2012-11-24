@@ -80,4 +80,40 @@ ul.list li h3 {
 	margin: 0;
 }
 
-
+ul.tree {
+	/*background: #f7f7f7;*/    
+}
+ul.tree li.root h2 {
+    color: #ccc;
+    padding: 0 0 15px 0;
+	border-bottom: 3px dashed #ddd;
+}
+ul.tree li.node {
+    padding-left: 20px;
+    padding-right: 0px;
+    background: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    cursor: move;
+}
+ul.tree li.node:hover {
+	background: #f7f7f7; 
+}
+ul.tree li.node > .btn-group {
+    visibility: hidden;
+}
+ul.tree li.node:hover > .btn-group {
+    visibility: visible;
+}
+ul.tree .offset1 { margin-left: 20px; }
+ul.tree .offset2 { margin-left: 40px; }
+ul.tree .offset3 { margin-left: 60px; }
+ul.tree .offset4 { margin-left: 80px; }
+ul.tree .offset5 { margin-left: 100px; }
+ul.tree .offset6 { margin-left: 120px; }
+ul.tree .offset7 { margin-left: 140px; }
+ul.tree .offset8 { margin-left: 160px; }
+ul.tree .offset9 { margin-left: 180px; }
+ul.tree .offset10 { margin-left: 200px; }
+ul.tree .offset11 { margin-left: 220px; }
+ul.tree .offset12 { margin-left: 240px; }
