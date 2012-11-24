@@ -143,7 +143,7 @@ class IndexController extends AbstractActionController
 		
 		// Insert layout
 		$layout2 = new \Wiss\Entity\Layout;
-		$layout2->setTitle('cms');	
+		$layout2->setTitle('wiss');	
 		$layout2->setPath('wiss/layout/layout');
 		$em->persist($layout2);
 		

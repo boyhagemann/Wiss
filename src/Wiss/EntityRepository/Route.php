@@ -82,9 +82,14 @@ class Route extends NestedTreeRepository
             $route->setFullName($fullName);
             $route->setParent($parentRoute);
 
+            $defaults = array();
             if(isset($options['defaults'])) {
-                $route->setDefaults($options['defaults']);
+                $defaults += $options['defaults'];
             }
+            if($parentRoute) {
+                $defaults += $this->getParentRouteDefaults($parentRoute);
+            }
+            $route->setDefaults($defaults);
 
             if(isset($options['constraints'])) {
                 $route->setConstraints($options['constraints']);
@@ -105,6 +110,20 @@ class Route extends NestedTreeRepository
 		}	
         
         return $route;
+    }
+            
+    /**
+     * 
+     * @param \Wiss\Entity\Route $route
+     * @return array
+     */
+    public function getParentRouteDefaults(\Wiss\Entity\Route $route)
+    {
+        $defaults = (array) $route->getDefaults();
+        if($route->getParent() instanceof \Wiss\Entity\Route) {
+            $defaults += $this->getParentRouteDefaults($route->getParent());
+        }
+        return $defaults;
     }
     
     /**

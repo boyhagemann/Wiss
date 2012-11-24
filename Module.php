@@ -58,26 +58,7 @@ class Module
 
 		});
     }
-	
-    /**
-     *
-     * @param ModleManager $moduleManager
-     */
-    public function init(ModuleManager $moduleManager)
-    {
-        // If the Wiss module is being used in the application, then
-        // a special layout is used.
-        $sharedEvents = $moduleManager->getEventManager()->getSharedManager();
-        $sharedEvents->attach(__NAMESPACE__, 'dispatch', function($e) {
-            
-            // This event will only be fired when an ActionController u
-            // Under the Wiss namespace is dispatched.
-            $controller = $e->getTarget();
-            $controller->layout('wiss/layout/layout');
-            
-        }, 100);
-    }
-	
+		
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
