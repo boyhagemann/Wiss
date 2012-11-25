@@ -200,15 +200,6 @@ class ContentController extends AbstractActionController
         return compact('content', 'form');
     }
     
-    public function sortAction()
-    {
-        $viewModel = new \Zend\View\Model\JsonModel;
-        $viewModel->setVariables(array(
-            'test' => true
-        ));
-        return $viewModel;
-    }
-    
     public function deleteAction()
     {
         

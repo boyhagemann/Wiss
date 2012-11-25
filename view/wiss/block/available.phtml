@@ -4,7 +4,7 @@
 <ul class="unstyled list blocks blocks-available">
 	<?php foreach($blocks as $block) : ?>
 	<li class="block draggable" data-block-id="<?php echo $block->getId() ?>">
-		<h2><a href=""><?php echo $block->getTitle() ?></a></h2>
+		<h2><?php echo $block->getTitle() ?></h2>
 	</li>
 	<?php endforeach ?>
 </ul>

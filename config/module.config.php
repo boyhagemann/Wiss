@@ -82,6 +82,18 @@ return array(
 									),
 								),
 							),
+							'sort' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/sort/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'sort',
+									),
+								),
+							),
 						)
 					),
 					'content' => array(
@@ -127,18 +139,6 @@ return array(
 									),
 									'defaults' => array(
 										'action' => 'delete',
-									),
-								),
-							),
-							'sort' => array(
-								'type' => 'Segment',
-								'options' => array(
-									'route' => '/sort/[:id]',
-									'constraints' => array(
-										'id' => '[0-9-]*',
-									),
-									'defaults' => array(
-										'action' => 'sort',
 									),
 								),
 							),

@@ -198,6 +198,21 @@ class PageController extends AbstractActionController
 		
 		return compact('page', 'zones', 'used');
 	}
+    
+	/**
+	 *
+	 * @return \Zend\View\Model\JsonModel 
+	 */
+    public function sortAction()
+    {        
+        $viewModel = new \Zend\View\Model\JsonModel;
+        $viewModel->setVariables(array(
+            'header' => $this->params()->fromHeader(),
+            'post' => $this->params()->fromPost(),
+            'get' => $this->params()->fromQuery(),
+        ));
+        return $viewModel;
+    }
 			
 	/**
 	 *

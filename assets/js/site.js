@@ -17,12 +17,32 @@ $(document).ready(function(e) {
         revertDuration: 200
     });
     
+    console.log('tss');
     $('.blocks-available .draggable').on('dragstop', function(event, ui) {
+
         var blockId = ui.helper.data('block-id');
-        console.log(blockId);
-        console.log(ui.helper);
-        console.log(event);
-        console.log(ui);
+        
+        var blocks = $('.blocks-used li');
+        var data = [];
+        
+        blocks.each(function(e) {
+            data.push({
+                contentId: $(this).data('content-id'),
+                position: '1'
+            });
+        })
+        
+        
+        $.ajax({
+            url: $('.blocks-used').data('sort-url'),
+            type:'get',
+            dataType:'json',
+            data: {test: data},
+            success: function(data){
+                console.log(data);
+            }
+        })
+        
     });
     
 })

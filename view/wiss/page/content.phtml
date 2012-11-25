@@ -9,9 +9,9 @@
 <?php foreach($zones as $zone) : ?>
 
 <h2><?php echo $zone->getTitle() ?></h2>
-<ul class="list blocks sortable droppable unstyled">
+<ul class="list blocks blocks-used sortable unstyled" data-sort-url="<?php echo $this->url('wiss/page/sort', array('id' => $page->getId())) ?>">
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
-	<li class="block">
+	<li class="block" data-content-id="<?php echo $content->getId() ?>">
 		<h2><?php echo $content->getTitle() ?></h2>
 		<div class="btn-group">
             <?php if($content->getBlock()->getFormClass()) : ?>
@@ -25,21 +25,3 @@
 </ul>
 
 <?php endforeach; ?>
-
-<a href="#" id="test">test</a>
-
-<script type="text/javascript">
-    
-    $('#test').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: '/zf2/testsite/public/wiss/content/sort/12',
-            type:'get',
-            dataType:'json',
-            success: function(data){
-                console.log(data);
-            }
-        });
-    });
-    
-</script>
