@@ -50,7 +50,7 @@ class Module
 			if($config['application']['use_zones']) {
 				
 				// Rewrite all incoming uri's to a single entry point
-				$route->setParam('controller', 'Wiss\Controller\PageContent');
+				$route->setParam('controller', 'Wiss\Controller\Content');
 				$route->setParam('action', 'route');
 				$route->setParam('route', $currentRoute);				
 				$route->setParam('originalRoute', $originalRoute);				

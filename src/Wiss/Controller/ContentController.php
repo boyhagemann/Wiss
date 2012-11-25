@@ -13,7 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 
-class PageContentController extends AbstractActionController
+class ContentController extends AbstractActionController
 {
     /**
      *

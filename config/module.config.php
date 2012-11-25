@@ -84,12 +84,12 @@ return array(
 							),
 						)
 					),
-					'page-content' => array(
+					'content' => array(
 						'type' => 'Literal',
 						'options' => array(
-							'route' => '/page-content',
+							'route' => '/content',
 							'defaults' => array(
-								'controller' => 'pageContent',
+								'controller' => 'content',
 							),
 						),
 						'may_terminate' => false,
@@ -434,7 +434,7 @@ return array(
 			'Wiss\Controller\Index' => 'Wiss\Controller\IndexController',
 			'Wiss\Controller\Module' => 'Wiss\Controller\ModuleController',
 			'Wiss\Controller\Page' => 'Wiss\Controller\PageController',
-			'Wiss\Controller\PageContent' => 'Wiss\Controller\PageContentController',
+			'Wiss\Controller\Content' => 'Wiss\Controller\ContentController',
 			'Wiss\Controller\Model' => 'Wiss\Controller\ModelController',
 			'Wiss\Controller\ModelElement' => 'Wiss\Controller\ModelElementController',
 			'Wiss\Controller\Navigation' => 'Wiss\Controller\NavigationController',
