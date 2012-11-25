@@ -9,9 +9,9 @@
 <?php foreach($zones as $zone) : ?>
 
 <h2><?php echo $zone->getTitle() ?></h2>
-<ul class="list blocks unstyled">
+<ul class="list blocks sortable droppable unstyled">
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
-	<li class="block draggable">
+	<li class="block">
 		<h2><?php echo $content->getTitle() ?></h2>
 		<div class="btn-group">
             <?php if($content->getBlock()->getFormClass()) : ?>
@@ -21,9 +21,6 @@
 		</div>
 	</li>
 	<?php endforeach ?>
-	<li class="block empty">
-		Drag blocks in here...
-	</li>
 </ul>
 
 <?php endforeach; ?>

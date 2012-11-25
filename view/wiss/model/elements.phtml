@@ -2,7 +2,7 @@
 
 <?php echo $this->navigation('cms')->menu()->setUlClass('nav nav-tabs')->renderSubmenu() ?>
 
-<ul class="list unstyled">
+<ul class="list sortable unstyled">
 	<?php foreach($model->getElements() as $element) : ?>
 	<li class="draggable">
 		<h2><?php echo $element->getName() ?></h2>

@@ -2,7 +2,7 @@
 
 <?php echo $this->navigation('cms')->menu()->setMinDepth(2)->setMaxDepth(2)->setOnlyActiveBranch(true)->setUlClass('nav nav-tabs') ?>
 
-<ul class="unstyled list">
+<ul class="unstyled sortable list">
 	<?php foreach($modules as $module) : ?>
 	<li<?php if ($module->isLocked()) : echo ' class="locked"'; else : echo ' class="draggable"'; endif ?>>
 		<h2><?php echo $module->getTitle() ?></h2>

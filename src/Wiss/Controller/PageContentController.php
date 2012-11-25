@@ -56,27 +56,24 @@ class PageContentController extends AbstractActionController
                 
         // Walk each zone and process the blocks
 		foreach($page->getContent() as $content) {
-			
-            $zoneName = $content->getZone()->getName();
-            
+			            
             // Get the block from this content part
             $block = $content->getBlock();
-
-            // Alter the current controller's routeMatch		
-            $routeMatch	= $this->getEvent()->getRouteMatch();
-            $routeMatch->setParam('controller', $block->getController());
-            $routeMatch->setParam('action', $block->getAction());
 
             // Inject all defaults that are set in the content block.
             // Each content block can have its own unique parameters to
             // control a block. This means a new controller action is 
             // dispatched for each block with custom parameters.
-            foreach($content->getDefaults() as $key => $value) {
-                $routeMatch->setParam($key, $value);
-            }
+            $defaults = array(
+                'controller' => $block->getController(),
+                'action' => $block->getAction(),
+            );
+            $defaults += (array) $content->getDefaults();
+            $defaults += $route->getDefaults();
             
-            // Alos add the route defaults
-            foreach($route->getDefaults() as $key => $value) {
+            // Alter the current controller's routeMatch		
+            $routeMatch	= $this->getEvent()->getRouteMatch();
+            foreach($defaults as $key => $value) {
                 $routeMatch->setParam($key, $value);
             }
 
@@ -104,8 +101,8 @@ class PageContentController extends AbstractActionController
             $view->setCaptureTo($content->getId());
             
             // Add the view to a zone view
+            $zoneName = $content->getZone()->getName();
             $this->getZoneViewModel($zoneName)->addChild($view);
-            break;
         }
 		
         // If all blocks are added to the zones, add the zones
@@ -160,6 +157,11 @@ class PageContentController extends AbstractActionController
         }
         
         return compact('content', 'form');
+    }
+    
+    public function sortAction()
+    {
+        
     }
     
     public function deleteAction()

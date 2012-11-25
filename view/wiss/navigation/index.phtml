@@ -1,7 +1,7 @@
 
 <h1>Navigation</h1>
 
-<ul class="unstyled list tree">
+<ul class="unstyled list sortable tree">
     <?php foreach($tree as $node) : ?>
     <?php if ($node->getLevel() === 0) : ?>
     <li class="root<?php echo $node->getLevel() ?>">

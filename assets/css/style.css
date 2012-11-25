@@ -19,6 +19,7 @@ ul.blocks {
 	margin: 10px 0;
 	padding: 10px 10px 0 10px;
 	border: 3px dashed #ddd;
+    min-height: 30px;
 }
 ul.blocks li.block {
 	margin-bottom: 10px;
@@ -116,6 +117,10 @@ ul.tree .offset11 { margin-left: 220px; }
 ul.tree .offset12 { margin-left: 240px; }
 
 
-ul li.draggable {    
+ul li.draggable, .sortable > li {    
     cursor: move;
+}
+
+ul-sortable-helper {
+    visibility: visible;
 }
