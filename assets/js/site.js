@@ -17,6 +17,12 @@ $(document).ready(function(e) {
         revertDuration: 200
     });
     
-    
+    $('.blocks-available .draggable').on('dragstop', function(event, ui) {
+        var blockId = ui.helper.data('block-id');
+        console.log(blockId);
+        console.log(ui.helper);
+        console.log(event);
+        console.log(ui);
+    });
     
 })

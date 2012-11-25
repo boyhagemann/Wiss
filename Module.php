@@ -35,7 +35,7 @@ class Module
 			$route = $e->getRouteMatch();	
 			$originalRoute = clone $route;
 			$currentRoute = $route->getMatchedRouteName();	
-            
+                      
     		// Go to the install page first if there is no valid database connection
             // Only go there is the current route is not 'install' already
 			if($currentRoute != 'wiss/install' && $config['application']['installed'] === false) {

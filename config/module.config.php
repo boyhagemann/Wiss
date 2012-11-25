@@ -130,6 +130,18 @@ return array(
 									),
 								),
 							),
+							'sort' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/sort/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'sort',
+									),
+								),
+							),
 						)
 					),
 					'navigation' => array(
@@ -468,6 +480,9 @@ return array(
 		'template_path_stack' => array(
 			__DIR__ . '/../view',
 		),
+        'strategies' => array(
+            'ViewJsonStrategy',
+        ),
 	),
 	'model-element-builders' => array(
 		'Wiss\Model\Element\Text' => 'Text',

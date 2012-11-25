@@ -25,3 +25,21 @@
 </ul>
 
 <?php endforeach; ?>
+
+<a href="#" id="test">test</a>
+
+<script type="text/javascript">
+    
+    $('#test').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/zf2/testsite/public/wiss/content/sort/12',
+            type:'get',
+            dataType:'json',
+            success: function(data){
+                console.log(data);
+            }
+        });
+    });
+    
+</script>

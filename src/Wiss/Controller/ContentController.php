@@ -11,6 +11,7 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use Doctrine\ORM\EntityManager;
 use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 
@@ -46,7 +47,7 @@ class ContentController extends AbstractActionController
 		$page = $route->getPage();
         
         // Set the right layout
-		$this->layout($page->getLayout()->getPath());
+        $this->layout($page->getLayout()->getPath());
 			
         // Set the flash messages first, before dispatching any othe
         // controller actions. Otherwise the flashMessages are already shown
@@ -90,6 +91,11 @@ class ContentController extends AbstractActionController
                 continue;
             }
             
+            // Return early if this is an ajax call
+            if($view instanceof JsonModel) {
+                return $view;
+            }
+            
             // Check if this viewModel is the last one to render in the chain.
             // A viewModel can have the 'setTerminate' to true. No other
             // view has to be rendered
@@ -123,7 +129,7 @@ class ContentController extends AbstractActionController
      * @return array
      */
     public function propertiesAction()
-    {
+    {        
         // Get the page content block
         $em = $this->getEntityManager();
         $content = $em->getRepository('Wiss\Entity\Content')->find($this->params('id'));
@@ -159,7 +165,7 @@ class ContentController extends AbstractActionController
      * @return array
      */
     public function configurationAction()
-    {
+    {        
         // Get the page content block
         $em = $this->getEntityManager();
         $content = $em->getRepository('Wiss\Entity\Content')->find($this->params('id'));
@@ -196,7 +202,11 @@ class ContentController extends AbstractActionController
     
     public function sortAction()
     {
-        
+        $viewModel = new \Zend\View\Model\JsonModel;
+        $viewModel->setVariables(array(
+            'test' => true
+        ));
+        return $viewModel;
     }
     
     public function deleteAction()
