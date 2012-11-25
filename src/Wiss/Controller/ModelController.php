@@ -10,15 +10,12 @@
 
 namespace Wiss\Controller;
 
-use Wiss\Entity\Model;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Code\Scanner\FileScanner;
-use Zend\Form\Annotation\AnnotationBuilder;
-use Zend\Code\Annotation\Parser;
-use Zend\Code\Annotation\AnnotationManager;
-use Zend\Code\Reflection\ClassReflection;
 use Doctrine\ORM\EntityManager;
+use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
+use Wiss\Entity\Model;
 
 class ModelController extends AbstractActionController {
 
@@ -83,9 +80,8 @@ class ModelController extends AbstractActionController {
 				return false;
 			}
 			
-            // Get data from entity annotations
-            $data = $this->getDataFromAnnotations($class);
-            $data += array(
+            // Build the standard data
+            $data = array(
                 'title' => $title,
                 'entity_class' => $class,
             );
@@ -100,8 +96,7 @@ class ModelController extends AbstractActionController {
         }
 
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
-		$form->prepareElements();
+        $form = $this->getForm(); 
 		$form->bind($model);
 		$form->setData($data);
 
@@ -160,9 +155,7 @@ class ModelController extends AbstractActionController {
         ));
 
         // Create the form
-        $form = $this->getServiceLocator()->get('Wiss\Form\Model\Properties');   
-		$form->setName('model');
-		$form->prepareElements(array());
+        $form = $this->getForm();  
 		$form->bind($model);
 
         if ($this->getRequest()->isPost()) {
@@ -236,6 +229,26 @@ class ModelController extends AbstractActionController {
         return false;
     }
     
+    /**
+     * 
+     * @return \Wiss\Form\Model
+     */
+    public function getForm()
+    {
+        $sl = $this->getServiceLocator();
+        $em = $this->getEntityManager();
+        $hydrator = new EntityHydrator($this->getEntityManager());
+        
+        $form = $sl->get('Wiss\Form\Model'); 
+		$form->setAttribute('class', 'form-horizontal');
+		$form->setHydrator($hydrator);   
+        $form->prepareElements();                
+        $form->get('module')->getProxy()->setObjectManager($em);
+        $form->get('node')->getProxy()->setObjectManager($em);
+                
+        return $form;
+    }
+    
 	/**
      * Get the class from the url params
 	 * 
@@ -246,41 +259,6 @@ class ModelController extends AbstractActionController {
         return str_replace('-', '\\', $this->params('class'));
 	}
     
-    /**
-     * Read some useful information from the annotations regarding
-     * list overviews
-     *
-     * @param string $class
-     * @return array 
-     */
-    public function getDataFromAnnotations($class) 
-	{
-        // Build an annotation parser to read the annotations
-        $parser = new Parser\DoctrineAnnotationParser();
-        $parser->registerAnnotation('Wiss\Annotation\Overview');
-
-        // Add the parser to the annotation manager
-        $annotationManager = new AnnotationManager();
-        $annotationManager->attach($parser);
-
-        // Use reflection to inspect the class for annotations
-        $reflection = new ClassReflection($class);
-        $annotations = $reflection->getAnnotations($annotationManager);
-
-        // Walk each found annotations
-        foreach ($annotations as $annotation) {
-
-            // Add the overview title fiel
-            if ($annotation instanceof \Wiss\Annotation\Overview) {
-                return array(
-                    'title_field' => $annotation->getTitleField()
-                );
-            }
-        }
-
-        return array();
-    }
-
     /**
      *
      * @return Doctrine\ORM\Collection

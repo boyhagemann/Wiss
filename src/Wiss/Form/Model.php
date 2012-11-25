@@ -10,56 +10,71 @@
 namespace Wiss\Form;
 
 use Zend\Form\Element;
-use Zend\Form\Fieldset;
 use Zend\Form\Form;
-use Zend\InputFilter\Input;
-use Zend\InputFilter\InputFilter;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class Model extends Form implements ServiceLocatorAwareInterface
-{	
-    protected $serviceLocator;
-	
+class Model extends Form implements InputFilterProviderInterface
+{		    
 	/**
 	 * 
-	 * @param array $data
 	 */
-    public function prepareElements(Array $data)
-    {                		
-		$this->setHydrator(new \Zend\Stdlib\Hydrator\ClassMethods());
-		$this->setAttribute('class', 'form-horizontal');
-		
+    public function prepareElements()
+    {                   		
 		// Title
-		$title = new Element('title');
-		$title->setAttributes(array(
-			'type' => 'text',
-			'label' => 'Name of the model'
-		));
-
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Text',
+            'name' => 'title',
+            'attributes' => array(
+                'label' => 'Name of the model'
+            )
+        ));
+        
+        // Module    
+        $this->add(array(
+            'name' => 'module',
+            'type' => 'DoctrineORMModule\Form\Element\EntitySelect',
+            'attributes' => array(
+                'label' => 'Belongs to module',
+            ),
+            'options' => array(
+                'target_class' => 'Wiss\Entity\Module',
+                'property' => 'title',
+            )
+        ));    
+        
+        // Root    
+        $this->add(array(
+            'name' => 'node',
+            'type' => 'DoctrineORMModule\Form\Element\EntitySelect',
+            'attributes' => array(
+                'label' => 'Put in navigation',
+            ),
+            'options' => array(
+                'target_class' => 'Wiss\Entity\Navigation',
+                'property' => 'label',
+            )
+        ));    
+        
 		// Submit
-		$submit = new Element('submit');
-		$submit->setAttributes(array(
-			'type'  => 'submit',
-			'value' => 'Install',
-			'class' => 'btn btn-primary btn-large',
-		));
+        $this->add(array(
+            'type' => 'Zend\Form\Element\Submit',
+            'name' => 'submit',
+            'attributes' => array(
+                'value' => 'Save',
+                'class' => 'btn btn-primary btn-large',
+            )
+        ));
+	}
 
-		$this->add($title);
-		$this->add($submit);
-
-		$inputFilter = new InputFilter();
-		$inputFilter->add(new Input('title'));
-		$this->setInputFilter($inputFilter);
-				
+    /**
+     * 
+     * @return array
+     */
+	public function getInputFilterSpecification()
+    {
+        return array(
+            
+        );
     }
-
-	public function getServiceLocator() {
-		return $this->serviceLocator;
-	}
-
-	public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
-		$this->serviceLocator = $serviceLocator;
-	}
-
-
+	
 }
