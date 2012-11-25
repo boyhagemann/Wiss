@@ -222,7 +222,7 @@ class IndexController extends AbstractActionController
         $block->setTitle('Available blocks');
         $block->setAvailable(false);
         $block->setController('Wiss\Controller\Block');
-        $block->setAction('index');
+        $block->setAction('available');
         $em->persist($block);
         
         // Add the available blocks to the content page

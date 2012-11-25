@@ -317,6 +317,31 @@ return array(
 							),
 						),
 					),
+					'block' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/blocks',
+							'defaults' => array(
+								'controller' => 'block',
+								'action' => 'index',
+							),
+						),
+						'may_terminate' => true,
+						'child_routes' => array(
+							'properties' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/properties/[:id]',
+									'constraints' => array(
+										'id' => '[0-9]*',
+									),
+									'defaults' => array(
+										'action' => 'properties'
+									),
+								),
+							),
+						),
+					),
 					'install' => array(
 						'type' => 'Literal',
 						'options' => array(
@@ -379,6 +404,16 @@ return array(
 					'module' => array(
 						'label' => 'Modules',
 						'route' => 'wiss/module',
+					),
+					'block' => array(
+						'label' => 'Blocks',
+						'route' => 'wiss/block',
+                        'pages' => array(
+                            'properties' => array(
+                                'label' => 'Properties',
+                                'route' => 'wiss/block/properties',
+                            )
+                        )
 					),
 				)
 			),

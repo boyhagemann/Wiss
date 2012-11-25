@@ -11,6 +11,7 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 
 class BlockController extends AbstractActionController
 {
@@ -20,12 +21,82 @@ class BlockController extends AbstractActionController
      * 
      */
     public function indexAction()
-    {								
-		$blocks = $this->getEntityManager()->getRepository('Wiss\Entity\Block')->findBy(array(
+    {						
+        $em = $this->getEntityManager();
+		$blocks = $em->getRepository('Wiss\Entity\Block')->findAll();
+		
+		return compact('blocks');
+    }
+		
+    /**
+     * 
+     */
+    public function availableAction()
+    {						
+        $em = $this->getEntityManager();
+		$blocks = $em->getRepository('Wiss\Entity\Block')->findBy(array(
             'available' => true
         ));
 		
 		return compact('blocks');
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function propertiesAction()
+    {
+        // Get the block entity
+        $em = $this->getEntityManager();
+        $block = $em->getRepository('Wiss\Entity\Block')->find($this->params('id'));
+        
+        // Get the form
+        $form = $this->getForm();
+        $form->bind($block);
+        
+        if($this->getRequest()->isPost()) {
+            
+            $form->setData($this->getRequest()->getPost());
+            
+            if($form->isValid()) {
+                
+                // Save the entity
+                $em->persist($form->getData());
+                $em->flush();
+                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Block properties are updated!');
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/block/properties', array(
+                    'id' => $block->getId(),
+                ));
+            }
+            
+        }
+        
+        return compact('form', 'block');
+    }
+    
+    /**
+     * 
+     * @return \Wiss\Form\Model
+     */
+    public function getForm()
+    {
+        $sl = $this->getServiceLocator();
+        $em = $this->getEntityManager();
+        $hydrator = new EntityHydrator($this->getEntityManager());
+        
+        $form = $sl->get('Wiss\Form\Block'); 
+		$form->setAttribute('class', 'form-horizontal');
+		$form->setHydrator($hydrator);   
+        $form->prepareElements();                
+//        $form->get('module')->getProxy()->setObjectManager($em);
+//        $form->get('node')->getProxy()->setObjectManager($em);
+                
+        return $form;
     }
 	
 		

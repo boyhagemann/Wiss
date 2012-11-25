@@ -63,23 +63,7 @@ class Module
     {
         return include __DIR__ . '/config/module.config.php';
     }
-	
-    public function getViewHelperConfig()
-    {
-        return array(
-            'factories' => array(
-                
-                // Instantiate a Flash Messenger
-                'flashMessenger' => function($sm) {
-					$locator = $sm->getServiceLocator();
-					$messenger = $locator->get('Zend\Mvc\Controller\Plugin\FlashMessenger');
-					$flashMessenger = new \Wiss\View\Helper\FlashMessenger($messenger);
-					return $flashMessenger;
-                },
-            ),
-        );
-    }
-	
+		
     public function getAutoloaderConfig()
     {
         return array(
