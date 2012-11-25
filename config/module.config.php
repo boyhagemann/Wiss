@@ -94,6 +94,18 @@ return array(
 						),
 						'may_terminate' => false,
 						'child_routes' => array(
+							'properties' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/properties/[:id]',
+									'constraints' => array(
+										'id' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'properties',
+									),
+								),
+							),
 							'configuration' => array(
 								'type' => 'Segment',
 								'options' => array(
@@ -387,7 +399,17 @@ return array(
 							),
 							'content' => array(
 								'label' => 'Content',
-								'route' => 'wiss/page/content'
+								'route' => 'wiss/page/content',
+                                'pages' => array(
+                                    'properties' => array(
+                                        'label' => 'Properties',
+                                        'route' => 'wiss/content/properties',
+                                    ),
+                                    'configuration' => array(
+                                        'label' => 'Configuration',
+                                        'route' => 'wiss/content/configuration',
+                                    )
+                                )
 							),
 						)
 					)

@@ -1,0 +1,10 @@
+<h1><?php echo $content->getTitle() ?></h1>
+
+<?php if ($content->getBlock()->getFormClass()) : ?>
+<ul class="nav nav-tabs">
+	<li><a href="<?php echo $this->url('wiss/content/properties', array('id' => $content->getId())) ?>">Properties</a></li>
+	<li class="active"><a href="<?php echo $this->url('wiss/content/configuration', array('id' => $content->getId())) ?>">Configuration</a></li>
+</ul>
+<?php endif ?>
+
+<?php echo $this->formRenderer($form) ?>

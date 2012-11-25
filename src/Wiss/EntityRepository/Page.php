@@ -71,7 +71,6 @@ class Page extends \Doctrine\ORM\EntityRepository
         $block->setTitle($page->getTitle());
         $block->setAction($defaults['action']);
         $block->setController($controller);
-        $block->setFormClass('Wiss\Form\Content');
         $em->persist($block);
 
         // Add this block to the content

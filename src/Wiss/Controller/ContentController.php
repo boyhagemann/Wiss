@@ -12,6 +12,7 @@ namespace Wiss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
+use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 
 class ContentController extends AbstractActionController
 {
@@ -121,6 +122,42 @@ class ContentController extends AbstractActionController
      * 
      * @return array
      */
+    public function propertiesAction()
+    {
+        // Get the page content block
+        $em = $this->getEntityManager();
+        $content = $em->getRepository('Wiss\Entity\Content')->find($this->params('id'));
+        
+        // Get the form
+        $form = $this->getForm();
+        $form->bind($content);
+        
+        // Check if data is posted
+        if($this->getRequest()->isPost()) {
+            $form->setData($this->getRequest()->getPost());
+            
+            if($form->isValid()) {
+                
+                $em->persist($form->getData());
+                $em->flush();
+                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('The block properties are updated!');
+                
+                //Redirect
+                $this->redirect()->toRoute('wiss/page/content', array(
+                    'id' => $content->getPage()->getId()
+                ));
+            }
+        }
+        
+        return compact('content', 'form');
+    }
+    
+    /**
+     * 
+     * @return array
+     */
     public function configurationAction()
     {
         // Get the page content block
@@ -128,9 +165,7 @@ class ContentController extends AbstractActionController
         $content = $em->getRepository('Wiss\Entity\Content')->find($this->params('id'));
         
         // Get the form for the configuration
-        $formClass = $content->getBlock()->getFormClass();
-        $form = $this->getServiceLocator()->get($formClass);
-        $form->prepareElements();
+        $form = $this->getBlockConfigurationForm($content);
         
         // Set the defaults based on the current configuration of the content block
         $form->setData($content->getDefaults());
@@ -171,6 +206,44 @@ class ContentController extends AbstractActionController
     
     /**
      * 
+     * @return \Wiss\Form\Content
+     */
+    public function getForm()
+    {        
+        $sl = $this->getServiceLocator();
+        $em = $this->getEntityManager();
+        $hydrator = new EntityHydrator($this->getEntityManager());
+        
+        $form = $sl->get('Wiss\Form\Content'); 
+		$form->setAttribute('class', 'form-horizontal');
+		$form->setHydrator($hydrator);   
+        $form->prepareElements();                
+                
+        return $form;
+    }
+    
+    /**
+     * 
+     * @param \Wiss\Entity\Content $content
+     * @return \Zend\Form\Form
+     */
+    public function getBlockConfigurationForm(\Wiss\Entity\Content $content)
+    {        
+        $sl = $this->getServiceLocator();
+        $em = $this->getEntityManager();
+        $hydrator = new EntityHydrator($this->getEntityManager());
+        
+        $formClass = $content->getBlock()->getFormClass();
+        $form = $sl->get($formClass); 
+		$form->setAttribute('class', 'form-horizontal');
+		$form->setHydrator($hydrator);   
+        $form->prepareElements();                
+                
+        return $form;
+    }
+    
+    /**
+     * 
      * @param string $name
      * @return \Zend\View\Model\ViewModel
      */
@@ -186,7 +259,7 @@ class ContentController extends AbstractActionController
         
         // Give the viewmodel a special template. In this template the user
         // can alter the surrounding html to their needs
-        $view->setTemplate('wiss/page-content/zone');
+        $view->setTemplate('wiss/content/zone');
         
         // We want to pass the current zone name as a variable in the view,
         // just for styling purposes

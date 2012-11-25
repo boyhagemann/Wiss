@@ -15,9 +15,10 @@
 		<h2><?php echo $content->getTitle() ?></h2>
 		<div class="btn-group">
             <?php if($content->getBlock()->getFormClass()) : ?>
-			<a href="<?php echo $this->url('wiss/page-content/configuration', array('id' => $content->getId())) ?>" class="btn btn-small btn-primary">Configuration</a>
+			<a href="<?php echo $this->url('wiss/content/configuration', array('id' => $content->getId())) ?>" class="btn btn-small btn-primary">Configuration</a>
             <?php endif ?>
-			<a href="<?php echo $this->url('wiss/page-content/delete', array('id' => $content->getId())) ?>" class="btn btn-small">Remove</a>
+			<a href="<?php echo $this->url('wiss/content/properties', array('id' => $content->getId())) ?>" class="btn btn-small">Properties</a>
+			<a href="<?php echo $this->url('wiss/content/delete', array('id' => $content->getId())) ?>" class="btn btn-small">Remove</a>
 		</div>
 	</li>
 	<?php endforeach ?>
