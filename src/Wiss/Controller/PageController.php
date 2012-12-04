@@ -190,12 +190,18 @@ class PageController extends AbstractActionController
 			$used[$zone->getId()] = array();
 		}
 		
+        // Add the blocks to the right zone
 		$pageContent = $page->getContent();
 		foreach($pageContent as $content) {
 			$zoneId = $content->getZone()->getId();
-			$used[$zoneId][] = $content;
+			$used[$zoneId][$content->getPosition()] = $content;
 		}
-		
+        
+        // Sort the blocks per zone
+        foreach($used as &$zone) {
+            ksort($zone);
+        }
+        
 		return compact('page', 'zones', 'used');
 	}
     
@@ -205,11 +211,47 @@ class PageController extends AbstractActionController
 	 */
     public function sortAction()
     {        
+        $em = $this->getEntityManager();
+        
+        try {
+        
+            $items = $this->params()->fromQuery('items');
+            $test = '';
+            foreach($items as $item) {
+                
+                if(isset($item['contentId'])) {
+
+                    $content = $em->find('Wiss\Entity\Content', $item['contentId']);
+                    $content->setZone($em->find('Wiss\Entity\Zone', $item['zoneId']));
+                    $content->setPosition($item['position']);
+                    $em->persist($content);                    
+                    $test .= sprintf('--contentId: %d, position: %d', $item['contentId'], $item['position']);
+                }
+                else {
+                    
+                    $block = $em->find('Wiss\Entity\Block', $item['blockId']);
+                    
+                    $content = new \Wiss\Entity\Content;
+                    $content->setPage($em->find('Wiss\Entity\Page', $this->params('id')));
+                    $content->setZone($em->find('Wiss\Entity\Zone', $item['zoneId']));
+                    $content->setBlock($block);
+                    $content->setPosition($item['position']);
+                    $content->setTitle($block->getTitle());
+                    $em->persist($content);
+                }
+                
+            }
+        
+            $em->flush();
+            
+        }
+        catch(\Exception $e) {
+            $test = $e->getMessage();
+        }
+        
         $viewModel = new \Zend\View\Model\JsonModel;
         $viewModel->setVariables(array(
-            'header' => $this->params()->fromHeader(),
-            'post' => $this->params()->fromPost(),
-            'get' => $this->params()->fromQuery(),
+            'resultaat' => $test,
         ));
         return $viewModel;
     }

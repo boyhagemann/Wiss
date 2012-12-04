@@ -50,6 +50,12 @@ class Content
 	protected $defaults = array();
 		
     /**
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $position = 0;
+
+    /**
      * 
      */
     public function __construct()
@@ -104,6 +110,13 @@ class Content
 	public function setDefaults($defaults) {
 		$this->defaults = $defaults;
 	}
+    
+    public function getPosition() {
+        return $this->position;
+    }
 
-
+    public function setPosition($position) {
+        $this->position = $position;
+    }
+    
 }
