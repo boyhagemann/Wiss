@@ -200,9 +200,28 @@ class ContentController extends AbstractActionController
         return compact('content', 'form');
     }
     
+    /**
+     * 
+     */
     public function deleteAction()
     {
+        // Get the page content block
+        $em = $this->getEntityManager();
+        $content = $em->getRepository('Wiss\Entity\Content')->find($this->params('id'));
+        $pageId = $content->getPage()->getId();
         
+        $em->remove($content);
+        $em->flush();
+
+        // Show a flash message
+        $this->flashMessenger()->addMessage('The block is removed from the page');
+
+        //Redirect
+        $this->redirect()->toRoute('wiss/page/content', array(
+            'id' => $pageId
+        ));
+        
+        return false;
     }
     
     /**

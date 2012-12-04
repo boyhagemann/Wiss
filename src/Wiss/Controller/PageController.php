@@ -255,7 +255,7 @@ class PageController extends AbstractActionController
         ));
         return $viewModel;
     }
-			
+    
 	/**
 	 *
 	 * @param \Doctrine\ORM\EntityManager $entityManager 
