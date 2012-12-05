@@ -12,6 +12,8 @@ namespace Wiss\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
+use Wiss\Annotation\Block;
+use Wiss\Annotation\Content;
 
 class BlockController extends AbstractActionController
 {
@@ -19,6 +21,7 @@ class BlockController extends AbstractActionController
 		
     /**
      * 
+     * @Content(action="scan", zone="sidebar")
      */
     public function indexAction()
     {						
@@ -39,6 +42,16 @@ class BlockController extends AbstractActionController
         ));
 		
 		return compact('blocks');
+    }
+    
+    /**
+     * 
+     * @Block(title="Scanned blocks")
+     */
+    public function scanAction()
+    {
+        $found = array();
+        return compact('found');
     }
     
     /**

@@ -8,7 +8,7 @@
         <h2><?php echo $node->getLabel() ?></h2>
     </li>
     <?php else : ?>
-    <li class="node draggable offset<?php echo $node->getLevel() ?>">
+    <li class="node offset<?php echo $node->getLevel() ?>">
         <h2><?php echo $node->getLabel() ?> </h2>
         <?php endif ?>
         <?php if($node->getRoute()) : ?>
