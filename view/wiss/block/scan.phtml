@@ -1,0 +1,10 @@
+
+<h1>Scanned blocks</h1>
+
+<ul class="unstyled list">
+	<?php foreach($blocks as $block) : ?>
+	<li class="block" data-block-id="<?php echo $block->getId() ?>">
+		<a href=""><?php echo $block->getTitle() ?></a>
+	</li>
+	<?php endforeach ?>
+</ul>

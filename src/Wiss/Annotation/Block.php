@@ -24,19 +24,9 @@ namespace Wiss\Annotation;
  */
 class Block
 {	
-	public $controller;
-    public $action;
-	public $title = ''; 
+	public $title; 
 	
 	public function getTitle() {
 		return $this->title;
-	}
-	
-	public function getController() {
-		return $this->controller;
-	}
-	
-	public function getAction() {
-		return $this->action;
-	}
+	}	
 }

@@ -13,6 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 use Wiss\Entity\Page;
+use Wiss\Annotation\Content;
 
 class PageController extends AbstractActionController
 {
@@ -20,6 +21,7 @@ class PageController extends AbstractActionController
 	
 	/**
 	 *
+     * @Content(controller="Wiss\Controller\Block", action="available", zone="sidebar")
 	 * @return array 
 	 */
     public function indexAction()

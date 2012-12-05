@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *  A test description
  * 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Wiss\EntityRepository\Block")
  * @ORM\Table(name="wiss_block")
  */
 class Block

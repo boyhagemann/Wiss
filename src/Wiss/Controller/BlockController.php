@@ -33,6 +33,7 @@ class BlockController extends AbstractActionController
 		
     /**
      * 
+     * @Block(title="Available blocks")
      */
     public function availableAction()
     {						
@@ -50,8 +51,18 @@ class BlockController extends AbstractActionController
      */
     public function scanAction()
     {
-        $found = array();
-        return compact('found');
+        $em = $this->getEntityManager();
+        
+        $repo = $em->getRepository('Wiss\Entity\Block');
+        $controllerLoader = $this->getServiceLocator()->get('controllerloader');
+        
+        $blocks = array();
+        foreach($controllerLoader->getCanonicalNames() as $name) {
+            $controller = $controllerLoader->get($name);
+            $blocks += $repo->scanController($controller);
+        }
+        
+        return compact('blocks');
     }
     
     /**
