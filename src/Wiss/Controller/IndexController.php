@@ -237,13 +237,27 @@ class IndexController extends AbstractActionController
         
         $em->flush();
         
+        
+        $controllerLoader = $this->getServiceLocator()->get('controllerloader');
+        
+        // Scan and install the block annotations
+        $blockRepo = $em->getRepository('Wiss\Entity\Block');
+        $blocks = $blockRepo->scanControllers($controllerLoader);
+        $blockRepo->saveBlocks($blocks);
+        
+        // Scan and install the content annotations
+        $contentRepo = $em->getRepository('Wiss\Entity\Content');
+        $content = $contentRepo->scanControllers($controllerLoader);
+        $contentRepo->saveContent($content);
+                
+        
 		// Update the config with the models installed
 		$this->writeToApplicationConfig(array(
 			'application' => array(
 				'installed' => true,
 				'use_zones' => true,
 			)
-		));
+		));        
         
         // Show a flash message
         $this->flashMessenger()->addMessage('The cms is installed sucessfully');
@@ -254,6 +268,11 @@ class IndexController extends AbstractActionController
 		return false;
 	}
 	
+    public function installAnnotationsAction()
+    {
+        
+    }
+    
 	/**
 	 *
 	 * @return boolean 

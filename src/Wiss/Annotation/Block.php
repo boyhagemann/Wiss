@@ -25,8 +25,13 @@ namespace Wiss\Annotation;
 class Block
 {	
 	public $title; 
+	public $form; 
 	
 	public function getTitle() {
 		return $this->title;
+	}	
+	
+	public function getForm() {
+		return $this->form;
 	}	
 }

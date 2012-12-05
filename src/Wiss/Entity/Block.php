@@ -4,6 +4,7 @@ namespace Wiss\Entity;
 
 use Wiss\Form\Mapping as Form;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  *  A test description
@@ -25,6 +26,12 @@ class Block
      * @ORM\Column
 	 */
 	protected $title;
+    
+	/**
+     * @ORM\Column
+     * @Gedmo\Slug(fields={"controller", "action"}, unique=true)
+	 */
+	protected $slug;
 
 	/**
 	 * 
@@ -96,6 +103,14 @@ class Block
 
     public function setAvailable($available) {
         $this->available = $available;
+    }
+
+    public function getSlug() {
+        return $this->slug;
+    }
+
+    public function setSlug($slug) {
+        $this->slug = $slug;
     }
 
 }

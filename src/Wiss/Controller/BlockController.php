@@ -51,18 +51,59 @@ class BlockController extends AbstractActionController
      */
     public function scanAction()
     {
-        $em = $this->getEntityManager();
-        
+        $em = $this->getEntityManager();        
         $repo = $em->getRepository('Wiss\Entity\Block');
+                
+        // Get the scanned blocks
         $controllerLoader = $this->getServiceLocator()->get('controllerloader');
+        $blocks = $repo->scanControllers($controllerLoader);
         
-        $blocks = array();
-        foreach($controllerLoader->getCanonicalNames() as $name) {
-            $controller = $controllerLoader->get($name);
-            $blocks += $repo->scanController($controller);
+        // Get the blocks that are already registered
+        $used = $em->getRepository('Wiss\Entity\Block')->findBy(array(
+            'available' => true
+        ));
+        
+        /// Filter the blocks that are already available
+        foreach($used as $block) {
+            $key = $block->getSlug();
+            if(isset($blocks[$key])) {
+                unset($blocks[$key]);
+            }
+        }
+        
+        if(!$blocks) {
+            return false;
         }
         
         return compact('blocks');
+    }
+    
+    /**
+     * 
+     * @return boolean
+     */
+    public function createAction()
+    {
+        $em = $this->getEntityManager();        
+        $repo = $em->getRepository('Wiss\Entity\Block');
+        $form = $this->getForm();
+        $key = $this->params('key');
+                
+        if($key) {
+
+            // Get the scanned blocks
+            $controllerLoader = $this->getServiceLocator()->get('controllerloader');
+            $blocks = $repo->scanControllers($controllerLoader);
+            $repo->saveBlocks($blocks);
+
+            // Show a flash message
+            $this->flashMessenger()->addMessage('New block added succesfully!');
+
+            // Redirect
+            $this->redirect()->toRoute('wiss/block');
+        }
+        
+        return false;
     }
     
     /**
@@ -117,8 +158,6 @@ class BlockController extends AbstractActionController
 		$form->setAttribute('class', 'form-horizontal');
 		$form->setHydrator($hydrator);   
         $form->prepareElements();                
-//        $form->get('module')->getProxy()->setObjectManager($em);
-//        $form->get('node')->getProxy()->setObjectManager($em);
                 
         return $form;
     }

@@ -28,15 +28,15 @@ class Content
     public $action;
 	public $zone; 
 	
-	public function getTitle() {
-		return $this->title;
-	}
-	
 	public function getController() {
 		return $this->controller;
 	}
 	
 	public function getAction() {
 		return $this->action;
+	}
+	
+	public function getZone() {
+		return $this->zone;
 	}
 }
