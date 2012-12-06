@@ -54,8 +54,7 @@ class ContentController extends AbstractActionController
         // in the layout. This is because the layout is rendered after all
         // the actions are dispatched.
         $this->layout()->setVariable('flashMessages', $this->flashMessenger()->getMessages());
-        
-                
+                        
         // Walk each zone and process the blocks
 		foreach($page->getContent() as $content) {
 			            

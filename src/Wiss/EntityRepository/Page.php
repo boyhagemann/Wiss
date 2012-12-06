@@ -9,8 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * 
  */
 class Page extends \Doctrine\ORM\EntityRepository
-{	
-    
+{	    
 	/**
 	 *
 	 * @param \Wiss\Entity\Route $route

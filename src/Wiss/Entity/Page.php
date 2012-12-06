@@ -124,12 +124,30 @@ class Page
         $this->module = $module;
     }
 
+    /**
+     * Get the page content already sorted by content position
+     * 
+     * @return array
+     */
 	public function getContent() {
-		return $this->content;
+        
+        $sort = array();
+        foreach($this->content as $content) {
+            $sort[$content->getPosition()][] = $content;
+        }
+        
+        // Reverse base on the position key
+        ksort($sort);
+        
+        $sortedContent = array();
+        foreach($sort as $items) {
+            $sortedContent = array_merge($sortedContent, $items);
+        }
+        
+        return $sortedContent;
 	}
 
 	public function setContent($content) {
 		$this->content = $content;
 	}
-	
 }
