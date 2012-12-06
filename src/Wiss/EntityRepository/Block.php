@@ -85,7 +85,7 @@ class Block extends \Doctrine\ORM\EntityRepository
         $blocks = array();
         foreach($controllerLoader->getCanonicalNames() as $name) {
             $controller = $controllerLoader->get($name);
-            $blocks += $this->scanController($controller);
+            $blocks = array_merge($blocks, $this->scanController($controller));
         }
         
         return $blocks;

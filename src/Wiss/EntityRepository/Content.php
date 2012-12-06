@@ -45,6 +45,7 @@ class Content extends \Doctrine\ORM\EntityRepository
                         continue;
                     }
                     
+                        
                     // Only actions can be blocks
                     if(!preg_match('/([a-zA-Z0-9_]+)Action/', $method->getName())) {
                         continue;
@@ -68,6 +69,7 @@ class Content extends \Doctrine\ORM\EntityRepository
                         'action' => $annotation->getAction(),
                     ));
                     
+                    // Find the page for the current controller and action
                     $qb = $this->createQueryBuilder('c');
                     $qb->join('c.block', 'b')
                        ->where('b.controller = :controller')
@@ -76,7 +78,7 @@ class Content extends \Doctrine\ORM\EntityRepository
                        ->setParameter('action', $action);
                     $currentContent = $qb->getQuery()->getOneOrNullResult();
                     $page = $currentContent->getPage();                    
-                    
+                                            
                     $zone = $em->getRepository('Wiss\Entity\Zone')->findOneBy(array(
                         'name' => $annotation->getZone(),
                         'layout' => $page->getLayout()->getId(),
@@ -107,10 +109,15 @@ class Content extends \Doctrine\ORM\EntityRepository
      */
     public function scanControllers(\Zend\Mvc\Controller\ControllerManager $controllerLoader) 
     {
+        $controllers = array();
+        foreach($controllerLoader->getCanonicalNames() as $key => $name) {
+            $controllers[$name] = $name;
+        }
+                
         $content = array();
-        foreach($controllerLoader->getCanonicalNames() as $name) {
+        foreach($controllers as $name) {
             $controller = $controllerLoader->get($name);
-            $content += $this->scanController($controller);
+            $content = array_merge($content, $this->scanController($controller));
         }
         
         return $content;
@@ -133,7 +140,7 @@ class Content extends \Doctrine\ORM\EntityRepository
      */
     public function saveContentItem(\Wiss\Entity\Content $content) 
     {        
-        $em = $this->getEntityManager();    
+        $em = $this->getEntityManager(); 
         $em->persist($content);
         $em->flush();
     }
