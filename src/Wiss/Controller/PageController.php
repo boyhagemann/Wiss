@@ -196,7 +196,7 @@ class PageController extends AbstractActionController
 		$pageContent = $page->getContent();
 		foreach($pageContent as $content) {
 			$zoneId = $content->getZone()->getId();
-			$used[$zoneId][$content->getPosition()] = $content;
+			$used[$zoneId][] = $content;
 		}
         
         // Sort the blocks per zone

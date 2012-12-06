@@ -3,7 +3,7 @@
 
 <ul class="unstyled list">
 	<?php foreach($blocks as $block) : ?>
-	<li class="block draggable">
+	<li class="block">
 		<h2><a href="<?php echo $this->url('wiss/block/properties', array('id' => $block->getId())) ?>"><?php echo $block->getTitle() ?></a></h2>
         <h3><?php echo $block->getController() ?> : <?php echo $block->getAction() ?></h3>
         <div class="btn-group">
