@@ -214,30 +214,13 @@ class IndexController extends AbstractActionController
                 
         // Generate the file and folders for the application module
         $em->getRepository('Wiss\Entity\Module')->generate($module2);
-             
-        
-        
-        // Insert block
-        $block = new \Wiss\Entity\Block;
-        $block->setTitle('Available blocks');
-        $block->setAvailable(false);
-        $block->setController('Wiss\Controller\Block');
-        $block->setAction('available');
-        $em->persist($block);
-        
-        // Add the available blocks to the content page
-        $page = $em->getRepository('Wiss\Entity\Page')->findOneBy(array('name' => 'content'));
-        $pageContent = new \Wiss\Entity\Content;
-        $pageContent->setTitle($block->getTitle());
-        $pageContent->setBlock($block);
-        $pageContent->setPage($page);
-        $pageContent->setZone($zone4);
-        $em->persist($pageContent);
-        
+                             
         
         $em->flush();
         
         
+        // For the scanning of annotation, just scan the controller that are
+        // registered with the service locator.
         $controllerLoader = $this->getServiceLocator()->get('controllerloader');
         
         // Scan and install the block annotations

@@ -21,7 +21,6 @@ class PageController extends AbstractActionController
 	
 	/**
 	 *
-     * @Content(controller="Wiss\Controller\Block", action="available", zone="sidebar")
 	 * @return array 
 	 */
     public function indexAction()
@@ -179,6 +178,7 @@ class PageController extends AbstractActionController
 		
 	/**
 	 *
+     * @Content(controller="Wiss\Controller\Block", action="available", zone="sidebar")
 	 * @return array 
 	 */
 	public function contentAction()
