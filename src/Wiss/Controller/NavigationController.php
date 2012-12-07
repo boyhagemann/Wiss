@@ -16,6 +16,10 @@ class NavigationController extends AbstractActionController
 {
 	protected $entityManager;
 	
+    /**
+     * 
+     * @return array
+     */
     public function indexAction()
     {
         $em = $this->getEntityManager();

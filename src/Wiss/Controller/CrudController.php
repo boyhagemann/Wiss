@@ -15,6 +15,8 @@ use Zend\Form\Form;
 use Wiss\Entity\Model;
 use Doctrine\ORM\EntityManager;
 
+use Wiss\Annotation\Block;
+
 class CrudController extends AbstractActionController
 {
     /**
@@ -103,6 +105,7 @@ class CrudController extends AbstractActionController
 		
 	/**
 	 *
+     * @Block(title="Testblock")
 	 * @return ViewModel 
 	 */
 	public function createAction()

@@ -27,6 +27,7 @@ class Content
 	public $controller;
     public $action;
 	public $zone; 
+	public $global; 
 	
 	public function getController() {
 		return $this->controller;
@@ -38,5 +39,9 @@ class Content
 	
 	public function getZone() {
 		return $this->zone;
+	}
+	
+	public function isGlobal() {
+		return (bool) $this->global;
 	}
 }

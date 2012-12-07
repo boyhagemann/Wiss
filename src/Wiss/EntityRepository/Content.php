@@ -12,6 +12,38 @@ use Zend\Code\Annotation\Parser\DoctrineAnnotationParser;
 class Content extends \Doctrine\ORM\EntityRepository
 {		
     /**
+     * Get the page content already sorted by content position
+     * 
+     * @param \Wiss\Entity\Page $page
+     * @param mixed $isGlobal
+     * @return array
+     */
+    public function findByPage(\Wiss\Entity\Page $page, $isGlobal = true)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb ->where('c.page = :page')
+            ->orWhere('c.global = :global')
+            ->setParameter('page', $page->getId())
+            ->setParameter('global', (bool) $isGlobal);
+        $result = $qb->getQuery()->getResult();
+        
+        $sort = array();
+        foreach($result as $content) {
+            $sort[$content->getPosition()][] = $content;
+        }
+        
+        // Reverse base on the position key
+        ksort($sort);
+        
+        $sortedContent = array();
+        foreach($sort as $items) {
+            $sortedContent = array_merge($sortedContent, $items);
+        }
+        
+        return $sortedContent;        
+    }
+    
+    /**
      * 
      * @param \Zend\Mvc\Controller\AbstractActionController $controller
      * @return array
@@ -46,29 +78,35 @@ class Content extends \Doctrine\ORM\EntityRepository
                     }
                     
                         
-                    // Only actions can be blocks
+                    // Only actions can use content
                     if(!preg_match('/([a-zA-Z0-9_]+)Action/', $method->getName())) {
                         continue;
                     }
                     
                     // Get the action from the method name
-                    $action = substr($method->getName(), 0, -6);
-                    
-                    // Get the controller from the class name
-                    $controller = substr($class->getName(), 0, -10); // strip the word 'Controller'
-                    
-                    if($annotation->getController()) {
-                        $blockController = $annotation->getController();
+                    $action = substr($method->getName(), 0, -6);                    
+                    if($annotation->getAction()) {
+                        $contentAction = $annotation->getAction();
                     }
                     else {
-                        $blockController = $controller;
+                        $contentAction = $action;
                     }
                     
-                    $block = $em->getRepository('Wiss\Entity\Block')->findOneBy(array(
-                        'controller' => $blockController,
-                        'action' => $annotation->getAction(),
-                    ));
+                    // Get the controller from the class name
+                    $controller = substr($class->getName(), 0, -10); // strip the word 'Controller'                    
+                    if($annotation->getController()) {
+                        $contentController = $annotation->getController();
+                    }
+                    else {
+                        $contentController = $controller;
+                    }
                     
+                    // Find the block that must be used as content
+                    $block = $em->getRepository('Wiss\Entity\Block')->findOneBy(array(
+                        'controller' => $contentController,
+                        'action' => $contentAction,
+                    ));
+                                        
                     // Find the page for the current controller and action
                     $qb = $this->createQueryBuilder('c');
                     $qb->join('c.block', 'b')
@@ -77,6 +115,7 @@ class Content extends \Doctrine\ORM\EntityRepository
                        ->setParameter('controller', $controller)
                        ->setParameter('action', $action);
                     $currentContent = $qb->getQuery()->getOneOrNullResult();
+                                        
                     $page = $currentContent->getPage();                    
                                             
                     $zone = $em->getRepository('Wiss\Entity\Zone')->findOneBy(array(
@@ -92,8 +131,10 @@ class Content extends \Doctrine\ORM\EntityRepository
                     $contentEntity->setPage($page);
                     $contentEntity->setPosition(0);
                     $contentEntity->setDefaults(array());
-                                        
-                    $content[] = $contentEntity;
+                    $contentEntity->setGlobal($annotation->isGlobal());
+                                    
+                    $key = $contentEntity->getKey();
+                    $content[$key] = $contentEntity;
                 }
             }
         

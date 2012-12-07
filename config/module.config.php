@@ -106,6 +106,18 @@ return array(
 						),
 						'may_terminate' => false,
 						'child_routes' => array(
+							'create' => array(
+								'type' => 'Segment',
+								'options' => array(
+									'route' => '/create/[:key]',
+									'constraints' => array(
+										'key' => '[0-9-]*',
+									),
+									'defaults' => array(
+										'action' => 'create',
+									),
+								),
+							),
 							'properties' => array(
 								'type' => 'Segment',
 								'options' => array(
@@ -361,7 +373,6 @@ return array(
 									),
 									'defaults' => array(
 										'action' => 'create',
-//                                        'key' => '',
 									),
 								),
 							),

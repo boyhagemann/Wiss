@@ -31,6 +31,11 @@ ul.blocks li.block.empty {
 	background: none;
 	font-style: italic;
 }
+ul.blocks li.block.global {
+	color: #ccc;
+    background: #f7f7f7;
+	font-style: italic;
+}
 ul.blocks li.block h2 {
 	margin-top: 0;
 }

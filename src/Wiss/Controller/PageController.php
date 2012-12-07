@@ -183,7 +183,8 @@ class PageController extends AbstractActionController
 	 */
 	public function contentAction()
 	{
-		$repo = $this->getEntityManager()->getRepository('Wiss\Entity\Page');
+        $em = $this->getEntityManager();
+		$repo = $em->getRepository('Wiss\Entity\Page');
 		$page = $repo->find($this->params('id'));
 		
 		$zones = $page->getLayout()->getZones();
@@ -193,7 +194,7 @@ class PageController extends AbstractActionController
 		}
 		
         // Add the blocks to the right zone
-		$pageContent = $page->getContent();
+		$pageContent = $em->getRepository('Wiss\Entity\Content')->findByPage($page);
 		foreach($pageContent as $content) {
 			$zoneId = $content->getZone()->getId();
 			$used[$zoneId][] = $content;

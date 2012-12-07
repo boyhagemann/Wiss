@@ -1,0 +1,10 @@
+
+<h1>New content detected</h1>
+
+<ul class="unstyled list">
+	<?php foreach($scanned as $key => $content) : ?>
+	<li class="block">
+		<a href="<?php echo $this->url('wiss/content/create', array('key' => $key)) ?>"><?php echo $content->getBlock()->getTitle() ?></a>
+	</li>
+	<?php endforeach ?>
+</ul>

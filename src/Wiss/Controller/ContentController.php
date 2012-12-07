@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Doctrine\ORM\EntityManager;
 use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
+use Wiss\Annotation\Block;
+use Wiss\Annotation\Content;
 
 class ContentController extends AbstractActionController
 {
@@ -55,8 +57,10 @@ class ContentController extends AbstractActionController
         // the actions are dispatched.
         $this->layout()->setVariable('flashMessages', $this->flashMessenger()->getMessages());
                         
+        $sortedContent = $em->getRepository('Wiss\Entity\Content')->findByPage($page);
+                
         // Walk each zone and process the blocks
-		foreach($page->getContent() as $content) {
+		foreach($sortedContent as $content) {
 			            
             // Get the block from this content part
             $block = $content->getBlock();
@@ -200,6 +204,35 @@ class ContentController extends AbstractActionController
     }
     
     /**
+     * @Content(action="scan", zone="sidebar", global=true) 
+     */
+    public function createAction()
+    {
+        $em = $this->getEntityManager();
+        $repo = $em->getRepository('Wiss\Entity\Content');
+        $key = $this->params('key');
+        
+        // Get the scanned blocks
+        $controllerLoader = $this->getServiceLocator()->get('controllerloader');
+        $scanned = $repo->scanControllers($controllerLoader);
+        
+        if(!isset($scanned[$key])) {
+            return false;
+        }
+        
+        $content = $scanned[$key];
+        
+        $em->persist($content);
+        $em->flush();
+        
+        // Show a flash message
+        $this->flashMessenger()->addMessage('The block is added to the page');
+
+        //Redirect
+        $this->redirect()->toRoute('wiss/navigation');
+    }
+    
+    /**
      * 
      */
     public function deleteAction()
@@ -221,6 +254,36 @@ class ContentController extends AbstractActionController
         ));
         
         return false;
+    }
+    
+    /**
+     * 
+     * @Block(title="Scanned content")")
+     */
+    public function scanAction()
+    {
+        $em = $this->getEntityManager();        
+        $repo = $em->getRepository('Wiss\Entity\Content');
+                
+        // Get the scanned blocks
+        $controllerLoader = $this->getServiceLocator()->get('controllerloader');
+        $scanned = $repo->scanControllers($controllerLoader);
+                
+        // Get the blocks that are already registered
+        $used = $em->getRepository('Wiss\Entity\Content')->findAll();
+                
+        /// Filter the blocks that are already available
+        foreach($used as $content) {
+            $key = $content->getKey();
+            if(isset($scanned[$key])) {
+                unset($scanned[$key]);
+            }
+        }
+        if(!$scanned) {
+            return false;
+        }
+        
+        return compact('scanned');
     }
     
     /**

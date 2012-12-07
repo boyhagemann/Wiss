@@ -54,6 +54,12 @@ class Content
      * @ORM\Column(type="integer")
      */
     protected $position = 0;
+		
+    /**
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $global = false;
 
     /**
      * 
@@ -117,6 +123,30 @@ class Content
 
     public function setPosition($position) {
         $this->position = $position;
+    }
+    
+    public function isGlobal() {
+        return $this->global;
+    }
+
+    public function setGlobal($global) {
+        $this->global = $global;
+    }
+
+        
+    /**
+     * 
+     * @return string
+     */
+    public function getKey()
+    {
+        $parts = array(
+            $this->getPage()->getId(),
+            $this->getZone()->getId(),
+            $this->getBlock()->getId(),
+        );
+        
+        return implode('-', $parts);
     }
     
 }

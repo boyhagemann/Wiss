@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use DoctrineORMModule\Stdlib\Hydrator\DoctrineEntity as EntityHydrator;
 
+use Wiss\Annotation\Content;
+
 class ModuleController extends AbstractActionController
 {
 	protected $entityManager;

@@ -232,7 +232,6 @@ class IndexController extends AbstractActionController
         $contentRepo = $em->getRepository('Wiss\Entity\Content');
         $content = $contentRepo->scanControllers($controllerLoader);
         $contentRepo->saveContent($content);
-                
         
 		// Update the config with the models installed
 		$this->writeToApplicationConfig(array(

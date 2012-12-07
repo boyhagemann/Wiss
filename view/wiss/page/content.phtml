@@ -11,7 +11,7 @@
 <h2><?php echo $zone->getTitle() ?></h2>
 <ul class="list blocks blocks-used sortable unstyled" data-zone-id="<?php echo $zone->getId() ?>" data-sort-url="<?php echo $this->url('wiss/page/sort', array('id' => $page->getId())) ?>">
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
-	<li class="block" data-content-id="<?php echo $content->getId() ?>">
+	<li class="block <?php if($content->isGlobal()) : ?> global<?php endif ?>" data-content-id="<?php echo $content->getId() ?>">
 		<h2><?php echo $content->getTitle() ?></h2>
 		<div class="btn-group">
             <?php if($content->getBlock()->getFormClass()) : ?>
