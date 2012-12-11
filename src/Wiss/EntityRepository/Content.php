@@ -114,8 +114,7 @@ class Content extends \Doctrine\ORM\EntityRepository
                        ->andWhere('b.action = :action')
                        ->setParameter('controller', $controller)
                        ->setParameter('action', $action);
-                    $currentContent = $qb->getQuery()->getOneOrNullResult();
-                                        
+                    $currentContent = $qb->getQuery()->getOneOrNullResult();                                                            
                     $page = $currentContent->getPage();                    
                                             
                     $zone = $em->getRepository('Wiss\Entity\Zone')->findOneBy(array(

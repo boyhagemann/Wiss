@@ -21,7 +21,7 @@ class BlockController extends AbstractActionController
 		
     /**
      * 
-     * @Content(action="scan", zone="sidebar", global=true)
+     * @Content(action="scan", zone="sidebar")
      */
     public function indexAction()
     {						
@@ -34,7 +34,6 @@ class BlockController extends AbstractActionController
     /**
      * 
      * @Block(title="Available blocks")
-     * @Content(action="index", zone="sidebar")
      */
     public function availableAction()
     {						
