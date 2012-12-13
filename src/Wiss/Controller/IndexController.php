@@ -250,11 +250,6 @@ class IndexController extends AbstractActionController
 		return false;
 	}
 	
-    public function installAnnotationsAction()
-    {
-        
-    }
-    
 	/**
 	 *
 	 * @return boolean 
