@@ -85,7 +85,7 @@ class ContentController extends AbstractActionController
             // Dispatch the new routeMatch. The routeMatch has the
             // right action set, so the only thing that remains is
             // to point to the right controller.
-            $view = $this->forward()->dispatch($block->getController(), $defaults);
+            $view = $this->forward()->dispatch($block->getController());
             
             // Only add the content to the view if a ViewModel is returned
             // If false is returned, it means that no view has to be 
