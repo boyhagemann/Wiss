@@ -89,6 +89,10 @@ class Route extends NestedTreeRepository
             if($parentRoute) {
                 $defaults += $this->getParentRouteDefaults($parentRoute);
             }
+            $defaults += array(
+                'controller' => '',
+                'action' => '',
+            );
             $route->setDefaults($defaults);
 
             if(isset($options['constraints'])) {

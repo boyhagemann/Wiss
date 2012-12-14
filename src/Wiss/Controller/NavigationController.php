@@ -30,7 +30,7 @@ class NavigationController extends AbstractActionController
             'rootClose' => '</ul>',
             'childOpen' => function($node) {
                 $class = ($node['__children'] ? 'folder' : '');
-                $li = sprintf('<li class="%s">', $class);
+                $li = sprintf('<li id="%d" class="%s">', $node['id'], $class);
                 return $li;
             },
             'childClose' => '</li>',
@@ -48,6 +48,17 @@ class NavigationController extends AbstractActionController
         $tree = $repo->childrenHierarchy( null, false, $options);
         
 		return compact('tree');
+    }    
+    
+	/**
+	 *
+	 * @return \Zend\View\Model\JsonModel 
+	 */
+    public function moveAction()
+    {
+        $viewModel = new \Zend\View\Model\JsonModel;
+        $viewModel->setVariables(array());
+        return $viewModel;
     }
 			
 	/**

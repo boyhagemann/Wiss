@@ -20,7 +20,7 @@ class IndexController extends AbstractActionController
      * 
      */
     public function installAction()
-    {								
+    {							
 		$form = new \Wiss\Form\Install();				
 		$form->setAttribute('action', $this->url()->fromRoute('wiss/install'));
 				

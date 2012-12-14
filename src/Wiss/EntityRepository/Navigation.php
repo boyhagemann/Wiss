@@ -52,6 +52,27 @@ class Navigation extends NestedTreeRepository
 		$writer = new \Zend\Config\Writer\PhpArray();
 		$writer->toFile('config/autoload/navigation.global.php', $config);
 	}
+    
+    public function createFromTree($label, \Wiss\Entity\Route $route, $nodeId, $type)
+    {
+        $em = $this->getEntityManager();
+        
+        $newNode = new \Wiss\Entity\Navigation();
+        $newNode->setLabel($label);
+        $newNode->setRoute($route);
+        $em->persist($newNode);
+        
+        $node = $this->find($nodeId);
+        
+        switch($type) {
+            
+            case 'over':
+                $this->persistAsFirstChildOf($newNode, $node);
+                break;
+        }
+        
+        $em->flush();
+    }
 		
 	/**
 	 *

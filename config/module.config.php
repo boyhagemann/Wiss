@@ -38,9 +38,13 @@ return array(
 						'may_terminate' => true,
 						'child_routes' => array(
 							'create' => array(
-								'type' => 'Literal',
+								'type' => 'Segment',
 								'options' => array(
-									'route' => '/create',
+									'route' => '/create[/:node/:position]',
+                                    'constraints' => array(
+										'node' => '[0-9-]*',
+										'position' => '[a-z]*',
+									),
 									'defaults' => array(
 										'action' => 'create',
 									),
@@ -536,6 +540,7 @@ return array(
 				'js/compiled.js' => array(
 					'js/bootstrap.min.js',
 					'js/jquery.dynatree.js',
+					'js/navigation.js',
 					'js/site.js',
 				),
 				'css/compiled.css' => array(

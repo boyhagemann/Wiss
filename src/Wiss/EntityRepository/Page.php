@@ -44,12 +44,14 @@ class Page extends \Doctrine\ORM\EntityRepository
         $page->setLayout($layout);
         $page->setRoute($route);	
         $em->persist($page);
-        
+                
         // Also bind the page to the route
         $route->setPage($page);
         $em->persist($route);
 
-        $this->addPageContent($page, $defaults);	
+        if($defaults['controller'] || $defaults['action']) {
+            $this->addPageContent($page, $defaults);	
+        }
         
         $em->flush();
 	}

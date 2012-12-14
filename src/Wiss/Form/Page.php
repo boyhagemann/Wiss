@@ -61,6 +61,18 @@ class Page extends Form implements InputFilterProviderInterface
                 'class' => 'btn btn-primary btn-large',
             ),
         ));			
+        
+        // Node
+        $this->add(array(
+            'name' => 'node',
+            'type' => 'Zend\Form\Element\Hidden',
+        ));
+        
+        // Position
+        $this->add(array(
+            'name' => 'position',
+            'type' => 'Zend\Form\Element\Hidden',
+        ));
     }
     
     /**

@@ -40,6 +40,11 @@ class PageController extends AbstractActionController
         $repo = $em->getRepository('Wiss\Entity\Route');
         $form = $this->getForm();
         
+        $form->setData(array(
+            'node' => $this->params('node'),
+            'position' => $this->params('position'),
+        ));
+        
         if($this->getRequest()->isPost()) {
             
             $form->setData($this->getRequest()->getPost());
@@ -49,13 +54,16 @@ class PageController extends AbstractActionController
                 // Collect the needed info
                 $data = $form->getData();
                 
-                
+                // Create a name
                 $filter = new \Zend\Filter\Word\SeparatorToDash(' ');
                 $name = strtolower($filter->filter($data['title']));
                 
                 // Create a route and page
                 $route = $repo->createRoute($name, array('options' => $data));
                 
+                // Create the navigation
+                $em->getRepository('Wiss\Entity\Navigation')->createFromTree($data['title'], $route, $data['node'], $data['position']);
+
                 // Update the route config
                 $repo->export();
                 
@@ -67,10 +75,7 @@ class PageController extends AbstractActionController
                     'id' => $route->getPage()->getId()
                 ));
             }
-            else {
-                
-                \Zend\Debug\Debug::dump($form->getData()); exit;
-            }
+            
         }
                 
 		return compact('form');
