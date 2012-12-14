@@ -24,8 +24,29 @@ class NavigationController extends AbstractActionController
     {
         $em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Navigation');                
-        $tree = $repo->children();
-            
+        $options = array(
+            'decorate' => true,
+            'rootOpen' => '<ul>',
+            'rootClose' => '</ul>',
+            'childOpen' => function($node) {
+                $class = ($node['__children'] ? 'folder' : '');
+                $li = sprintf('<li class="%s">', $class);
+                return $li;
+            },
+            'childClose' => '</li>',
+            'nodeDecorator' => function($node) use ($repo) {
+                $model = $repo->find($node['id']);
+                $route = $model->getRoute();
+                if(!$route) {
+                    return $node['label'];
+                }
+                
+                $url = $this->url()->fromRoute('wiss/page/content', array('id' => $route->getPage()->getId()));
+                return sprintf('<a href="%s">%s</a>', $url, $node['label']);
+            }
+        );
+        $tree = $repo->childrenHierarchy( null, false, $options);
+        
 		return compact('tree');
     }
 			

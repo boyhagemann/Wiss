@@ -142,6 +142,13 @@ class Navigation
         return $this->lvl;
     }
 
+    public function getLeft() {
+        return $this->lft;
+    }
+
+    public function getRight() {
+        return $this->rgt;
+    }
 
 
 }

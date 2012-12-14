@@ -534,12 +534,13 @@ return array(
 			),
 			'collections' => array(
 				'js/compiled.js' => array(
-//					'js/jquery-1.8.3.js',
 					'js/bootstrap.min.js',
+					'js/jquery.dynatree.js',
 					'js/site.js',
 				),
 				'css/compiled.css' => array(
 					'css/bootstrap.min.css',
+					'css/dynatree/skin-vista/ui.dynatree.css',
 					'css/style.css',
 				)
 			)
