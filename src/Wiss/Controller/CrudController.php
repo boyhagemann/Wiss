@@ -105,7 +105,6 @@ class CrudController extends AbstractActionController
 		
 	/**
 	 *
-     * @Block(title="Testblock")
 	 * @return ViewModel 
 	 */
 	public function createAction()
