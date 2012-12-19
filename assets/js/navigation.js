@@ -37,7 +37,6 @@ $(function() {
                 }
             },
             onDrop: function(node, sourceNode, hitMode, ui, draggable) {
-//                console.log(hitMode)
               
                 var copynode;
                 if(sourceNode) {
@@ -51,6 +50,17 @@ $(function() {
                     }else if(hitMode == "after"){
                         
                     }
+                    
+                    if(sourceNode.data.key == '_2') {
+
+                        var url = ui.helper.attr('href');
+                        url += '/' + node.data.key;
+                        url += '/' + hitMode;
+                        node.data.href = url;
+                    
+                    }
+                    console.log(sourceNode.data.key);
+                    console.log(node.data.href);
                     
                     
                     return true;

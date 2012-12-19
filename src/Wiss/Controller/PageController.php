@@ -224,7 +224,8 @@ class PageController extends AbstractActionController
         try {
         
             $items = $this->params()->fromQuery('items');
-            $test = '';
+            $data = array();
+            
             foreach($items as $item) {
                 
                 if(isset($item['contentId'])) {
@@ -233,7 +234,6 @@ class PageController extends AbstractActionController
                     $content->setZone($em->find('Wiss\Entity\Zone', $item['zoneId']));
                     $content->setPosition($item['position']);
                     $em->persist($content);                    
-                    $test .= sprintf('--contentId: %d, position: %d', $item['contentId'], $item['position']);
                 }
                 else {
                     
@@ -246,6 +246,18 @@ class PageController extends AbstractActionController
                     $content->setPosition($item['position']);
                     $content->setTitle($block->getTitle());
                     $em->persist($content);
+                    $em->flush();
+                    
+                    // Render the block partial
+                    $partial = new ViewModel();
+                    $partial->setTerminal(true)
+                            ->setTemplate('wiss/page/partial/content-actions.phtml')
+                            ->setVariable('content', $content);
+                    
+                    // Return the content ID
+                    $renderer = $this->getServiceLocator()->get('viewrenderer');
+                    $data['html'] = $renderer->render($partial);
+                    $data['content']['id'] = $content->getId();
                 }
                 
             }
@@ -254,13 +266,11 @@ class PageController extends AbstractActionController
             
         }
         catch(\Exception $e) {
-            $test = $e->getMessage();
+            $data['message'] = $e->getMessage();
         }
         
         $viewModel = new \Zend\View\Model\JsonModel;
-        $viewModel->setVariables(array(
-            'resultaat' => $test,
-        ));
+        $viewModel->setVariables(array($data));
         return $viewModel;
     }
     

@@ -19,10 +19,6 @@ $(function() {
         revert: true,
         revertDuration: 200
     });
-        
-    $('.blocks-available .draggable').on('dragstop', function(event, ui) {
-        sortBlocks(event, ui);
-    });
     
     sortBlocks = function(event, ui)
     {              
@@ -37,6 +33,8 @@ $(function() {
         var blocks = $('.blocks-used li');
         var data = [];
         
+        // Collect the relevant data from the blocks and zones.
+        // Put it in an object that is to be send thru ajax
         blocks.each(function(i) {
             data.push({
                 blockId: blockId,
@@ -46,13 +44,20 @@ $(function() {
             });
         })
         
+        // Save the current block positions 
         $.ajax({
             url: $('.blocks-used').data('sort-url'),
             type:'get',
             dataType:'json',
             data: {items: data},
-            success: function(data){
-//                console.log(data);
+            success: function(response){
+                        
+                data = response[0];
+                if(data.html) {
+                    var newBlock = $('.blocks-used').find('li[data-block-id]');
+                    newBlock.append(data.html);
+                    newBlock.removeAttr('data-block-id').attr('data-content-id', data.content.id)
+                }
             }
         })
     }

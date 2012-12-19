@@ -13,13 +13,7 @@
 	<?php foreach ($used[$zone->getId()] as $content) : ?>
 	<li class="block <?php if($content->isGlobal()) : ?> global<?php endif ?>" data-content-id="<?php echo $content->getId() ?>">
 		<h2><?php echo $content->getTitle() ?></h2>
-		<div class="btn-group">
-            <?php if($content->getBlock()->getFormClass()) : ?>
-			<a href="<?php echo $this->url('wiss/content/configuration', array('id' => $content->getId())) ?>" class="btn btn-small btn-primary">Configuration</a>
-            <?php endif ?>
-			<a href="<?php echo $this->url('wiss/content/properties', array('id' => $content->getId())) ?>" class="btn btn-small">Properties</a>
-			<a href="<?php echo $this->url('wiss/content/delete', array('id' => $content->getId())) ?>" class="btn btn-small">Remove</a>
-		</div>
+        <?php echo $this->partial('wiss/page/partial/content-actions.phtml', array('content' => $content)) ?>
 	</li>
 	<?php endforeach ?>
 </ul>
