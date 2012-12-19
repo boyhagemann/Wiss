@@ -237,8 +237,10 @@ class PageController extends AbstractActionController
                 }
                 else {
                     
+                    // Find the block that must be placed as content on the page
                     $block = $em->find('Wiss\Entity\Block', $item['blockId']);
                     
+                    // Build the page content
                     $content = new \Wiss\Entity\Content;
                     $content->setPage($em->find('Wiss\Entity\Page', $this->params('id')));
                     $content->setZone($em->find('Wiss\Entity\Zone', $item['zoneId']));
@@ -248,15 +250,16 @@ class PageController extends AbstractActionController
                     $em->persist($content);
                     $em->flush();
                     
-                    // Render the block partial
+                    // Render the block partial, this will show the actions that
+                    // can be performed by the user for this content block, 
+                    // i.e. 'properties', 'configuration', 'delete'
                     $partial = new ViewModel();
                     $partial->setTerminal(true)
                             ->setTemplate('wiss/page/partial/content-actions.phtml')
                             ->setVariable('content', $content);
                     
-                    // Return the content ID
-                    $renderer = $this->getServiceLocator()->get('viewrenderer');
-                    $data['html'] = $renderer->render($partial);
+                    // Render the partial with the buttons
+                    $data['html'] = $this->getServiceLocator()->get('viewrenderer')->render($partial);
                     $data['content']['id'] = $content->getId();
                 }
                 
