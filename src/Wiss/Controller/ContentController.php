@@ -204,7 +204,7 @@ class ContentController extends AbstractActionController
     }
     
     /**
-     * @Content(action="scan", zone="sidebar", global=true) 
+     * 
      */
     public function createAction()
     {

@@ -53,6 +53,7 @@ $(function() {
             success: function(response){
                         
                 data = response[0];
+                
                 if(data.html) {
                     var newBlock = $('.blocks-used').find('li[data-block-id]');
                     newBlock.append(data.html);

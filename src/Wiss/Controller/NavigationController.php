@@ -11,6 +11,7 @@ namespace Wiss\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Wiss\Annotation\Content;
 
 class NavigationController extends AbstractActionController
 {
@@ -18,6 +19,7 @@ class NavigationController extends AbstractActionController
 	
     /**
      * 
+     * @Content(action="scan", controller="Wiss\Controller\Content", zone="sidebar") 
      * @return array
      */
     public function indexAction()
