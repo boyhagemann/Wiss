@@ -44,6 +44,8 @@ class Model extends \Doctrine\ORM\EntityRepository
     public function generate(\Wiss\Entity\Model $model)
     {
         $this->generateController($model);
+        $this->generateListView($model);
+        $this->generateItemView($model);
         $this->generateEntity($model);
         $this->generateForm($model);
         $this->generateRoutes($model);
@@ -55,63 +57,95 @@ class Model extends \Doctrine\ORM\EntityRepository
      * @param \Wiss\Entity\Model $model 
      */
     public function generateRoutes(\Wiss\Entity\Model $model) 
-	{
+	{        
         // Build the config, starting from router.routes
-        $config['router']['routes']['wiss']['child_routes']['model']['child_routes'] = array(
+        $config['router']['routes'] = array(
             $model->getSlug() => array(
                 'type' => 'Literal',
                 'may_terminate' => true,
                 'options' => array(
-                    'layout' => 'cms',
+                    'layout' => 'default',
                     'route' => '/' . $model->getSlug(),
                     'defaults' => array(
-                        '__NAMESPACE__' => '',
                         'controller' => $model->getControllerClass(),
-                        'action' => 'index',
-                        'slug' => $model->getSlug(),
+                        'action' => 'list',
                     ),
                 ),
                 'child_routes' => array(
-                    'create' => array(
+                    'view' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'layout' => 'cms',
-                            'route' => '/create',
+                            'layout' => 'default',
+                            'route' => '/[:slug]',
                             'defaults' => array(
-                                'action' => 'create',
+                                'action' => 'view',
                             ),
                         )
-                    ),
-                    'edit' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'layout' => 'cms',
-                            'route' => '/edit/:id',
-                            'defaults' => array(
-                                'action' => 'edit',
-                            ),
-                            'constraints' => array(
-                                'id' => '[0-9]+',
-                            ),
-                        )
-                    ),
-                    'delete' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'layout' => 'cms',
-                            'route' => '/delete/:id',
-                            'defaults' => array(
-                                'action' => 'delete',
-                            ),
-                            'constraints' => array(
-                                'id' => '[0-9]+',
-                            ),
+                    ),     
+                ),     
+            ),   
+            'wiss' => array(
+                'child_routes' => array(
+                    'model' => array(
+                        'child_routes' => array(
+                            $model->getSlug() => array(
+                                'type' => 'Literal',
+                                'may_terminate' => true,
+                                'options' => array(
+                                    'layout' => 'cms',
+                                    'route' => '/' . $model->getSlug(),
+                                    'defaults' => array(
+                                        '__NAMESPACE__' => '',
+                                        'controller' => $model->getControllerClass(),
+                                        'action' => 'index',
+                                        'slug' => $model->getSlug(),
+                                    ),
+                                ),
+                                'child_routes' => array(
+                                    'create' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'layout' => 'cms',
+                                            'route' => '/create',
+                                            'defaults' => array(
+                                                'action' => 'create',
+                                            ),
+                                        )
+                                    ),
+                                    'edit' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'layout' => 'cms',
+                                            'route' => '/edit/:id',
+                                            'defaults' => array(
+                                                'action' => 'edit',
+                                            ),
+                                            'constraints' => array(
+                                                'id' => '[0-9]+',
+                                            ),
+                                        )
+                                    ),
+                                    'delete' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'layout' => 'cms',
+                                            'route' => '/delete/:id',
+                                            'defaults' => array(
+                                                'action' => 'delete',
+                                            ),
+                                            'constraints' => array(
+                                                'id' => '[0-9]+',
+                                            ),
+                                        )
+                                    )
+                                )
+                            )
                         )
                     )
                 )
             )
         );
-
+        
         // Import the config thru the Page entity repository
         $em = $this->getEntityManager();
         $repo = $em->getRepository('Wiss\Entity\Route');
@@ -196,12 +230,17 @@ class Model extends \Doctrine\ORM\EntityRepository
             'namespace' => $namespace,
             'uses' => array(
                 array('Wiss\Controller\CrudController', 'EntityController'),
+                array('Wiss\Annotation\Block'),
             ),
             'class' => array(
                 'name' => $class . 'Controller',
                 'extendedclass' => 'EntityController',
                 'properties' => array(
                     array('modelName', $model->getSlug(), PropertyGenerator::FLAG_PROTECTED),
+                ),
+                'methods' => array(
+                   array('listAction', array(), null, '', sprintf('@Block(titel="%s list")', $model->getTitle())),
+                   array('viewAction', array(), null, '', sprintf('@Block(titel="%s item view")', $model->getTitle())),
                 )
             ),
         );
@@ -209,6 +248,40 @@ class Model extends \Doctrine\ORM\EntityRepository
         // Write the data to disk
         $generator = FileGenerator::fromArray($fileData);
         $generator->write();
+    }
+    
+	
+
+    /**
+     *
+     * @param \Wiss\Entity\Model $model
+     */
+    public function generateListView(\Wiss\Entity\Model $model) 
+	{	 
+        $module = $model->getModule()->getName();
+        $folder = $this->buildViewPath($module, $model->getControllerClass());
+        $filename = $folder . '/list.phtml';
+                
+        $body = 'list';
+        
+        // Write the data to disk
+        file_put_contents($filename, $body);
+    }
+
+    /**
+     *
+     * @param \Wiss\Entity\Model $model
+     */
+    public function generateItemView(\Wiss\Entity\Model $model) 
+	{	 
+        $module = $model->getModule()->getName();
+        $folder = $this->buildViewPath($module, $model->getControllerClass());
+        $filename = $folder . '/view.phtml';
+                
+        $body = 'view';
+        
+        // Write the data to disk
+        file_put_contents($filename, $body);
     }
     
     /**
@@ -299,9 +372,11 @@ class Model extends \Doctrine\ORM\EntityRepository
         // Add the elements 
         foreach ($model->getElements() as $element) {
 
+            // Get the builder for generating the form element config
             $builderClass = $element->getBuilderClass();
             $builder = new $builderClass($element);
             
+            // Add the config to the body
             $body .= '// ' . $element->getName() . PHP_EOL;
             $body .= '$this->add(';
             $body .= stripslashes(var_export($builder->getFormElementConfig(), true));
@@ -401,6 +476,28 @@ class Model extends \Doctrine\ORM\EntityRepository
     {
         $file = str_replace('\\', '/', $class);
         $path = sprintf('module/%s/src/%sController.php', $module, $file);
+		return $path;
+    }
+	
+    /**
+     * 
+     * @param string $module
+     * @param string $class
+     * @return string
+     */
+    public function buildViewPath($module, $class)
+    {
+        $filter = new \Zend\Filter\Word\CamelCaseToDash();
+        $parts = explode('\\', $class);
+        $controller = strtolower($filter->filter(end($parts)));
+        $moduleView = strtolower($filter->filter($module));
+        $path = sprintf('module/%s/view/%s/%s', $module, $moduleView, $controller);
+        
+        // Create the folder if it does not exist
+        if(!file_exists($path)) {
+            @mkdir($path, 0777, true);
+        }
+        
 		return $path;
     }
 	

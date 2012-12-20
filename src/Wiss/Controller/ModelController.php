@@ -214,9 +214,7 @@ class ModelController extends AbstractActionController {
         ));
         
         // Generate the model parts
-        $repo->generateEntity($model);
-        $repo->generateController($model);
-        $repo->generateForm($model);        
+        $repo->generate($model);    
         
         // Show a flash message
         $this->flashMessenger()->addMessage('The model is succesfully generated!');
