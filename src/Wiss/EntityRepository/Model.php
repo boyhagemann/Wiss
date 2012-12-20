@@ -302,8 +302,9 @@ class Model extends \Doctrine\ORM\EntityRepository
             $builderClass = $element->getBuilderClass();
             $builder = new $builderClass($element);
             
+            $body .= '// ' . $element->getName() . PHP_EOL;
             $body .= '$this->add(';
-            $body .= var_export($builder->getFormElementConfig(), true);
+            $body .= stripslashes(var_export($builder->getFormElementConfig(), true));
             $body .= ');' . PHP_EOL . PHP_EOL;
         }
 
