@@ -7,7 +7,7 @@ use Zend\Code\Generator\PropertyGenerator;
 use Gedmo\Sluggable\Util\Urlizer;
 use Wiss\Form\ModelExport as ExportForm;
 
-use Doctrine\ORM\Tools\EntityGenerator;
+use Wiss\ORM\Tools\EntityGenerator;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\Builder\ClassMetadataBuilder;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -225,7 +225,7 @@ class Model extends \Doctrine\ORM\EntityRepository
             @mkdir(dirname($filename), 0777, true);
         }
         
-        $listActionBody = 'return new ViewModel();';
+        $listActionBody = 'return new ViewModel(array(\'list\' => $this->getEntities()));';
         
         $viewActionBody = 'return new ViewModel();';
         
@@ -267,7 +267,13 @@ class Model extends \Doctrine\ORM\EntityRepository
         $folder = $this->buildViewPath($module, $model->getControllerClass());
         $filename = $folder . '/list.phtml';
                 
-        $body = 'list';
+        // Build the body
+        $body = sprintf('<h3>%s list</h3>', $model->getTitle()) . PHP_EOL;
+        $body .= '<ul class="list">' . PHP_EOL;
+        $body .= '    <?php foreach($list as $item) : ?>' . PHP_EOL;
+        $body .= sprintf('    <li><a href="<?php echo $this->route(\'%s/view\', array(\'slug\' => $item->getSlug())) ?>"><?php echo $item->getTitle() ?></a></li>', $model->getSlug()) . PHP_EOL;
+        $body .= '    <?php endforeach; ?>' . PHP_EOL; 
+        $body .= '</ul>';
         
         // Write the data to disk
         file_put_contents($filename, $body);
@@ -283,7 +289,12 @@ class Model extends \Doctrine\ORM\EntityRepository
         $folder = $this->buildViewPath($module, $model->getControllerClass());
         $filename = $folder . '/view.phtml';
                 
-        $body = 'view';
+        // Build the body
+        $body = '<h1><?php echo $entity->getTitle() ?></h1>' . PHP_EOL;
+        
+        foreach($model->getElements() as $modelElement) {
+            $body .= sprintf('<dt>%s</dt><dd><?php echo $entity->get%s()</dd>', $modelElement->getLabel(), ucfirst($modelElement->getName())) . PHP_EOL;
+        }
         
         // Write the data to disk
         file_put_contents($filename, $body);
@@ -314,6 +325,10 @@ class Model extends \Doctrine\ORM\EntityRepository
         $tableName = strtolower($filter->filter($model->getModule()->getName()));
         $tableName .= '_' . $filter2->filter($model->getSlug());
         $info->setTableName($tableName);
+        
+        $info->uses = array(
+            'Gedmo\Mapping\Annotation' => 'Gedmo'
+        );
 
 		// Start a builder to add data to the metadata object
 		$builder = new ClassMetadataBuilder($info);
@@ -331,8 +346,13 @@ class Model extends \Doctrine\ORM\EntityRepository
                 continue;
             }
             
+            $elementBuilderClass = $element->getBuilderClass();
+            $elementBuilder = new $elementBuilderClass($element);
+            $metadata = $elementBuilder->getEntityMetadata();
+            
             // Add the element to the builder
-			$builder->addField($element->getName(), 'string');
+			$builder->addField($element->getName(), $metadata['type'], $metadata);
+            
 		}
         
         // Set the right folder for the entity

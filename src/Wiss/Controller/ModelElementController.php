@@ -57,6 +57,9 @@ class ModelElementController extends AbstractActionController {
                 $em->persist($modelElement);
                 $em->flush();
                 
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Element saved!');
+                
                 // Redirect
                 $this->redirect()->toRoute('wiss/model-element/config', array(
                     'id' => $modelElement->getId()
@@ -92,7 +95,10 @@ class ModelElementController extends AbstractActionController {
                                 
                 // Save the new modelElement
                 $em->persist($form->getData());
-                $em->flush();
+                $em->flush();                
+                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Element properties saved!');
                 
                 // Redirect
                 $this->redirect()->toRoute('wiss/model-element/properties', array(
@@ -112,7 +118,8 @@ class ModelElementController extends AbstractActionController {
     public function configAction() 
 	{
         // Get the correct model element
-        $modelElement = $this->getEntityManager()->find('Wiss\Entity\ModelElement', $this->params('id'));
+        $em = $this->getEntityManager();
+        $modelElement = $em->find('Wiss\Entity\ModelElement', $this->params('id'));
         $model = $modelElement->getModel();
         
         // Get the builder that is used to build the form element and the entity mapping
@@ -120,11 +127,32 @@ class ModelElementController extends AbstractActionController {
         
         // Get the config form from the builder, to enter the needed options
         // to build the form element or entity mapping
-        $form = $builder->getForm();
+        $form = $builder->getConfigurationForm();
         
         // Set the config form defaults, based on the existing model 
         // element config
         $form->setData((array)$modelElement->getConfiguration());
+        
+        if ($this->getRequest()->isPost()) {
+			
+            $form->setData($this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+                                
+                // Save the new modelElement
+                $modelElement->setConfiguration($form->getData());
+                $em->persist($modelElement);
+                $em->flush();
+                
+                // Show a flash message
+                $this->flashMessenger()->addMessage('Element config saved!');
+                
+                // Redirect
+                $this->redirect()->toRoute('wiss/model-element/config', array(
+                    'id' => $this->params('id')
+                ));
+            }
+        }
         
         // Return the view variables in an array
         return compact('form', 'builder', 'modelElement', 'model');

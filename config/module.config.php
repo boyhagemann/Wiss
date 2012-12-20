@@ -514,8 +514,7 @@ return array(
 	),
 	'model-element-builders' => array(
 		'Wiss\Model\Element\Text' => 'Text',
-		'Wiss\Model\Element\Textarea' => 'Textarea',
-		'Wiss\Model\Element\DatePicker' => 'DatePicker',
+		'Wiss\Model\Element\Slug' => 'Slug',
 	),
 	'doctrine' => array(
 		'driver' => array(

@@ -22,4 +22,11 @@ interface Builder
      * @return array
      */
     public function getFormElementConfig();
+    
+    /**
+     * Build a form for configuring the element
+     * 
+     * @return \Zend\Form\Form
+     */
+    public function getConfigurationForm();
 }

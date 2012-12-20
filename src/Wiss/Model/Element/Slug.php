@@ -6,7 +6,7 @@ namespace Wiss\Model\Element;
  *
  * @author Boy
  */
-class Text extends AbstractBuilder
+class Slug extends AbstractBuilder
 {    
     /**
      * Build a Doctrine class metadata object, that holds all
@@ -15,9 +15,17 @@ class Text extends AbstractBuilder
      * @return \Doctrin\ORM\Mapping\ClassMetadata
      */
     public function getEntityMetadata()
-    {        
+    {
+        $modelElement = $this->getModelElement();
+        $config = $modelElement->getConfiguration();
+        
         return array(
             'type' => 'string',
+            'extensions' => array(
+                'Gedmo\Slug' => array(
+                    'fields' => $config['fields'],
+                )
+            )
         );
     }
     
@@ -52,10 +60,13 @@ class Text extends AbstractBuilder
         $form->setAttribute('class', 'form-horizontal');
         
         $form->add(array(
-            'type' => 'Zend\Form\Element\Text',
-            'name' => 'size',
+            'type' => 'Zend\Form\Element\MultiCheckbox',
+            'name' => 'fields',
             'attributes' => array(
-                'label' => 'Size'
+                'label' => 'Which field?',
+                'options' => array(
+                    'title' => 'Title',
+                ),
             )
         ));
         

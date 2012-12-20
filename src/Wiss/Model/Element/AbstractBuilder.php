@@ -59,6 +59,16 @@ class AbstractBuilder implements Builder
     {
         
     }
+    
+    /**
+     * Build a form for configuring the element
+     * 
+     * @return \Zend\Form\Form
+     */
+    public function getConfigurationForm()
+    {
+        
+    }
 }
 
 ?>
