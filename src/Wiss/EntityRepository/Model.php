@@ -225,12 +225,17 @@ class Model extends \Doctrine\ORM\EntityRepository
             @mkdir(dirname($filename), 0777, true);
         }
         
+        $listActionBody = 'return new ViewModel();';
+        
+        $viewActionBody = 'return new ViewModel();';
+        
         $fileData = array(
             'filename' => $filename,
             'namespace' => $namespace,
             'uses' => array(
                 array('Wiss\Controller\CrudController', 'EntityController'),
                 array('Wiss\Annotation\Block'),
+                array('Zend\View\Model\ViewModel'),
             ),
             'class' => array(
                 'name' => $class . 'Controller',
@@ -239,8 +244,8 @@ class Model extends \Doctrine\ORM\EntityRepository
                     array('modelName', $model->getSlug(), PropertyGenerator::FLAG_PROTECTED),
                 ),
                 'methods' => array(
-                   array('listAction', array(), null, '', sprintf('@Block(titel="%s list")', $model->getTitle())),
-                   array('viewAction', array(), null, '', sprintf('@Block(titel="%s item view")', $model->getTitle())),
+                   array('listAction', array(), null, $listActionBody, sprintf('@Block(titel="%s list")', $model->getTitle())),
+                   array('viewAction', array(), null, $viewActionBody, sprintf('@Block(titel="%s item view")', $model->getTitle())),
                 )
             ),
         );
