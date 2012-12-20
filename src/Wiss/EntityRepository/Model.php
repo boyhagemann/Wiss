@@ -298,17 +298,16 @@ class Model extends \Doctrine\ORM\EntityRepository
 
         // Add the elements 
         foreach ($model->getElements() as $element) {
+
+            $builderClass = $element->getBuilderClass();
+            $builder = new $builderClass($element);
             
-            // Only continue if the element exists
-            if(!$element instanceof \Wiss\Entity\ModelElement) {
-                continue;
-            }
-            
-			$name = $element->getName();
-			
-            /** @todo Implement form element building */
+            $body .= '$this->add(';
+            $body .= var_export($builder->getFormElementConfig(), true);
+            $body .= ');' . PHP_EOL . PHP_EOL;
         }
 
+        
         // Create the submit method
         $body .= '// submit' . PHP_EOL;
         $body .= '$this->add(array(' . PHP_EOL;

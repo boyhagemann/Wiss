@@ -244,7 +244,7 @@ class ModelController extends AbstractActionController {
 		$form->setHydrator($hydrator);   
         $form->prepareElements();                
         $form->get('module')->getProxy()->setObjectManager($em);
-        $form->get('node')->getProxy()->setObjectManager($em);
+//        $form->get('node')->getProxy()->setObjectManager($em);
                 
         return $form;
     }

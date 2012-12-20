@@ -43,17 +43,17 @@ class Model extends Form implements InputFilterProviderInterface
         ));    
         
         // Root    
-        $this->add(array(
-            'name' => 'node',
-            'type' => 'DoctrineORMModule\Form\Element\EntitySelect',
-            'attributes' => array(
-                'label' => 'Put in navigation',
-            ),
-            'options' => array(
-                'target_class' => 'Wiss\Entity\Navigation',
-                'property' => 'label',
-            )
-        ));    
+//        $this->add(array(
+//            'name' => 'node',
+//            'type' => 'DoctrineORMModule\Form\Element\EntitySelect',
+//            'attributes' => array(
+//                'label' => 'Put in navigation',
+//            ),
+//            'options' => array(
+//                'target_class' => 'Wiss\Entity\Navigation',
+//                'property' => 'label',
+//            )
+//        ));    
         
 		// Submit
         $this->add(array(

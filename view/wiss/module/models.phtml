@@ -5,9 +5,11 @@
 <ul class="unstyled list">
 	<?php foreach($models as $model) : ?>
 	<li>
-		<h2><a href="<?php echo $this->url($model->getNode()->getRoute()->getFullName(), (array) $model->getNode()->getParams()) ?>"><?php echo $model->getTitle() ?></a></h2>
+		<h2><?php echo $model->getTitle() ?></h2>
 		<div class="btn-group">			
+            <?php if($model->getNode()->getRoute()) : ?>
 			<a href="<?php echo $this->url($model->getNode()->getRoute()->getFullName(), (array) $model->getNode()->getParams()) ?>" class="btn btn-small">Records</a>
+            <?php endif ?>
 			<a href="<?php echo $this->url('wiss/model/properties', array('slug' => $model->getSlug())) ?>" class="btn btn-small">Properties</a>
 			<a href="<?php echo $this->url('wiss/model/elements', array('slug' => $model->getSlug())) ?>" class="btn btn-small">Elements</a>
 		</div>

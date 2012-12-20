@@ -139,6 +139,7 @@ class Route extends NestedTreeRepository
     public function findOneByNameAndParentRoute($name, \Wiss\Entity\Route $parentRoute = null)
     {
         $params['name'] = $name;
+        $params['parent'] = null; // First find the route with no parent
         if($parentRoute) {
             $params['parent'] = $parentRoute->getId();
         }

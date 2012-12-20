@@ -7,15 +7,36 @@ namespace Wiss\Model\Element;
  * @author Boy
  */
 class AbstractBuilder implements Builder 
-{
+{   
+    /**
+     *
+     * @var \Wiss\Entity\ModelElement
+     */
+    protected $modelElement;
     
     /**
      * 
-     * @return \Zend\Form
+     * @param \Wiss\Entity\ModelElement $modelElement
      */
-    public function getForm()
+    public function __construct(\Wiss\Entity\ModelElement $modelElement)
     {
-        
+        $this->modelElement = $modelElement;
+    }
+    
+    /**
+     * 
+     * @return \Wiss\Entity\ModelElement
+     */
+    public function getModelElement() {
+        return $this->modelElement;
+    }
+
+    /**
+     * 
+     * @param \Wiss\Entity\ModelElement $modelElement
+     */
+    public function setModelElement($modelElement) {
+        $this->modelElement = $modelElement;
     }
     
     /**
@@ -30,11 +51,11 @@ class AbstractBuilder implements Builder
     }
     
     /**
-     * Build a form element that is used to control the model
+     * Build a form element config
      * 
-     * @return \Zend\Form\Element
+     * @return array
      */
-    public function getFormElement()
+    public function getFormElementConfig()
     {
         
     }
