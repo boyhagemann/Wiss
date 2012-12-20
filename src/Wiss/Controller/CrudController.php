@@ -313,11 +313,19 @@ class CrudController extends AbstractActionController
      */
     public function getEntity()
     {      
+        $em = $this->getEntityManager();        
         $model = $this->getModel();
     	$entityClass = $model->getEntityClass();
         $id = $this->getId();
-        $em = $this->getEntityManager();        
-		return $em->find($entityClass, $id);
+        
+        if($id) {
+            return $em->find($entityClass, $id);
+        }
+        else {
+            return $em->getRepository($entityClass)->findOneBy(array(
+                'slug' => $this->params('slug')
+            ));
+        }
     }
     
     /**

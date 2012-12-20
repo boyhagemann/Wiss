@@ -227,7 +227,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         
         $listActionBody = 'return new ViewModel(array(\'list\' => $this->getEntities()));';
         
-        $viewActionBody = 'return new ViewModel();';
+        $viewActionBody = 'return new ViewModel(array(\'entity\' => $this->getEntity()));';
         
         $fileData = array(
             'filename' => $filename,
@@ -271,7 +271,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $body = sprintf('<h3>%s list</h3>', $model->getTitle()) . PHP_EOL;
         $body .= '<ul class="list">' . PHP_EOL;
         $body .= '    <?php foreach($list as $item) : ?>' . PHP_EOL;
-        $body .= sprintf('    <li><a href="<?php echo $this->route(\'%s/view\', array(\'slug\' => $item->getSlug())) ?>"><?php echo $item->getTitle() ?></a></li>', $model->getSlug()) . PHP_EOL;
+        $body .= sprintf('    <li><a href="<?php echo $this->url(\'%s/view\', array(\'slug\' => $item->getSlug())) ?>"><?php echo $item->getTitle() ?></a></li>', $model->getSlug()) . PHP_EOL;
         $body .= '    <?php endforeach; ?>' . PHP_EOL; 
         $body .= '</ul>';
         
@@ -293,7 +293,7 @@ class Model extends \Doctrine\ORM\EntityRepository
         $body = '<h1><?php echo $entity->getTitle() ?></h1>' . PHP_EOL;
         
         foreach($model->getElements() as $modelElement) {
-            $body .= sprintf('<dt>%s</dt><dd><?php echo $entity->get%s()</dd>', $modelElement->getLabel(), ucfirst($modelElement->getName())) . PHP_EOL;
+            $body .= sprintf('<dt>%s</dt><dd><?php echo $entity->get%s() ?></dd>', $modelElement->getLabel(), ucfirst($modelElement->getName())) . PHP_EOL;
         }
         
         // Write the data to disk
