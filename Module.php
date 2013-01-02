@@ -12,8 +12,9 @@ namespace Wiss;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 
-class Module
+class Module implements ViewHelperProviderInterface
 {
     /**
      *
@@ -63,7 +64,15 @@ class Module
     {
         $moduleManager->loadModule('JqueryUi');
     }
-
+    
+    public function getViewHelperConfig()
+    {
+        return array(
+            'invokables' => array(
+                'pageUrl' => 'Wiss\View\Helper\PageUrl',
+            )
+        );
+    }
 
     public function getConfig()
     {

@@ -1,4 +1,8 @@
-<h1><?php echo $page->getTitle() ?></h1>
+<h1><span class="badge badge-info">page</span> <?php echo $page->getTitle() ?></h1>
+<a href="<?php echo $this->pageUrl($page) ?>" class="light"><?php echo $this->pageUrl($page) ?></a>
+<br>
+<br>
+
 
 <ul class="nav nav-tabs">
 	<li><a href="<?php echo $this->url('wiss/page/properties', array('id' => $page->getId())) ?>">Properties</a></li>

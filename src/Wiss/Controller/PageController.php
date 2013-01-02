@@ -191,6 +191,7 @@ class PageController extends AbstractActionController
         $em = $this->getEntityManager();
 		$repo = $em->getRepository('Wiss\Entity\Page');
 		$page = $repo->find($this->params('id'));
+//        \Zend\Debug\Debug::dump($this->getServiceLocator()); exit;
 		
 		$zones = $page->getLayout()->getZones();
 		$used = array();
